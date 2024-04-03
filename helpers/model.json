@@ -1,0 +1,48 @@
+{
+  "aircraft": {
+    "make": "Cessna",
+    "type": "C-172",
+    "fuelBurn": 9.5,
+    "tbo": 2000,
+    "tsmoh": 700
+  },
+  "factors": {
+    "fuelPrice": 4.5,
+    "engineOverhaul": 3000.0
+  },
+  "costs": {
+    "acquisition": {
+      "price": 0,
+      "downPayment": 0,
+      "principal": 0.0,
+      "durationYears": 10.0,
+      "interestRate": 0.08
+    },
+    "rental": {
+      "hourlyRate": 0.0,
+      "isWet": true
+    },
+    "operation": {
+      "fixed": {
+        "hangar": 0.0,
+        "insurance": 0.0,
+        "annual": 0.0,
+        "financing": 0.0
+      },
+      "variable": {
+        "fuel": 0.0,
+        "oil": 0.0,
+        "reserve": {
+          "engine": 0.0,
+          "maintenance": 0.0
+        },
+        "upgrades": 0.0,
+        "cosmetic": 0.0
+      }
+    }
+  },
+  "partners": {
+    "number": 1,
+    "hoursPerPartner": 8.0
+  }
+}
