@@ -24,7 +24,7 @@ module.exports = {
 		if (formula < 0) {
 			return 0;
 		} else {
-			return formula;
+			return Math.ceil(formula);
 		}
 	},
 };
