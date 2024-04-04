@@ -458,9 +458,9 @@ export function Calculator({
 		<>
 			{/* Calculator */}
 			<form onSubmit={handleSubmit}>
-				<div className="grid grid-flow-col items-start gap-12 pb-12">
+				<div className="grid grid-flow-row items-start gap-12 pb-12 lg:grid-flow-col">
 					{/* LEFT */}
-					<div className="grid h-full grid-flow-row content-start items-start gap-16 rounded-lg border border-black/10 bg-slate-950/5 p-8 hover:border-black/20 dark:border-white/10 dark:bg-white/5 dark:hover:border-white/20">
+					<div className="grid h-full grid-flow-row content-start items-start gap-16 rounded-lg border border-black/10 bg-slate-950/5 p-6 hover:border-black/20 lg:p-8 dark:border-white/10 dark:bg-white/5 dark:hover:border-white/20">
 						<div className="grid grid-flow-row gap-8">
 							<h1 className="text-xl font-semibold dark:text-white">
 								About the plane
@@ -494,7 +494,7 @@ export function Calculator({
 												<Input
 													type="number"
 													name="costs.acquisition.price"
-													defaultValue={50000}
+													value={50000}
 													onChange={handleChange}
 												/>
 											</div>
@@ -516,7 +516,6 @@ export function Calculator({
 													name="aircraft.fuelBurn"
 													onChange={handleChange}
 													value={formData?.aircraft?.fuelBurn}
-													defaultValue={8}
 												/>
 											</div>
 										</HeadlessField>
@@ -531,7 +530,7 @@ export function Calculator({
 													type="number"
 													name="factors.fuelPrice"
 													onChange={handleChange}
-													defaultValue={formData?.factors?.fuelPrice}
+													value={formData?.factors?.fuelPrice}
 												/>
 												<div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-12">
 													<span className="text-gray-500 sm:text-sm">/gal</span>
@@ -552,7 +551,6 @@ export function Calculator({
 													name="aircraft.oilRefill"
 													onChange={handleChange}
 													value={formData?.aircraft?.oilRefill}
-													defaultValue={8}
 												/>
 											</div>
 										</HeadlessField>
@@ -567,7 +565,6 @@ export function Calculator({
 													type="number"
 													name="factors.oilPrice"
 													onChange={handleChange}
-													defaultValue={formData?.factors?.oilPrice}
 													value={formData?.factors?.oilPrice}
 												/>
 												<div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-12">
@@ -599,7 +596,7 @@ export function Calculator({
 										<Input
 											type="number"
 											name="partners.number"
-											defaultValue={formData.partners?.number}
+											value={formData.partners?.number}
 											onChange={handleChange}
 										/>
 									</div>
@@ -615,7 +612,7 @@ export function Calculator({
 											type="number"
 											name="partners.hoursPerPartner"
 											onChange={handleChange}
-											defaultValue={formData.partners?.hoursPerPartner}
+											value={formData.partners?.hoursPerPartner}
 										/>
 									</div>
 								</HeadlessField>
@@ -626,11 +623,11 @@ export function Calculator({
 					{/* RIGHT */}
 					<div className="grid grid-flow-row gap-12">
 						{/* OWNERSHIP COSTS */}
-						<div className="grid grid-flow-row items-start gap-8  rounded-lg border border-black/10 bg-slate-950/5 p-8 hover:border-black/20 dark:border-white/10 dark:bg-white/5 dark:hover:border-white/20">
+						<div className="grid grid-flow-row items-start gap-8  rounded-lg border border-black/10 bg-slate-950/5 p-6 hover:border-black/20 lg:p-8 dark:border-white/10 dark:bg-white/5 dark:hover:border-white/20">
 							<h1 className="text-xl font-semibold dark:text-white">
 								Ownership Costs
 							</h1>
-							<div className="grid grid-flow-col content-start  items-start gap-24">
+							<div className="grid grid-flow-row content-start items-start  gap-24 lg:grid-flow-col">
 								<div className="grid grid-flow-row gap-16">
 									{/* Financing Details */}
 									<div className="grid grid-flow-row gap-6">
@@ -666,15 +663,13 @@ export function Calculator({
 												</div>
 											</HeadlessField>
 
-											<div className="grid grid-flow-col items-baseline gap-2">
+											<div className="grid max-w-64 grid-flow-col items-baseline gap-2 lg:max-w-none">
 												<HeadlessField className="grid grid-flow-row gap-2">
 													<Label>Duration (Years)</Label>
 													<Input
 														type="number"
 														name="costs.acquisition.durationYears"
-														defaultValue={
-															formData?.costs?.acquisition?.durationYears
-														}
+														value={formData?.costs?.acquisition?.durationYears}
 														className="max-w-28"
 														onChange={handleChange}
 													/>
@@ -697,9 +692,7 @@ export function Calculator({
 															name="costs.acquisition.interestRate"
 															onChange={handleChange}
 															className="max-w-28"
-															defaultValue={
-																formData?.costs?.acquisition?.interestRate
-															}
+															value={formData?.costs?.acquisition?.interestRate}
 														/>
 													</div>
 												</HeadlessField>
@@ -720,7 +713,7 @@ export function Calculator({
 														type="number"
 														name="factors.engineOverhaul"
 														onChange={handleChange}
-														defaultValue={formData?.factors?.engineOverhaul}
+														value={formData?.factors?.engineOverhaul}
 													/>
 												</div>
 											</HeadlessField>
@@ -737,7 +730,7 @@ export function Calculator({
 														type="number"
 														name="aircraft.tbo"
 														onChange={handleChange}
-														defaultValue={formData?.aircraft?.tbo}
+														value={formData?.aircraft?.tbo}
 													/>
 												</div>
 											</HeadlessField>
@@ -754,7 +747,7 @@ export function Calculator({
 														type="number"
 														name="aircraft.tsmoh"
 														onChange={handleChange}
-														defaultValue={formData?.aircraft?.tsmoh}
+														value={formData?.aircraft?.tsmoh}
 														invalid={validationErrors?.tsmoh}
 													/>
 												</div>
@@ -782,9 +775,6 @@ export function Calculator({
 														type="number"
 														name="costs.operation.fixed.hangar"
 														onChange={handleChange}
-														defaultValue={
-															formData?.costs?.operation?.fixed?.hangar
-														}
 														value={formData?.costs?.operation?.fixed?.hangar}
 													/>
 													<div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-12">
@@ -807,9 +797,6 @@ export function Calculator({
 														type="number"
 														name="costs.operation.fixed.insurance"
 														onChange={handleChange}
-														defaultValue={
-															formData?.costs?.operation?.fixed?.insurance
-														}
 														value={formData?.costs?.operation?.fixed?.insurance}
 													/>
 													<div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-12">
@@ -832,9 +819,6 @@ export function Calculator({
 														type="number"
 														name="costs.operation.fixed.annual"
 														onChange={handleChange}
-														defaultValue={
-															formData?.costs?.operation?.fixed?.annual
-														}
 														value={formData?.costs?.operation?.fixed?.annual}
 													/>
 													<div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-12">
@@ -914,9 +898,6 @@ export function Calculator({
 													type="number"
 													name="costs.operation.variable.oil"
 													onChange={handleChange}
-													defaultValue={
-														formData?.costs?.operation?.variable?.oil
-													}
 													value={formData?.costs?.operation?.variable?.oil}
 												/>
 												<div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-12">
@@ -937,7 +918,7 @@ export function Calculator({
 													type="number"
 													name="costs.operation.variable.reserve.engine"
 													onChange={handleChange}
-													defaultValue={
+													value={
 														formData?.costs?.operation?.variable?.reserve
 															?.engine
 													}
@@ -960,7 +941,7 @@ export function Calculator({
 													type="number"
 													name="costs.operation.variable.reserve.maintenance"
 													onChange={handleChange}
-													defaultValue={
+													value={
 														formData?.costs?.operation?.variable?.reserve
 															?.maintenance
 													}
@@ -983,9 +964,7 @@ export function Calculator({
 													type="number"
 													name="costs.operation.variable.upgrades"
 													onChange={handleChange}
-													defaultValue={
-														formData?.costs?.operation?.variable?.upgrades
-													}
+													value={formData?.costs?.operation?.variable?.upgrades}
 												/>
 												<div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-12">
 													<span className="text-gray-500 sm:text-sm">
@@ -1005,9 +984,7 @@ export function Calculator({
 													type="number"
 													name="costs.operation.variable.cosmetic"
 													onChange={handleChange}
-													defaultValue={
-														formData?.costs?.operation?.variable?.cosmetic
-													}
+													value={formData?.costs?.operation?.variable?.cosmetic}
 												/>
 												<div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-12">
 													<span className="text-gray-500 sm:text-sm">
@@ -1022,7 +999,7 @@ export function Calculator({
 						</div>
 
 						{/* RENTAL COSTS */}
-						<div className="rounded-lg border border-black/10 bg-slate-950/5 p-8 hover:border-black/20 dark:border-white/10 dark:bg-white/5 dark:hover:border-white/20">
+						<div className="rounded-lg border border-black/10 bg-slate-950/5 p-6 hover:border-black/20 lg:p-8 dark:border-white/10 dark:bg-white/5 dark:hover:border-white/20">
 							<div className="grid grid-flow-row gap-8">
 								<h1 className="text-xl font-semibold dark:text-white">
 									Rental Costs
@@ -1038,7 +1015,7 @@ export function Calculator({
 												type="number"
 												name="costs.rental.hourlyRate"
 												onChange={handleChange}
-												defaultValue={formData?.costs?.rental?.hourlyRate}
+												value={formData?.costs?.rental?.hourlyRate}
 											/>
 											<div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-12">
 												<span className="text-gray-500 sm:text-sm">/hour</span>

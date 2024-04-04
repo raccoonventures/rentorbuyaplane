@@ -13,7 +13,9 @@ export default function RootLayout({
 }>) {
 	return (
 		<html lang="en">
-			<body className="bg-stone-50 dark:bg-[#202124]">{children}</body>
+			<body className="bg-stone-50 p-4 md:p-12 lg:px-36 lg:py-24 dark:bg-[#202124]">
+				{children}
+			</body>
 		</html>
 	);
 }
