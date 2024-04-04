@@ -71,6 +71,7 @@ export interface OutputData {
 			perHourFlight?: number;
 		};
 	};
+	breakEven?: number;
 }
 
 export interface DetailedFormData {

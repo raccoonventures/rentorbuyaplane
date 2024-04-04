@@ -341,8 +341,15 @@ export function Calculator({
 				12;
 
 		const owningFixedPerHour =
-			(owningFixedTotal / (formData?.partners?.number ?? 1)) *
-			(formData?.partners?.hoursPerPartner ?? 1);
+			owningFixedTotal /
+			((formData?.partners?.number ?? 1) *
+				(formData?.partners?.hoursPerPartner ?? 1));
+
+		const breakEven = Financials.findBreakEven(
+			rentingPerHour,
+			owningPerHour,
+			owningFixedTotal,
+		);
 
 		return {
 			renting: {
@@ -358,6 +365,7 @@ export function Calculator({
 					perHourFlight: Math.ceil(owningFixedPerHour),
 				},
 			},
+			breakEven: breakEven,
 		};
 	}, [
 		formData.costs?.rental?.isWet,
@@ -372,6 +380,8 @@ export function Calculator({
 
 	useEffect(() => {
 		// Check if the calculated values differ from the current formData output values
+		const shouldUpdateBreakEven =
+			formData.output?.breakEven !== calculatedOutput.breakEven;
 		const shouldUpdateRenting =
 			formData.output?.renting?.perHour !== calculatedOutput.renting.perHour;
 		const shouldUpdateOwningPerHour =
@@ -384,6 +394,7 @@ export function Calculator({
 			calculatedOutput.owning.fixed.perHourFlight;
 
 		if (
+			shouldUpdateBreakEven ||
 			shouldUpdateRenting ||
 			shouldUpdateOwningPerHour ||
 			shouldUpdateOwningFixedPerYear ||
@@ -394,6 +405,7 @@ export function Calculator({
 				...prevData,
 				output: {
 					...prevData.output,
+					breakEven: calculatedOutput.breakEven,
 					renting: {
 						...prevData.output?.renting,
 						perHour: calculatedOutput.renting.perHour,
@@ -1087,6 +1099,24 @@ export function Calculator({
 							{formData?.output?.owning?.perHour}
 						</dd>
 					</div>
+
+					<div
+						key="BreakEven"
+						className="overflow-hidden rounded-lg bg-white px-4 py-5 shadow sm:p-6"
+					>
+						<dt className="truncate text-sm font-medium text-gray-500">
+							Owning Fixed Total
+						</dt>
+						<dd className="mt-1 text-3xl font-semibold tracking-tight text-gray-900">
+							{formData?.output?.owning?.fixed?.perYear}
+						</dd>
+					</div>
+
+					<p className="text-green-500">
+						{formData?.output?.breakEven == 0
+							? `You don't fly enough in a year to save money by owning`
+							: `You'll break even after ${formData?.output?.breakEven} hours`}
+					</p>
 				</dl>
 			</div>
 		</>
