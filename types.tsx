@@ -72,6 +72,8 @@ export interface OutputData {
 		};
 	};
 	breakEven?: number;
+	estimatedHours?: number;
+	isBuyingBest?: boolean;
 }
 
 export interface DetailedFormData {

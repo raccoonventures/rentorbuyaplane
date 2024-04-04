@@ -30,6 +30,7 @@ import { Switch } from '@/catalyst/switch';
 
 import Planes from '@/helpers/planes.json';
 
+import { Badge } from '@/catalyst/badge';
 import Financials from '@/utils/financials';
 
 export function Calculator() {
@@ -83,6 +84,9 @@ export function Calculator() {
 		partners: {
 			number: 1,
 			hoursPerPartner: 52,
+		},
+		output: {
+			isBuyingBest: false,
 		},
 	});
 
@@ -148,8 +152,11 @@ export function Calculator() {
 
 	// Handle any changes in the form
 	const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-		const { name, value } = e.target;
+		const { name, value: rawValue } = e.target;
 		const keys = name.split('.');
+		// Parse value as an integer if name is 'output.estimatedHours'
+		const value =
+			name === 'output.estimatedHours' ? parseInt(rawValue, 10) : rawValue;
 		// Updaten FormData
 		setFormData((prevData) => {
 			// A recursive function to handle deep updates
@@ -281,6 +288,26 @@ export function Calculator() {
 				},
 			}));
 		}
+
+		const estimatedHours = formData.output?.estimatedHours ?? 0;
+		const breakEven = formData.output?.breakEven ?? 0;
+		if (estimatedHours > breakEven) {
+			setFormData((prevData) => ({
+				...prevData,
+				output: {
+					...prevData.output,
+					isBuyingBest: true,
+				},
+			}));
+		} else {
+			setFormData((prevData) => ({
+				...prevData,
+				output: {
+					...prevData.output,
+					isBuyingBest: false,
+				},
+			}));
+		}
 	}, [
 		formData.aircraft?.fuelBurn,
 		formData.aircraft?.oilRefill,
@@ -293,6 +320,8 @@ export function Calculator() {
 		formData.costs?.acquisition?.durationYears,
 		formData.costs?.acquisition?.interestRate,
 		formData.costs?.acquisition?.downPayment,
+		formData.output?.breakEven,
+		formData.output?.estimatedHours,
 	]);
 
 	const validationErrors = useMemo(() => {
@@ -455,7 +484,7 @@ export function Calculator() {
 				<form onSubmit={handleSubmit}>
 					<div className="grid grid-flow-row items-start gap-12 pb-12 lg:grid-flow-col">
 						{/* LEFT */}
-						<div className="grid h-full grid-flow-row content-start items-start gap-16 rounded-lg border border-black/10 bg-slate-950/5 p-6 hover:border-black/20 lg:p-8 dark:border-white/10 dark:bg-white/5 dark:hover:border-white/20">
+						<div className="grid h-full grid-flow-row content-start items-start gap-16 rounded-lg border border-black/10 bg-zinc-950/5 p-6 hover:border-black/20 lg:p-8 dark:border-white/10 dark:bg-white/5 dark:hover:border-white/20">
 							<div className="grid grid-flow-row gap-8">
 								<h1 className="text-xl font-semibold dark:text-white">
 									About the plane
@@ -484,7 +513,7 @@ export function Calculator() {
 												<Label>Acquisition Price</Label>
 												<div className="relative">
 													<div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
-														<span className="text-gray-500 sm:text-sm">$</span>
+														<span className="text-zinc-500 sm:text-sm">$</span>
 													</div>
 													<Input
 														type="number"
@@ -504,7 +533,7 @@ export function Calculator() {
 												<Label>Fuel Burn</Label>
 												<div className="relative">
 													<div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-12">
-														<span className="text-gray-500 sm:text-sm">
+														<span className="text-zinc-500 sm:text-sm">
 															GPH
 														</span>
 													</div>
@@ -521,7 +550,7 @@ export function Calculator() {
 												<Label>Fuel Price</Label>
 												<div className="relative">
 													<div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
-														<span className="text-gray-500 sm:text-sm">$</span>
+														<span className="text-zinc-500 sm:text-sm">$</span>
 													</div>
 													<Input
 														type="number"
@@ -530,7 +559,7 @@ export function Calculator() {
 														value={formData?.factors?.fuelPrice}
 													/>
 													<div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-12">
-														<span className="text-gray-500 sm:text-sm">
+														<span className="text-zinc-500 sm:text-sm">
 															/gal
 														</span>
 													</div>
@@ -541,7 +570,7 @@ export function Calculator() {
 												<Label>Oil refill every</Label>
 												<div className="relative">
 													<div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-12">
-														<span className="text-gray-500 sm:text-sm">
+														<span className="text-zinc-500 sm:text-sm">
 															hours
 														</span>
 													</div>
@@ -558,7 +587,7 @@ export function Calculator() {
 												<Label>Oil Price</Label>
 												<div className="relative">
 													<div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
-														<span className="text-gray-500 sm:text-sm">$</span>
+														<span className="text-zinc-500 sm:text-sm">$</span>
 													</div>
 													<Input
 														type="number"
@@ -567,7 +596,7 @@ export function Calculator() {
 														value={formData?.factors?.oilPrice}
 													/>
 													<div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-12">
-														<span className="text-gray-500 sm:text-sm">
+														<span className="text-zinc-500 sm:text-sm">
 															/qt
 														</span>
 													</div>
@@ -589,7 +618,7 @@ export function Calculator() {
 										<Label>Number of Partners</Label>
 										<div className="relative">
 											<div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-12">
-												<span className="text-gray-500 sm:text-sm">
+												<span className="text-zinc-500 sm:text-sm">
 													Partner
 													{(formData?.partners?.number ?? 0) > 1 ? 's' : ''}
 												</span>
@@ -607,7 +636,7 @@ export function Calculator() {
 										<Label>Hours Per Partner</Label>
 										<div className="relative">
 											<div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-12">
-												<span className="text-gray-500 sm:text-sm">/year</span>
+												<span className="text-zinc-500 sm:text-sm">/year</span>
 											</div>
 											<Input
 												type="number"
@@ -624,7 +653,7 @@ export function Calculator() {
 						{/* RIGHT */}
 						<div className="grid grid-flow-row gap-12">
 							{/* OWNERSHIP COSTS */}
-							<div className="grid grid-flow-row items-start gap-8  rounded-lg border border-black/10 bg-slate-950/5 p-6 hover:border-black/20 lg:p-8 dark:border-white/10 dark:bg-white/5 dark:hover:border-white/20">
+							<div className="grid grid-flow-row items-start gap-8  rounded-lg border border-black/10 bg-zinc-950/5 p-6 hover:border-black/20 lg:p-8 dark:border-white/10 dark:bg-white/5 dark:hover:border-white/20">
 								<h1 className="text-xl font-semibold dark:text-white">
 									Ownership Costs
 								</h1>
@@ -638,7 +667,7 @@ export function Calculator() {
 													<Label>Down Payment</Label>
 													<div className="relative">
 														<div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
-															<span className="text-gray-500 sm:text-sm">
+															<span className="text-zinc-500 sm:text-sm">
 																$
 															</span>
 														</div>
@@ -655,7 +684,7 @@ export function Calculator() {
 													<Label>Principal</Label>
 													<div className="relative">
 														<div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
-															<span className="text-gray-500 sm:text-sm">
+															<span className="text-zinc-500 sm:text-sm">
 																$
 															</span>
 														</div>
@@ -682,7 +711,7 @@ export function Calculator() {
 														/>
 													</HeadlessField>
 
-													<span className="px-0.5 text-gray-500 sm:text-sm">
+													<span className="px-0.5 text-zinc-500 sm:text-sm">
 														@
 													</span>
 
@@ -690,7 +719,7 @@ export function Calculator() {
 														<Label className="text-right">Interest Rate</Label>
 														<div className="relative">
 															<div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-14">
-																<span className="text-gray-500 sm:text-sm">
+																<span className="text-zinc-500 sm:text-sm">
 																	%
 																</span>
 															</div>
@@ -716,7 +745,7 @@ export function Calculator() {
 													<Label>Overhaul Cost</Label>
 													<div className="relative">
 														<div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
-															<span className="text-gray-500 sm:text-sm">
+															<span className="text-zinc-500 sm:text-sm">
 																$
 															</span>
 														</div>
@@ -733,7 +762,7 @@ export function Calculator() {
 													<Label>Time Before Overhaul</Label>
 													<div className="relative">
 														<div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-12">
-															<span className="text-gray-500 sm:text-sm">
+															<span className="text-zinc-500 sm:text-sm">
 																Hours
 															</span>
 														</div>
@@ -750,7 +779,7 @@ export function Calculator() {
 													<Label>Time Since Major Overhaul</Label>
 													<div className="relative">
 														<div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-12">
-															<span className="text-gray-500 sm:text-sm">
+															<span className="text-zinc-500 sm:text-sm">
 																Hours
 															</span>
 														</div>
@@ -780,7 +809,7 @@ export function Calculator() {
 													<Label>Hangar</Label>
 													<div className="relative">
 														<div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
-															<span className="text-gray-500 sm:text-sm">
+															<span className="text-zinc-500 sm:text-sm">
 																$
 															</span>
 														</div>
@@ -791,7 +820,7 @@ export function Calculator() {
 															value={formData?.costs?.operation?.fixed?.hangar}
 														/>
 														<div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-12">
-															<span className="text-gray-500 sm:text-sm">
+															<span className="text-zinc-500 sm:text-sm">
 																{formData?.settings?.fixedCostsYearly
 																	? '/year'
 																	: '/month'}
@@ -804,7 +833,7 @@ export function Calculator() {
 													<Label>Insurance</Label>
 													<div className="relative">
 														<div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
-															<span className="text-gray-500 sm:text-sm">
+															<span className="text-zinc-500 sm:text-sm">
 																$
 															</span>
 														</div>
@@ -817,7 +846,7 @@ export function Calculator() {
 															}
 														/>
 														<div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-12">
-															<span className="text-gray-500 sm:text-sm">
+															<span className="text-zinc-500 sm:text-sm">
 																{formData?.settings?.fixedCostsYearly
 																	? '/year'
 																	: '/month'}
@@ -830,7 +859,7 @@ export function Calculator() {
 													<Label>Annual Inspection</Label>
 													<div className="relative">
 														<div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
-															<span className="text-gray-500 sm:text-sm">
+															<span className="text-zinc-500 sm:text-sm">
 																$
 															</span>
 														</div>
@@ -841,7 +870,7 @@ export function Calculator() {
 															value={formData?.costs?.operation?.fixed?.annual}
 														/>
 														<div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-12">
-															<span className="text-gray-500 sm:text-sm">
+															<span className="text-zinc-500 sm:text-sm">
 																{formData?.settings?.fixedCostsYearly
 																	? '/year'
 																	: '/month'}
@@ -854,7 +883,7 @@ export function Calculator() {
 													<Label>Installments</Label>
 													<div className="relative">
 														<div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
-															<span className="text-gray-500 sm:text-sm">
+															<span className="text-zinc-500 sm:text-sm">
 																$
 															</span>
 														</div>
@@ -867,7 +896,7 @@ export function Calculator() {
 															}
 														/>
 														<div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-12">
-															<span className="text-gray-500 sm:text-sm">
+															<span className="text-zinc-500 sm:text-sm">
 																{formData?.settings?.fixedCostsYearly
 																	? '/year'
 																	: '/month'}
@@ -895,7 +924,7 @@ export function Calculator() {
 												<Label>Fuel</Label>
 												<div className="relative">
 													<div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
-														<span className="text-gray-500 sm:text-sm">$</span>
+														<span className="text-zinc-500 sm:text-sm">$</span>
 													</div>
 													<Input
 														type="number"
@@ -904,7 +933,7 @@ export function Calculator() {
 														onChange={handleChange}
 													/>
 													<div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-12">
-														<span className="text-gray-500 sm:text-sm">
+														<span className="text-zinc-500 sm:text-sm">
 															/hour
 														</span>
 													</div>
@@ -915,7 +944,7 @@ export function Calculator() {
 												<Label>Oil</Label>
 												<div className="relative">
 													<div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
-														<span className="text-gray-500 sm:text-sm">$</span>
+														<span className="text-zinc-500 sm:text-sm">$</span>
 													</div>
 													<Input
 														type="number"
@@ -924,7 +953,7 @@ export function Calculator() {
 														value={formData?.costs?.operation?.variable?.oil}
 													/>
 													<div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-12">
-														<span className="text-gray-500 sm:text-sm">
+														<span className="text-zinc-500 sm:text-sm">
 															/hour
 														</span>
 													</div>
@@ -935,7 +964,7 @@ export function Calculator() {
 												<Label>Engine Overhaul Reserve</Label>
 												<div className="relative">
 													<div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
-														<span className="text-gray-500 sm:text-sm">$</span>
+														<span className="text-zinc-500 sm:text-sm">$</span>
 													</div>
 													<Input
 														type="number"
@@ -947,7 +976,7 @@ export function Calculator() {
 														}
 													/>
 													<div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-12">
-														<span className="text-gray-500 sm:text-sm">
+														<span className="text-zinc-500 sm:text-sm">
 															/hour
 														</span>
 													</div>
@@ -958,7 +987,7 @@ export function Calculator() {
 												<Label>Maintenance Reserve</Label>
 												<div className="relative">
 													<div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
-														<span className="text-gray-500 sm:text-sm">$</span>
+														<span className="text-zinc-500 sm:text-sm">$</span>
 													</div>
 													<Input
 														type="number"
@@ -970,7 +999,7 @@ export function Calculator() {
 														}
 													/>
 													<div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-12">
-														<span className="text-gray-500 sm:text-sm">
+														<span className="text-zinc-500 sm:text-sm">
 															/hour
 														</span>
 													</div>
@@ -981,7 +1010,7 @@ export function Calculator() {
 												<Label>Upgrades</Label>
 												<div className="relative">
 													<div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
-														<span className="text-gray-500 sm:text-sm">$</span>
+														<span className="text-zinc-500 sm:text-sm">$</span>
 													</div>
 													<Input
 														type="number"
@@ -992,7 +1021,7 @@ export function Calculator() {
 														}
 													/>
 													<div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-12">
-														<span className="text-gray-500 sm:text-sm">
+														<span className="text-zinc-500 sm:text-sm">
 															/hour
 														</span>
 													</div>
@@ -1003,7 +1032,7 @@ export function Calculator() {
 												<Label>Cosmetic</Label>
 												<div className="relative">
 													<div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
-														<span className="text-gray-500 sm:text-sm">$</span>
+														<span className="text-zinc-500 sm:text-sm">$</span>
 													</div>
 													<Input
 														type="number"
@@ -1014,7 +1043,7 @@ export function Calculator() {
 														}
 													/>
 													<div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-12">
-														<span className="text-gray-500 sm:text-sm">
+														<span className="text-zinc-500 sm:text-sm">
 															/hour
 														</span>
 													</div>
@@ -1026,7 +1055,7 @@ export function Calculator() {
 							</div>
 
 							{/* RENTAL COSTS */}
-							<div className="rounded-lg border border-black/10 bg-slate-950/5 p-6 hover:border-black/20 lg:p-8 dark:border-white/10 dark:bg-white/5 dark:hover:border-white/20">
+							<div className="rounded-lg border border-black/10 bg-zinc-950/5 p-6 hover:border-black/20 lg:p-8 dark:border-white/10 dark:bg-white/5 dark:hover:border-white/20">
 								<div className="grid grid-flow-row gap-8">
 									<h1 className="text-xl font-semibold dark:text-white">
 										Rental Costs
@@ -1036,7 +1065,7 @@ export function Calculator() {
 											<Label>Hourly Rate</Label>
 											<div className="relative">
 												<div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
-													<span className="text-gray-500 sm:text-sm">$</span>
+													<span className="text-zinc-500 sm:text-sm">$</span>
 												</div>
 												<Input
 													type="number"
@@ -1045,7 +1074,7 @@ export function Calculator() {
 													value={formData?.costs?.rental?.hourlyRate}
 												/>
 												<div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-12">
-													<span className="text-gray-500 sm:text-sm">
+													<span className="text-zinc-500 sm:text-sm">
 														/hour
 													</span>
 												</div>
@@ -1066,133 +1095,155 @@ export function Calculator() {
 						</div>
 					</div>
 
-					{/* Sticky bar */}
-					<div className="grid h-20 w-full items-center justify-center bg-green-200">
-						<div className="max-w-min">
+					{/* CTA */}
+
+					<div className="mx-auto max-w-7xl px-6 py-12 lg:flex lg:items-center lg:justify-between lg:px-8">
+						<h2 className="text-3xl font-bold tracking-tight text-zinc-950 sm:text-4xl dark:text-zinc-50">
+							Get a copy of these results
+							<br />
+							Download now for free
+						</h2>
+						<div className="mt-10 flex items-center gap-x-6 lg:mt-0 lg:flex-shrink-0">
 							<Button color="green" type="submit">
 								Submit
 							</Button>
+							<a
+								href="#"
+								className="text-sm font-semibold leading-6 text-zinc-950 dark:text-zinc-50"
+							>
+								Learn more <span aria-hidden="true">→</span>
+							</a>
 						</div>
 					</div>
 				</form>
 			</section>
 
 			{/* Output Results */}
-			<div>
-				<h3 className="text-base font-semibold leading-6 text-gray-900">
-					Last 30 days
-				</h3>
-				<dl className="mt-5 grid grid-cols-1 gap-5 sm:grid-cols-3">
-					<div
-						key="Renting"
-						className="overflow-hidden rounded-lg bg-white px-4 py-5 shadow sm:p-6"
-					>
-						<dt className="truncate text-sm font-medium text-gray-500">
-							Renting
-						</dt>
-						<dd className="mt-1 text-3xl font-semibold tracking-tight text-gray-900">
-							{formData?.output?.renting?.perHour}
-						</dd>
+			<section className="grid grid-flow-row items-center justify-center">
+				<div className="grid grid-flow-row items-center justify-center py-16">
+					<h2 className="pb-6 text-center text-lg font-bold text-zinc-950 dark:text-zinc-50">
+						{' '}
+						{formData.output?.estimatedHours == undefined
+							? 'How many hours do you plan on flying per year?'
+							: `You plan on flying ${formData.output.estimatedHours == 200 ? `at least ${formData.output.estimatedHours}` : formData.output.estimatedHours} hours per year`}{' '}
+					</h2>
+					<div className="grid grid-flow-col items-center gap-2">
+						<span className="w-10 text-right text-zinc-600 dark:text-zinc-200">
+							0
+						</span>
+						<input
+							name="output.estimatedHours"
+							type="range"
+							min={0}
+							max={200}
+							onChange={handleChange}
+							className="w-[40dvw]"
+						/>
+						<span className="w-10 text-left text-zinc-600 dark:text-zinc-200">
+							200+
+						</span>
 					</div>
+				</div>
 
+				<div className="grid grid-flow-row items-center justify-center gap-4 md:grid-flow-col lg:gap-12">
+					{/* Renting */}
 					<div
-						key="Owning"
-						className="overflow-hidden rounded-lg bg-white px-4 py-5 shadow sm:p-6"
+						className={`h-full w-full rounded-lg  border md:min-w-96 lg:p-8 ${!formData.output?.isBuyingBest ? 'scale-110 border-emerald-500 bg-emerald-800/10 p-6 hover:border-emerald-950 dark:border-emerald-400/40 dark:bg-emerald-500/10 dark:hover:border-emerald-400' : 'border-black/10 bg-zinc-950/5 p-6 hover:border-black/20 dark:border-white/10 dark:bg-white/5 dark:hover:border-white/20'} `}
 					>
-						<dt className="truncate text-sm font-medium text-gray-500">
-							Owning
-						</dt>
-						<dd className="mt-1 text-3xl font-semibold tracking-tight text-gray-900">
-							{formData?.output?.owning?.perHour}
-						</dd>
-					</div>
-
-					<div
-						key="BreakEven"
-						className="overflow-hidden rounded-lg bg-white px-4 py-5 shadow sm:p-6"
-					>
-						<dt className="truncate text-sm font-medium text-gray-500">
-							Owning Fixed Total
-						</dt>
-						<dd className="mt-1 text-3xl font-semibold tracking-tight text-gray-900">
-							{formData?.output?.owning?.fixed?.perYear}
-						</dd>
-					</div>
-
-					<p className="text-green-500">
-						{formData?.output?.breakEven == 0
-							? `You don't fly enough in a year to save money by owning`
-							: `You'll break even after ${formData?.output?.breakEven} hours`}
-					</p>
-				</dl>
-			</div>
-
-			<section className="grid grid-flow-row items-center justify-center gap-12 md:grid-flow-col">
-				{/* Renting */}
-				<div className="h-full min-w-96 rounded-lg border border-black/10 bg-slate-950/5 p-6 hover:border-black/20 lg:p-8 dark:border-white/10 dark:bg-white/5 dark:hover:border-white/20">
-					<div className="grid grid-flow-row gap-8">
-						<h1 className="text-xl font-semibold dark:text-white">
-							Rent a plane
-						</h1>
-						<div className="grid min-h-48 grid-flow-row content-start gap-4">
-							<p className="flex items-baseline gap-x-2  text-slate-200">
-								<span className="text-4xl font-semibold tracking-tight text-white ">
-									${commaNumber(formData?.output?.renting?.perHour)}
-								</span>
-								<span className="text-sm text-gray-400">/hour</span>
-								<dt className="group relative grid grid-flow-col items-center">
-									<span className="cursor-help">of renting</span>
-									<span className="absolute -right-2 top-8 z-[999] w-max max-w-48 scale-0 rounded bg-zinc-700 px-3 py-2 text-center text-xs font-normal text-white shadow-xl group-hover:scale-100">
-										The hourly rate for renting the plane
+						<div className="grid grid-flow-row gap-8">
+							<div className="flex items-center gap-2">
+								<h1 className="text-xl font-semibold dark:text-white">
+									Rent a plane
+								</h1>
+								{!formData.output?.isBuyingBest && (
+									<Badge className="mt-0.5 uppercase" color="lime">
+										best option
+									</Badge>
+								)}
+							</div>
+							<div className="grid min-h-48 grid-flow-row content-start gap-4">
+								<div className="flex items-baseline gap-x-2  text-zinc-200">
+									<span>
+										<span className="text-3xl font-semibold tracking-tight text-zinc-950 md:text-4xl dark:text-white ">
+											${commaNumber(formData?.output?.renting?.perHour)}
+										</span>
+										<span className="text-sm text-zinc-800 dark:text-zinc-400">
+											/hour
+										</span>
 									</span>
-								</dt>
-							</p>
+									<dt className="group relative grid grid-flow-col items-center text-zinc-600 dark:text-zinc-200">
+										<span className="cursor-help">of renting</span>
+										<span className="absolute -right-2 top-8 z-[999] w-max max-w-48 scale-0 rounded bg-zinc-700 px-3 py-2 text-center text-xs font-normal text-white shadow-xl group-hover:scale-100">
+											The hourly rate for renting the plane
+										</span>
+									</dt>
+								</div>
+							</div>
 						</div>
 					</div>
-				</div>
-				{/* or */}
-				<div className="grid h-10 w-10 items-center justify-center">
-					<span className="text-2xl font-bold uppercase italic text-white/50">
-						or
-					</span>
-				</div>
-				{/* Owning */}
+					{/* or */}
+					<div className="hidden h-10 w-10 items-center justify-center lg:grid">
+						<span className="text-2xl font-bold uppercase italic text-white/50">
+							or
+						</span>
+					</div>
+					{/* Owning */}
 
-				<div className="h-full min-w-96 rounded-lg border border-black/10 bg-slate-950/5 p-6 hover:border-black/20 lg:p-8 dark:border-white/10 dark:bg-white/5 dark:hover:border-white/20">
-					<div className="grid grid-flow-row gap-8">
-						<h1 className="text-xl font-semibold dark:text-white">
-							Buy a plane
-						</h1>
-						<div className="grid min-h-48 grid-flow-row content-start gap-4">
-							<p className="flex items-baseline gap-x-2 text-slate-200">
-								<span className="text-4xl font-semibold tracking-tight text-white">
-									${commaNumber(formData?.output?.owning?.perHour)}
+					<div
+						className={`h-full w-full rounded-lg  border md:min-w-96 lg:p-8 ${formData.output?.isBuyingBest ? 'scale-110 border-emerald-500 bg-emerald-800/10 p-6 hover:border-emerald-950 dark:border-emerald-400/40 dark:bg-emerald-500/10 dark:hover:border-emerald-400' : 'border-black/10 bg-zinc-950/5 p-6 hover:border-black/20 dark:border-white/10 dark:bg-white/5 dark:hover:border-white/20'} `}
+					>
+						<div className="grid grid-flow-row gap-8">
+							<div className="flex items-center gap-2">
+								<h1 className="text-xl font-semibold dark:text-white">
+									Buy a plane
+								</h1>
+								{formData.output?.isBuyingBest && (
+									<Badge className="mt-0.5 uppercase" color="lime">
+										best option
+									</Badge>
+								)}
+							</div>
+							<div className="grid min-h-48 grid-flow-row content-start gap-4">
+								<div className="flex flex-col items-baseline  gap-x-2 text-zinc-200 md:flex-row">
+									<span>
+										<span className="text-3xl font-semibold tracking-tight text-zinc-950 md:text-4xl dark:text-white">
+											${commaNumber(formData?.output?.owning?.perHour)}
+										</span>
+										<span className="text-sm text-zinc-800 dark:text-zinc-400">
+											/hour
+										</span>
+									</span>
+									<dt className="group relative grid grid-flow-col items-center text-zinc-600 dark:text-zinc-200">
+										<span className="cursor-help">
+											of variable operation costs
+										</span>
+										<span className="absolute -right-2 top-8 z-[999] w-max max-w-48 scale-0 rounded bg-zinc-700 px-3 py-2 text-center text-xs font-normal text-white shadow-xl group-hover:scale-100">
+											The hourly costs for fuel, oil, and reserve funds for
+											overhaul and maintenance
+										</span>
+									</dt>
+								</div>
+								<span className="text-4xl font-bold text-zinc-800 dark:text-zinc-400">
+									+
 								</span>
-								<span className="text-sm text-gray-400">/hour</span>
-								<dt className="group relative grid grid-flow-col items-center">
-									<span className="cursor-help">
-										of variable operation costs
+								<div className="flex flex-col items-baseline gap-x-2 text-zinc-200  md:flex-row">
+									<span>
+										<span className="text-3xl font-semibold tracking-tight text-zinc-950 md:text-4xl dark:text-white">
+											${commaNumber(formData?.output?.owning?.fixed?.perYear)}
+										</span>
+										<span className="text-sm text-zinc-800 dark:text-zinc-400">
+											/year
+										</span>
 									</span>
-									<span className="absolute -right-2 top-8 z-[999] w-max max-w-48 scale-0 rounded bg-zinc-700 px-3 py-2 text-center text-xs font-normal text-white shadow-xl group-hover:scale-100">
-										The hourly costs for fuel, oil, and reserve funds for
-										overhaul and maintenance
-									</span>
-								</dt>
-							</p>
-							<span className="text-4xl font-bold text-zinc-400">+</span>
-							<p className="flex items-baseline gap-x-2  text-slate-200">
-								<span className="text-4xl font-semibold tracking-tight text-white">
-									${commaNumber(formData?.output?.owning?.fixed?.perYear)}
-								</span>
-								<span className="text-sm text-gray-400">/year</span>
-								<dt className="group relative grid grid-flow-col items-center">
-									<span className="cursor-help">of fixed costs</span>
-									<span className="absolute -right-2 top-8 z-[999] w-max max-w-48 scale-0 rounded bg-zinc-700 px-3 py-2 text-center text-xs font-normal text-white shadow-xl group-hover:scale-100">
-										The yearly total for insurance, annual inspection,
-										financing, and hangaring
-									</span>
-								</dt>
-							</p>
+									<dt className="group relative grid grid-flow-col items-center text-zinc-600 dark:text-zinc-200">
+										<span className="cursor-help">of fixed costs</span>
+										<span className="absolute -right-2 top-8 z-[999] w-max max-w-48 scale-0 rounded bg-zinc-700 px-3 py-2 text-center text-xs font-normal text-white shadow-xl group-hover:scale-100">
+											The yearly total for insurance, annual inspection,
+											financing, and hangaring
+										</span>
+									</dt>
+								</div>
+							</div>
 						</div>
 					</div>
 				</div>
