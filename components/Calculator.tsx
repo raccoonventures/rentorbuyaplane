@@ -450,7 +450,9 @@ export function Calculator({
 					{/* LEFT */}
 					<div className="grid h-full grid-flow-row content-start items-start gap-16 rounded-lg border border-black/10 bg-slate-950/5 p-8 hover:border-black/20 dark:border-white/10 dark:bg-white/5 dark:hover:border-white/20">
 						<div className="grid grid-flow-row gap-8">
-							<h1 className="text-xl dark:text-white">About the plane</h1>
+							<h1 className="text-xl font-semibold dark:text-white">
+								About the plane
+							</h1>
 							<div className="grid grid-flow-row gap-16">
 								{/* Aircraft Details */}
 								<div className="grid grid-flow-row gap-6">
@@ -566,7 +568,7 @@ export function Calculator({
 							</div>
 						</div>
 						<div className="grid grid-flow-row gap-8">
-							<h1 className="text-xl dark:text-white">
+							<h1 className="text-xl font-semibold dark:text-white">
 								About the owner
 								{(formData?.partners?.number ?? 0) > 1 ? 's' : ''}
 							</h1>
@@ -613,7 +615,9 @@ export function Calculator({
 					<div className="grid grid-flow-row gap-12">
 						{/* OWNERSHIP COSTS */}
 						<div className="grid grid-flow-row items-start gap-8  rounded-lg border border-black/10 bg-slate-950/5 p-8 hover:border-black/20 dark:border-white/10 dark:bg-white/5 dark:hover:border-white/20">
-							<h1 className="text-xl dark:text-white">Ownership Costs</h1>
+							<h1 className="text-xl font-semibold dark:text-white">
+								Ownership Costs
+							</h1>
 							<div className="grid grid-flow-col content-start  items-start gap-24">
 								<div className="grid grid-flow-row gap-16">
 									{/* Financing Details */}
@@ -1008,7 +1012,9 @@ export function Calculator({
 						{/* RENTAL COSTS */}
 						<div className="rounded-lg border border-black/10 bg-slate-950/5 p-8 hover:border-black/20 dark:border-white/10 dark:bg-white/5 dark:hover:border-white/20">
 							<div className="grid grid-flow-row gap-8">
-								<h1 className="text-xl dark:text-white">Rental Costs</h1>
+								<h1 className="text-xl font-semibold dark:text-white">
+									Rental Costs
+								</h1>
 								<div className="grid grid-flow-row gap-4">
 									<HeadlessField className="grid grid-flow-row gap-2">
 										<Label>Hourly Rate</Label>
