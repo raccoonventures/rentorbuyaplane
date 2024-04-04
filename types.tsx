@@ -2,12 +2,14 @@ export interface AircraftData {
 	make?: string;
 	type?: string;
 	fuelBurn?: number;
+	oilRefill?: number;
 	tbo?: number;
 	tsmoh?: number;
 }
 
 export interface FactorData {
 	fuelPrice?: number;
+	oilPrice?: number;
 	engineOverhaul?: number;
 }
 

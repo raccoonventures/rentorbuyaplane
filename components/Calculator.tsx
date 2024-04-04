@@ -47,11 +47,13 @@ export function Calculator({
 		aircraft: {
 			type: 'Cessna 172',
 			fuelBurn: 8,
+			oilRefill: 50,
 			tbo: 2000,
 			tsmoh: 0,
 		},
 		factors: {
 			fuelPrice: 8,
+			oilPrice: 20,
 			engineOverhaul: 30000,
 		},
 		costs: {
@@ -75,7 +77,7 @@ export function Calculator({
 				},
 				variable: {
 					fuel: 64,
-					oil: 5,
+					oil: 0.4,
 					reserve: {
 						engine: 15,
 						maintenance: 25,
@@ -91,6 +93,7 @@ export function Calculator({
 		},
 	});
 
+	// Handle Type Select
 	let [selectPlaneType, setSelectPlaneType] = useState('');
 	const handleSelectChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
 		setSelectPlaneType(e.target.value);
@@ -105,6 +108,7 @@ export function Calculator({
 		}));
 	};
 
+	// Handle Rentals IsWet Switch
 	const handleIsWetSwitchChange = (checked: boolean) => {
 		setFormData((prevData) => ({
 			...prevData,
@@ -118,6 +122,7 @@ export function Calculator({
 		}));
 	};
 
+	// Handle YearlyCosts Switch
 	const handleFixedCostsYearlySwitchChange = (checked: boolean) => {
 		setFormData((prevData) => {
 			const hangar = prevData?.costs?.operation?.fixed?.hangar ?? 0;
@@ -147,6 +152,8 @@ export function Calculator({
 			};
 		});
 	};
+
+	// Handle any changes in the form
 	const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
 		const { name, value } = e.target;
 		const keys = name.split('.');
@@ -190,6 +197,26 @@ export function Calculator({
 						variable: {
 							...prevData?.costs?.operation?.variable,
 							fuel: fuelCost,
+						},
+					},
+				},
+			}));
+		}
+
+		// Logic for calculating oil cost
+		const oilRefill = formData.aircraft?.oilRefill ?? 0;
+		const oilPrice = formData.factors?.oilPrice ?? 1;
+		if (oilRefill && oilPrice) {
+			const oilCost = oilPrice / oilRefill;
+			setFormData((prevData) => ({
+				...prevData,
+				costs: {
+					...prevData.costs,
+					operation: {
+						...prevData?.costs?.operation,
+						variable: {
+							...prevData?.costs?.operation?.variable,
+							oil: oilCost,
 						},
 					},
 				},
@@ -263,10 +290,12 @@ export function Calculator({
 		}
 	}, [
 		formData.aircraft?.fuelBurn,
+		formData.aircraft?.oilRefill,
 		formData.aircraft?.tbo,
 		formData.aircraft?.tsmoh,
 		formData.factors?.engineOverhaul,
 		formData.factors?.fuelPrice,
+		formData.factors?.oilPrice,
 		formData.costs?.acquisition?.price,
 		formData.costs?.acquisition?.durationYears,
 		formData.costs?.acquisition?.interestRate,
@@ -314,7 +343,7 @@ export function Calculator({
 	return (
 		<>
 			<form onSubmit={handleSubmit}>
-				<div className="grid grid-flow-col items-start gap-24 pb-12">
+				<div className="grid grid-flow-col items-start gap-12 pb-12">
 					{/* LEFT */}
 					<div className="grid h-full grid-flow-row content-start items-start gap-8 rounded-lg border border-white/10 bg-white/5 p-8 hover:border-white/20">
 						<h1 className="text-xl text-white">Start here</h1>
@@ -352,7 +381,12 @@ export function Calculator({
 											/>
 										</div>
 									</HeadlessField>
-
+								</div>
+							</div>
+							{/* Consumption Details */}
+							<div className="grid grid-flow-row gap-6">
+								<h2 className="text-[#FF7124]">Consumption Details</h2>
+								<div className="grid grid-flow-row gap-4">
 									<HeadlessField className="grid grid-flow-row gap-2">
 										<Label>Fuel Burn</Label>
 										<div className="relative">
@@ -382,7 +416,42 @@ export function Calculator({
 												defaultValue={formData?.factors?.fuelPrice}
 											/>
 											<div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-12">
-												<span className="text-gray-500 sm:text-sm">/Gal</span>
+												<span className="text-gray-500 sm:text-sm">/gal</span>
+											</div>
+										</div>
+									</HeadlessField>
+
+									<HeadlessField className="grid grid-flow-row gap-2">
+										<Label>Oil refill every</Label>
+										<div className="relative">
+											<div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-12">
+												<span className="text-gray-500 sm:text-sm">hours</span>
+											</div>
+											<Input
+												type="number"
+												name="aircraft.oilRefill"
+												onChange={handleChange}
+												value={formData?.aircraft?.oilRefill}
+												defaultValue={8}
+											/>
+										</div>
+									</HeadlessField>
+
+									<HeadlessField className="grid grid-flow-row gap-2">
+										<Label>Oil Price</Label>
+										<div className="relative">
+											<div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
+												<span className="text-gray-500 sm:text-sm">$</span>
+											</div>
+											<Input
+												type="number"
+												name="factors.oilPrice"
+												onChange={handleChange}
+												defaultValue={formData?.factors?.oilPrice}
+												value={formData?.factors?.oilPrice}
+											/>
+											<div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-12">
+												<span className="text-gray-500 sm:text-sm">/qt</span>
 											</div>
 										</div>
 									</HeadlessField>
@@ -720,7 +789,13 @@ export function Calculator({
 													defaultValue={
 														formData?.costs?.operation?.variable?.oil
 													}
+													value={formData?.costs?.operation?.variable?.oil}
 												/>
+												<div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-12">
+													<span className="text-gray-500 sm:text-sm">
+														/hour
+													</span>
+												</div>
 											</div>
 										</HeadlessField>
 
