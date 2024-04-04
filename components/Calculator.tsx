@@ -345,154 +345,157 @@ export function Calculator({
 			<form onSubmit={handleSubmit}>
 				<div className="grid grid-flow-col items-start gap-12 pb-12">
 					{/* LEFT */}
-					<div className="grid h-full grid-flow-row content-start items-start gap-8 rounded-lg border border-white/10 bg-white/5 p-8 hover:border-white/20">
-						<h1 className="text-xl text-white">Start here</h1>
-						<div className="grid grid-flow-row gap-16">
-							{/* Aircraft Details */}
-							<div className="grid grid-flow-row gap-6">
-								<h2 className="text-[#FF7124]">Aircraft Details</h2>
-								<div className="grid grid-flow-row gap-4">
-									<HeadlessField className="grid grid-flow-row gap-2">
-										<Label>Type</Label>
-										<Select
-											name="aircraft.type"
-											value={selectPlaneType}
-											onChange={handleSelectChange}
-										>
-											{Planes.map((plane, index) => (
-												<option key={index} value={plane}>
-													{plane}
-												</option>
-											))}
-										</Select>
-									</HeadlessField>
+					<div className="grid h-full grid-flow-row content-start items-start gap-16 rounded-lg border border-white/10 bg-white/5 p-8 hover:border-white/20">
+						<div className="grid grid-flow-row gap-8">
+							<h1 className="text-xl text-white">About the plane</h1>
+							<div className="grid grid-flow-row gap-16">
+								{/* Aircraft Details */}
+								<div className="grid grid-flow-row gap-6">
+									<h2 className="text-[#FF7124]">Aircraft Details</h2>
+									<div className="grid grid-flow-row gap-4">
+										<HeadlessField className="grid grid-flow-row gap-2">
+											<Label>Type</Label>
+											<Select
+												name="aircraft.type"
+												value={selectPlaneType}
+												onChange={handleSelectChange}
+											>
+												{Planes.map((plane, index) => (
+													<option key={index} value={plane}>
+														{plane}
+													</option>
+												))}
+											</Select>
+										</HeadlessField>
 
-									<HeadlessField className="grid grid-flow-row gap-2">
-										<Label>Acquisition Price</Label>
-										<div className="relative">
-											<div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
-												<span className="text-gray-500 sm:text-sm">$</span>
+										<HeadlessField className="grid grid-flow-row gap-2">
+											<Label>Acquisition Price</Label>
+											<div className="relative">
+												<div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
+													<span className="text-gray-500 sm:text-sm">$</span>
+												</div>
+												<Input
+													type="number"
+													name="costs.acquisition.price"
+													defaultValue={50000}
+													onChange={handleChange}
+												/>
 											</div>
-											<Input
-												type="number"
-												name="costs.acquisition.price"
-												defaultValue={50000}
-												onChange={handleChange}
-											/>
-										</div>
-									</HeadlessField>
+										</HeadlessField>
+									</div>
+								</div>
+								{/* Consumption Details */}
+								<div className="grid grid-flow-row gap-6">
+									<h2 className="text-[#FF7124]">Consumption Details</h2>
+									<div className="grid grid-flow-row gap-4">
+										<HeadlessField className="grid grid-flow-row gap-2">
+											<Label>Fuel Burn</Label>
+											<div className="relative">
+												<div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-12">
+													<span className="text-gray-500 sm:text-sm">GPH</span>
+												</div>
+												<Input
+													type="number"
+													name="aircraft.fuelBurn"
+													onChange={handleChange}
+													value={formData?.aircraft?.fuelBurn}
+													defaultValue={8}
+												/>
+											</div>
+										</HeadlessField>
+
+										<HeadlessField className="grid grid-flow-row gap-2">
+											<Label>Fuel Price</Label>
+											<div className="relative">
+												<div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
+													<span className="text-gray-500 sm:text-sm">$</span>
+												</div>
+												<Input
+													type="number"
+													name="factors.fuelPrice"
+													onChange={handleChange}
+													defaultValue={formData?.factors?.fuelPrice}
+												/>
+												<div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-12">
+													<span className="text-gray-500 sm:text-sm">/gal</span>
+												</div>
+											</div>
+										</HeadlessField>
+
+										<HeadlessField className="grid grid-flow-row gap-2">
+											<Label>Oil refill every</Label>
+											<div className="relative">
+												<div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-12">
+													<span className="text-gray-500 sm:text-sm">
+														hours
+													</span>
+												</div>
+												<Input
+													type="number"
+													name="aircraft.oilRefill"
+													onChange={handleChange}
+													value={formData?.aircraft?.oilRefill}
+													defaultValue={8}
+												/>
+											</div>
+										</HeadlessField>
+
+										<HeadlessField className="grid grid-flow-row gap-2">
+											<Label>Oil Price</Label>
+											<div className="relative">
+												<div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
+													<span className="text-gray-500 sm:text-sm">$</span>
+												</div>
+												<Input
+													type="number"
+													name="factors.oilPrice"
+													onChange={handleChange}
+													defaultValue={formData?.factors?.oilPrice}
+													value={formData?.factors?.oilPrice}
+												/>
+												<div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-12">
+													<span className="text-gray-500 sm:text-sm">/qt</span>
+												</div>
+											</div>
+										</HeadlessField>
+									</div>
 								</div>
 							</div>
-							{/* Consumption Details */}
-							<div className="grid grid-flow-row gap-6">
-								<h2 className="text-[#FF7124]">Consumption Details</h2>
-								<div className="grid grid-flow-row gap-4">
-									<HeadlessField className="grid grid-flow-row gap-2">
-										<Label>Fuel Burn</Label>
-										<div className="relative">
-											<div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-12">
-												<span className="text-gray-500 sm:text-sm">GPH</span>
-											</div>
-											<Input
-												type="number"
-												name="aircraft.fuelBurn"
-												onChange={handleChange}
-												value={formData?.aircraft?.fuelBurn}
-												defaultValue={8}
-											/>
-										</div>
-									</HeadlessField>
-
-									<HeadlessField className="grid grid-flow-row gap-2">
-										<Label>Fuel Price</Label>
-										<div className="relative">
-											<div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
-												<span className="text-gray-500 sm:text-sm">$</span>
-											</div>
-											<Input
-												type="number"
-												name="factors.fuelPrice"
-												onChange={handleChange}
-												defaultValue={formData?.factors?.fuelPrice}
-											/>
-											<div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-12">
-												<span className="text-gray-500 sm:text-sm">/gal</span>
-											</div>
-										</div>
-									</HeadlessField>
-
-									<HeadlessField className="grid grid-flow-row gap-2">
-										<Label>Oil refill every</Label>
-										<div className="relative">
-											<div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-12">
-												<span className="text-gray-500 sm:text-sm">hours</span>
-											</div>
-											<Input
-												type="number"
-												name="aircraft.oilRefill"
-												onChange={handleChange}
-												value={formData?.aircraft?.oilRefill}
-												defaultValue={8}
-											/>
-										</div>
-									</HeadlessField>
-
-									<HeadlessField className="grid grid-flow-row gap-2">
-										<Label>Oil Price</Label>
-										<div className="relative">
-											<div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
-												<span className="text-gray-500 sm:text-sm">$</span>
-											</div>
-											<Input
-												type="number"
-												name="factors.oilPrice"
-												onChange={handleChange}
-												defaultValue={formData?.factors?.oilPrice}
-												value={formData?.factors?.oilPrice}
-											/>
-											<div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-12">
-												<span className="text-gray-500 sm:text-sm">/qt</span>
-											</div>
-										</div>
-									</HeadlessField>
-								</div>
-							</div>
+						</div>
+						<div className="grid grid-flow-row gap-8">
+							<h1 className="text-xl text-white">About the owners</h1>
 							{/* Partnership Details */}
-							<div className="grid grid-flow-row gap-6">
-								<h2 className="text-[#FF7124]">Partnership Details</h2>
-								<div className="grid grid-flow-row gap-4">
-									<HeadlessField className="grid grid-flow-row gap-2">
-										<Label>Number of Partners</Label>
-										<div className="relative">
-											<div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-12">
-												<span className="text-gray-500 sm:text-sm">
-													Partners
-												</span>
-											</div>
-											<Input
-												type="number"
-												name="partners.number"
-												defaultValue={formData.partners?.number}
-												onChange={handleChange}
-											/>
-										</div>
-									</HeadlessField>
 
-									<HeadlessField className="grid grid-flow-row gap-2">
-										<Label>Hours Per Partner</Label>
-										<div className="relative">
-											<div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-12">
-												<span className="text-gray-500 sm:text-sm">/year</span>
-											</div>
-											<Input
-												type="number"
-												name="partners.hoursPerPartner"
-												onChange={handleChange}
-												defaultValue={formData.partners?.hoursPerPartner}
-											/>
+							<div className="grid grid-flow-row gap-4">
+								<HeadlessField className="grid grid-flow-row gap-2">
+									<Label>Number of Partners</Label>
+									<div className="relative">
+										<div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-12">
+											<span className="text-gray-500 sm:text-sm">Partners</span>
 										</div>
-									</HeadlessField>
-								</div>
+										<Input
+											type="number"
+											name="partners.number"
+											defaultValue={formData.partners?.number}
+											onChange={handleChange}
+										/>
+									</div>
+								</HeadlessField>
+
+								<HeadlessField className="grid grid-flow-row gap-2">
+									<Label>Hours Per Partner</Label>
+									<div className="relative">
+										<div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-12">
+											<span className="text-gray-500 sm:text-sm">/year</span>
+										</div>
+										<Input
+											type="number"
+											name="partners.hoursPerPartner"
+											onChange={handleChange}
+											defaultValue={formData.partners?.hoursPerPartner}
+										/>
+									</div>
+								</HeadlessField>
 							</div>
 						</div>
 					</div>
