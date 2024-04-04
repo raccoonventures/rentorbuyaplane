@@ -9,9 +9,9 @@ import {
 	type FieldsetProps as HeadlessFieldsetProps,
 	type LabelProps as HeadlessLabelProps,
 	type LegendProps as HeadlessLegendProps,
-} from '@headlessui/react';
-import clsx from 'clsx';
-import type React from 'react';
+} from '@headlessui/react'
+import clsx from 'clsx'
+import type React from 'react'
 
 export function Fieldset({
 	className,
@@ -25,7 +25,7 @@ export function Fieldset({
 				'[&>*+[data-slot=control]]:mt-6 [&>[data-slot=text]]:mt-1',
 			)}
 		/>
-	);
+	)
 }
 
 export function Legend({ ...props }: HeadlessLegendProps) {
@@ -38,7 +38,7 @@ export function Legend({ ...props }: HeadlessLegendProps) {
 				'text-base/6 font-semibold text-zinc-950 data-[disabled]:opacity-50 sm:text-sm/6 dark:text-white',
 			)}
 		/>
-	);
+	)
 }
 
 export function FieldGroup({
@@ -51,7 +51,7 @@ export function FieldGroup({
 			data-slot="control"
 			className={clsx(className, 'space-y-8')}
 		/>
-	);
+	)
 }
 
 export function Field({ className, ...props }: HeadlessFieldProps) {
@@ -68,7 +68,7 @@ export function Field({ className, ...props }: HeadlessFieldProps) {
 			)}
 			{...props}
 		/>
-	);
+	)
 }
 
 export function Label({
@@ -84,7 +84,7 @@ export function Label({
 				'select-none text-base/6 text-zinc-950 data-[disabled]:opacity-50 sm:text-sm/6 dark:text-white',
 			)}
 		/>
-	);
+	)
 }
 
 export function Description({
@@ -101,7 +101,7 @@ export function Description({
 				'text-base/6 text-zinc-500 data-[disabled]:opacity-50 sm:text-sm/6 dark:text-zinc-400',
 			)}
 		/>
-	);
+	)
 }
 
 export function ErrorMessage({
@@ -118,5 +118,5 @@ export function ErrorMessage({
 				'text-base/6 text-red-600 data-[disabled]:opacity-50 sm:text-sm/6 dark:text-red-500',
 			)}
 		/>
-	);
+	)
 }

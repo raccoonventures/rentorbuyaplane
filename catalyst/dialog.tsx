@@ -6,11 +6,11 @@ import {
 	Transition as HeadlessTransition,
 	TransitionChild as HeadlessTransitionChild,
 	type DialogProps as HeadlessDialogProps,
-} from '@headlessui/react';
-import clsx from 'clsx';
-import type React from 'react';
-import { Fragment } from 'react';
-import { Text } from './text';
+} from '@headlessui/react'
+import clsx from 'clsx'
+import type React from 'react'
+import { Fragment } from 'react'
+import { Text } from './text'
 
 const sizes = {
 	xs: 'sm:max-w-xs',
@@ -22,7 +22,7 @@ const sizes = {
 	'3xl': 'sm:max-w-3xl',
 	'4xl': 'sm:max-w-4xl',
 	'5xl': 'sm:max-w-5xl',
-};
+}
 
 export function Dialog({
 	open,
@@ -32,8 +32,8 @@ export function Dialog({
 	children,
 	...props
 }: {
-	size?: keyof typeof sizes;
-	children: React.ReactNode;
+	size?: keyof typeof sizes
+	children: React.ReactNode
 } & HeadlessDialogProps) {
 	return (
 		<HeadlessTransition appear as={Fragment} show={open} {...props}>
@@ -80,7 +80,7 @@ export function Dialog({
 				</HeadlessTransitionChild>
 			</HeadlessDialog>
 		</HeadlessTransition>
-	);
+	)
 }
 
 export function DialogTitle({
@@ -95,7 +95,7 @@ export function DialogTitle({
 				'text-balance text-lg/6 font-semibold text-zinc-950 sm:text-base/6 dark:text-white',
 			)}
 		/>
-	);
+	)
 }
 
 export function DialogDescription({
@@ -108,14 +108,14 @@ export function DialogDescription({
 			{...props}
 			className={clsx(className, 'mt-2 text-pretty')}
 		/>
-	);
+	)
 }
 
 export function DialogBody({
 	className,
 	...props
 }: React.ComponentPropsWithoutRef<'div'>) {
-	return <div {...props} className={clsx(className, 'mt-6')} />;
+	return <div {...props} className={clsx(className, 'mt-6')} />
 }
 
 export function DialogActions({
@@ -130,5 +130,5 @@ export function DialogActions({
 				'mt-8 flex flex-col-reverse items-center justify-end gap-3 *:w-full sm:flex-row sm:*:w-auto',
 			)}
 		/>
-	);
+	)
 }

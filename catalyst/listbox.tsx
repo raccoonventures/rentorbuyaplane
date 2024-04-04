@@ -1,4 +1,4 @@
-'use client';
+'use client'
 
 import {
 	Listbox as HeadlessListbox,
@@ -9,9 +9,9 @@ import {
 	Transition as HeadlessTransition,
 	type ListboxOptionProps as HeadlessListboxOptionProps,
 	type ListboxProps as HeadlessListboxProps,
-} from '@headlessui/react';
-import clsx from 'clsx';
-import { Fragment } from 'react';
+} from '@headlessui/react'
+import clsx from 'clsx'
+import { Fragment } from 'react'
 
 export function Listbox<T>({
 	className,
@@ -21,11 +21,11 @@ export function Listbox<T>({
 	children: options,
 	...props
 }: {
-	className?: string;
-	placeholder?: React.ReactNode;
-	autoFocus?: boolean;
-	'aria-label'?: string;
-	children?: React.ReactNode;
+	className?: string
+	placeholder?: React.ReactNode
+	autoFocus?: boolean
+	'aria-label'?: string
+	children?: React.ReactNode
 } & Omit<HeadlessListboxProps<typeof Fragment, T>, 'multiple'>) {
 	return (
 		<HeadlessListbox {...props} multiple={false}>
@@ -150,7 +150,7 @@ export function Listbox<T>({
 				</HeadlessListboxOptions>
 			</HeadlessTransition>
 		</HeadlessListbox>
-	);
+	)
 }
 
 export function ListboxOption<T>({
@@ -167,7 +167,7 @@ export function ListboxOption<T>({
 
 		// Avatars
 		'[&>[data-slot=avatar]]:size-6 sm:[&>[data-slot=avatar]]:size-5',
-	);
+	)
 
 	return (
 		<HeadlessListboxOption as={Fragment} {...props}>
@@ -175,7 +175,7 @@ export function ListboxOption<T>({
 				if (selectedOption) {
 					return (
 						<div className={clsx(className, sharedClasses)}>{children}</div>
-					);
+					)
 				}
 
 				return (
@@ -214,10 +214,10 @@ export function ListboxOption<T>({
 							{children}
 						</span>
 					</div>
-				);
+				)
 			}}
 		</HeadlessListboxOption>
-	);
+	)
 }
 
 export function ListboxLabel({
@@ -232,7 +232,7 @@ export function ListboxLabel({
 			)}
 			{...props}
 		/>
-	);
+	)
 }
 
 export function ListboxDescription({
@@ -250,5 +250,5 @@ export function ListboxDescription({
 		>
 			<span className="flex-1 truncate">{children}</span>
 		</span>
-	);
+	)
 }
