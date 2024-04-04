@@ -60,6 +60,19 @@ export interface SettingsData {
 	fixedCostsYearly?: boolean;
 }
 
+export interface OutputData {
+	renting?: {
+		perHour?: number;
+	};
+	owning?: {
+		perHour?: number;
+		fixed?: {
+			perYear?: number;
+			perHourFlight?: number;
+		};
+	};
+}
+
 export interface DetailedFormData {
 	aircraft?: AircraftData;
 	factors?: FactorData;
@@ -70,4 +83,5 @@ export interface DetailedFormData {
 	};
 	partners?: PartnerData;
 	settings?: SettingsData;
+	output?: OutputData;
 }
