@@ -19,6 +19,7 @@ interface FormData {
 
 import { Field as HeadlessField } from '@headlessui/react';
 import { useEffect, useMemo, useState } from 'react';
+const commaNumber = require('comma-number');
 
 import { Button } from '@/catalyst/button';
 import { ErrorMessage, Label } from '@/catalyst/fieldset';
@@ -31,9 +32,7 @@ import Planes from '@/helpers/planes.json';
 
 import Financials from '@/utils/financials';
 
-export function Calculator({
-	errors = { has: () => false, get: () => null },
-}: CalculatorProps) {
+export function Calculator() {
 	let [isOpen, setIsOpen] = useState(false);
 	let [isComplete, setIsComplete] = useState(false);
 
@@ -74,7 +73,7 @@ export function Calculator({
 					oil: 0.4,
 					reserve: {
 						engine: 15,
-						maintenance: 25,
+						maintenance: 10,
 					},
 					upgrades: 0,
 					cosmetic: 0,
@@ -424,6 +423,7 @@ export function Calculator({
 		}
 	}, [calculatedOutput, formData.output, setFormData]);
 
+	// Handle the submit
 	const handleSubmit = async (e: any) => {
 		e.preventDefault();
 		/* try {
@@ -447,12 +447,6 @@ export function Calculator({
 		}*/
 		console.log(formData);
 	};
-
-	const stats = [
-		{ name: 'Total Subscribers', stat: '71,897' },
-		{ name: 'Avg. Open Rate', stat: '58.16%' },
-		{ name: 'Avg. Click Rate', stat: '24.57%' },
-	];
 
 	return (
 		<>
@@ -695,7 +689,7 @@ export function Calculator({
 													<HeadlessField className="grid grid-flow-row gap-2">
 														<Label className="text-right">Interest Rate</Label>
 														<div className="relative">
-															<div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-10">
+															<div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-14">
 																<span className="text-gray-500 sm:text-sm">
 																	%
 																</span>
@@ -1133,11 +1127,75 @@ export function Calculator({
 				</dl>
 			</div>
 
-			<section className="grid grid-flow-row md:grid-flow-col">
+			<section className="grid grid-flow-row items-center justify-center gap-12 md:grid-flow-col">
 				{/* Renting */}
-				<div className="rounded-lg border border-black/10 bg-slate-950/5 p-6 hover:border-black/20 lg:p-8 dark:border-white/10 dark:bg-white/5 dark:hover:border-white/20"></div>
+				<div className="h-full min-w-96 rounded-lg border border-black/10 bg-slate-950/5 p-6 hover:border-black/20 lg:p-8 dark:border-white/10 dark:bg-white/5 dark:hover:border-white/20">
+					<div className="grid grid-flow-row gap-8">
+						<h1 className="text-xl font-semibold dark:text-white">
+							Rent a plane
+						</h1>
+						<div className="grid min-h-48 grid-flow-row content-start gap-4">
+							<p className="flex items-baseline gap-x-2  text-slate-200">
+								<span className="text-4xl font-semibold tracking-tight text-white ">
+									${commaNumber(formData?.output?.renting?.perHour)}
+								</span>
+								<span className="text-sm text-gray-400">/hour</span>
+								<dt className="group relative grid grid-flow-col items-center">
+									<span className="cursor-help">of renting</span>
+									<span className="absolute -right-2 top-8 z-[999] w-max max-w-48 scale-0 rounded bg-zinc-700 px-3 py-2 text-center text-xs font-normal text-white shadow-xl group-hover:scale-100">
+										The hourly rate for renting the plane
+									</span>
+								</dt>
+							</p>
+						</div>
+					</div>
+				</div>
+				{/* or */}
+				<div className="grid h-10 w-10 items-center justify-center">
+					<span className="text-2xl font-bold uppercase italic text-white/50">
+						or
+					</span>
+				</div>
 				{/* Owning */}
-				<div className="rounded-lg border border-black/10 bg-slate-950/5 p-6 hover:border-black/20 lg:p-8 dark:border-white/10 dark:bg-white/5 dark:hover:border-white/20"></div>
+
+				<div className="h-full min-w-96 rounded-lg border border-black/10 bg-slate-950/5 p-6 hover:border-black/20 lg:p-8 dark:border-white/10 dark:bg-white/5 dark:hover:border-white/20">
+					<div className="grid grid-flow-row gap-8">
+						<h1 className="text-xl font-semibold dark:text-white">
+							Buy a plane
+						</h1>
+						<div className="grid min-h-48 grid-flow-row content-start gap-4">
+							<p className="flex items-baseline gap-x-2 text-slate-200">
+								<span className="text-4xl font-semibold tracking-tight text-white">
+									${commaNumber(formData?.output?.owning?.perHour)}
+								</span>
+								<span className="text-sm text-gray-400">/hour</span>
+								<dt className="group relative grid grid-flow-col items-center">
+									<span className="cursor-help">
+										of variable operation costs
+									</span>
+									<span className="absolute -right-2 top-8 z-[999] w-max max-w-48 scale-0 rounded bg-zinc-700 px-3 py-2 text-center text-xs font-normal text-white shadow-xl group-hover:scale-100">
+										The hourly costs for fuel, oil, and reserve funds for
+										overhaul and maintenance
+									</span>
+								</dt>
+							</p>
+							<span className="text-4xl font-bold text-zinc-400">+</span>
+							<p className="flex items-baseline gap-x-2  text-slate-200">
+								<span className="text-4xl font-semibold tracking-tight text-white">
+									${commaNumber(formData?.output?.owning?.fixed?.perYear)}
+								</span>
+								<span className="text-sm text-gray-400">/year</span>
+								<dt className="group relative grid grid-flow-col items-center">
+									<span className="cursor-help">of fixed costs</span>
+									<span className="absolute -right-2 top-8 z-[999] w-max max-w-48 scale-0 rounded bg-zinc-700 px-3 py-2 text-center text-xs font-normal text-white shadow-xl group-hover:scale-100">
+										The yearly total for insurance, annual inspection,
+										financing, and hangaring
+									</span>
+								</dt>
+							</p>
+						</div>
+					</div>
+				</div>
 			</section>
 		</>
 	);
