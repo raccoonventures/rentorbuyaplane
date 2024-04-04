@@ -18,7 +18,7 @@ interface FormData {
 }
 
 import { Field as HeadlessField } from '@headlessui/react';
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 
 import {
 	Alert,
@@ -27,7 +27,7 @@ import {
 	AlertTitle,
 } from '@/catalyst/alert';
 import { Button } from '@/catalyst/button';
-import { Label } from '@/catalyst/fieldset';
+import { ErrorMessage, Label } from '@/catalyst/fieldset';
 import { Input } from '@/catalyst/input';
 import { Select } from '@/catalyst/select';
 
@@ -75,10 +75,10 @@ export function Calculator({
 				},
 				variable: {
 					fuel: 64,
-					oil: 200,
+					oil: 5,
 					reserve: {
-						engine: 75,
-						maintenance: 75,
+						engine: 15,
+						maintenance: 25,
 					},
 					upgrades: 0,
 					cosmetic: 0,
@@ -105,10 +105,52 @@ export function Calculator({
 		}));
 	};
 
+	const handleIsWetSwitchChange = (checked: boolean) => {
+		setFormData((prevData) => ({
+			...prevData,
+			costs: {
+				...prevData.costs,
+				rental: {
+					...prevData?.costs?.rental,
+					isWet: checked,
+				},
+			},
+		}));
+	};
+
+	const handleFixedCostsYearlySwitchChange = (checked: boolean) => {
+		setFormData((prevData) => {
+			const hangar = prevData?.costs?.operation?.fixed?.hangar ?? 0;
+			const insurance = prevData?.costs?.operation?.fixed?.insurance ?? 0;
+			const annual = prevData?.costs?.operation?.fixed?.annual ?? 0;
+			const financing = prevData?.costs?.operation?.fixed?.financing ?? 0;
+
+			return {
+				...prevData,
+				costs: {
+					...prevData.costs,
+					operation: {
+						...prevData?.costs?.operation,
+						fixed: {
+							...prevData?.costs?.operation?.fixed,
+							hangar: checked ? hangar * 12 : hangar / 12,
+							insurance: checked ? insurance * 12 : insurance / 12,
+							annual: checked ? annual * 12 : annual / 12,
+							financing: checked ? financing * 12 : financing / 12,
+						},
+					},
+				},
+				settings: {
+					...prevData.settings,
+					fixedCostsYearly: checked,
+				},
+			};
+		});
+	};
 	const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
 		const { name, value } = e.target;
 		const keys = name.split('.');
-
+		// Updaten FormData
 		setFormData((prevData) => {
 			// A recursive function to handle deep updates
 			const updateNestedData = (
@@ -165,7 +207,7 @@ export function Calculator({
 				: acquisitionPrice * 0.2;
 			const calculatedPrincipal = acquisitionPrice - downPayment;
 			const principal = calculatedPrincipal > 0 ? calculatedPrincipal : 0;
-			const installments =
+			const installments: number =
 				interestRate && durationYears
 					? Financials.calculateMonthlyPayment(
 							principal,
@@ -193,14 +235,57 @@ export function Calculator({
 				},
 			}));
 		}
+
+		// Logic for calculating Engine Overhaul Reserve
+		const overhaulCost = formData.factors?.engineOverhaul ?? 0;
+		const tbo = formData?.aircraft?.tbo ?? 0;
+		const tsmoh = formData?.aircraft?.tsmoh ?? 0;
+		const timeToNextOverhaul = tbo - tsmoh;
+
+		if (timeToNextOverhaul > 0) {
+			const engineOverhaulReserve = overhaulCost / timeToNextOverhaul;
+			setFormData((prevData) => ({
+				...prevData,
+				costs: {
+					...prevData.costs,
+					operation: {
+						...prevData?.costs?.operation,
+						variable: {
+							...prevData?.costs?.operation?.variable,
+							reserve: {
+								...prevData?.costs?.operation?.variable?.reserve,
+								engine: Math.ceil(engineOverhaulReserve),
+							},
+						},
+					},
+				},
+			}));
+		}
 	}, [
-		formData.aircraft?.fuelBurn, // Specific dependency
-		formData.factors?.fuelPrice, // Specific dependency
-		formData.costs?.acquisition?.price, // Specific dependency
-		formData.costs?.acquisition?.durationYears, // Specific dependency
-		formData.costs?.acquisition?.interestRate, // Specific dependency
-		formData.costs?.acquisition?.downPayment, // Specific dependency
+		formData.aircraft?.fuelBurn,
+		formData.aircraft?.tbo,
+		formData.aircraft?.tsmoh,
+		formData.factors?.engineOverhaul,
+		formData.factors?.fuelPrice,
+		formData.costs?.acquisition?.price,
+		formData.costs?.acquisition?.durationYears,
+		formData.costs?.acquisition?.interestRate,
+		formData.costs?.acquisition?.downPayment,
 	]);
+
+	const validationErrors = useMemo(() => {
+		const errors = {
+			tsmoh: false,
+		};
+		const tsmoh = formData?.aircraft?.tsmoh ?? 0;
+		const tbo = formData?.aircraft?.tbo ?? 0;
+
+		errors.tsmoh = tsmoh >= tbo;
+
+		// ... include any other validation logic here
+
+		return errors;
+	}, [formData?.aircraft?.tsmoh, formData?.aircraft?.tbo]);
 
 	const handleSubmit = async (e: any) => {
 		e.preventDefault();
@@ -285,32 +370,20 @@ export function Calculator({
 									</HeadlessField>
 
 									<HeadlessField className="grid grid-flow-row gap-2">
-										<Label>Time Before Overhaul</Label>
+										<Label>Fuel Price</Label>
 										<div className="relative">
-											<div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-12">
-												<span className="text-gray-500 sm:text-sm">Hours</span>
+											<div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
+												<span className="text-gray-500 sm:text-sm">$</span>
 											</div>
 											<Input
 												type="number"
-												name="aircraft.tbo"
+												name="factors.fuelPrice"
 												onChange={handleChange}
-												defaultValue={formData?.aircraft?.tbo}
+												defaultValue={formData?.factors?.fuelPrice}
 											/>
-										</div>
-									</HeadlessField>
-
-									<HeadlessField className="grid grid-flow-row gap-2">
-										<Label>Time Since Major Overhaul</Label>
-										<div className="relative">
 											<div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-12">
-												<span className="text-gray-500 sm:text-sm">Hours</span>
+												<span className="text-gray-500 sm:text-sm">/Gal</span>
 											</div>
-											<Input
-												type="number"
-												name="aircraft.tsmoh"
-												onChange={handleChange}
-												defaultValue={formData?.aircraft?.tsmoh}
-											/>
 										</div>
 									</HeadlessField>
 								</div>
@@ -357,325 +430,398 @@ export function Calculator({
 
 					{/* RIGHT */}
 					<div className="grid grid-flow-row gap-12">
-						<h1 className="text-xl text-white">Start here</h1>
 						{/* OWNERSHIP COSTS */}
-						<div className="grid grid-flow-col items-start gap-24 rounded-lg border border-white/10 bg-white/5 p-8 hover:border-white/20">
-							{/* Financing Details */}
-							<div className="grid grid-flow-row gap-6">
-								<h2 className="text-[#FF7124]">Financing Details</h2>
-								<div className="grid grid-flow-row gap-4">
-									<HeadlessField className="grid grid-flow-row gap-2">
-										<Label>Down Payment</Label>
-										<div className="relative">
-											<div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
-												<span className="text-gray-500 sm:text-sm">$</span>
-											</div>
-											<Input
-												type="number"
-												name="costs.acquisition.downPayment"
-												onChange={handleChange}
-												value={formData?.costs?.acquisition?.downPayment}
-											/>
-										</div>
-									</HeadlessField>
-
-									<HeadlessField className="grid grid-flow-row gap-2">
-										<Label>Principal</Label>
-										<div className="relative">
-											<div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
-												<span className="text-gray-500 sm:text-sm">$</span>
-											</div>
-											<Input
-												type="number"
-												name="costs.acquisition.principal"
-												onChange={handleChange}
-												value={formData?.costs?.acquisition?.principal}
-											/>
-										</div>
-									</HeadlessField>
-
-									<div className="grid grid-flow-col items-baseline gap-2">
-										<HeadlessField className="grid grid-flow-row gap-2">
-											<Label>Duration (Years)</Label>
-											<Input
-												type="number"
-												name="costs.acquisition.durationYears"
-												defaultValue={
-													formData?.costs?.acquisition?.durationYears
-												}
-												className="max-w-28"
-												onChange={handleChange}
-											/>
-										</HeadlessField>
-
-										<span className="px-0.5 text-gray-500 sm:text-sm">@</span>
-
-										<HeadlessField className="grid grid-flow-row gap-2">
-											<Label className="text-right">Interest Rate</Label>
-											<div className="relative">
-												<div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-10">
-													<span className="text-gray-500 sm:text-sm">%</span>
+						<div className="grid grid-flow-row items-start gap-8  rounded-lg border border-white/10 bg-white/5 p-8 hover:border-white/20">
+							<h1 className="text-xl text-white">Ownership Costs</h1>
+							<div className="grid grid-flow-col content-start  items-start gap-24">
+								<div className="grid grid-flow-row gap-16">
+									{/* Financing Details */}
+									<div className="grid grid-flow-row gap-6">
+										<h2 className="text-[#FF7124]">Financing Details</h2>
+										<div className="grid grid-flow-row gap-4">
+											<HeadlessField className="grid grid-flow-row gap-2">
+												<Label>Down Payment</Label>
+												<div className="relative">
+													<div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
+														<span className="text-gray-500 sm:text-sm">$</span>
+													</div>
+													<Input
+														type="number"
+														name="costs.acquisition.downPayment"
+														onChange={handleChange}
+														value={formData?.costs?.acquisition?.downPayment}
+													/>
 												</div>
-												<Input
-													type="number"
-													name="costs.acquisition.interestRate"
-													onChange={handleChange}
-													className="max-w-28"
-													defaultValue={
-														formData?.costs?.acquisition?.interestRate
-													}
-												/>
+											</HeadlessField>
+
+											<HeadlessField className="grid grid-flow-row gap-2">
+												<Label>Principal</Label>
+												<div className="relative">
+													<div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
+														<span className="text-gray-500 sm:text-sm">$</span>
+													</div>
+													<Input
+														type="number"
+														name="costs.acquisition.principal"
+														onChange={handleChange}
+														value={formData?.costs?.acquisition?.principal}
+													/>
+												</div>
+											</HeadlessField>
+
+											<div className="grid grid-flow-col items-baseline gap-2">
+												<HeadlessField className="grid grid-flow-row gap-2">
+													<Label>Duration (Years)</Label>
+													<Input
+														type="number"
+														name="costs.acquisition.durationYears"
+														defaultValue={
+															formData?.costs?.acquisition?.durationYears
+														}
+														className="max-w-28"
+														onChange={handleChange}
+													/>
+												</HeadlessField>
+
+												<span className="px-0.5 text-gray-500 sm:text-sm">
+													@
+												</span>
+
+												<HeadlessField className="grid grid-flow-row gap-2">
+													<Label className="text-right">Interest Rate</Label>
+													<div className="relative">
+														<div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-10">
+															<span className="text-gray-500 sm:text-sm">
+																%
+															</span>
+														</div>
+														<Input
+															type="number"
+															name="costs.acquisition.interestRate"
+															onChange={handleChange}
+															className="max-w-28"
+															defaultValue={
+																formData?.costs?.acquisition?.interestRate
+															}
+														/>
+													</div>
+												</HeadlessField>
 											</div>
-										</HeadlessField>
+										</div>
+									</div>
+									{/* Overhaul */}
+									<div className="grid grid-flow-row gap-6">
+										<h2 className="text-[#FF7124]">Engine Overhaul</h2>
+										<div className="grid grid-flow-row gap-4">
+											<HeadlessField className="grid grid-flow-row gap-2">
+												<Label>Overhaul Cost</Label>
+												<div className="relative">
+													<div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
+														<span className="text-gray-500 sm:text-sm">$</span>
+													</div>
+													<Input
+														type="number"
+														name="factors.engineOverhaul"
+														onChange={handleChange}
+														defaultValue={formData?.factors?.engineOverhaul}
+													/>
+												</div>
+											</HeadlessField>
+
+											<HeadlessField className="grid grid-flow-row gap-2">
+												<Label>Time Before Overhaul</Label>
+												<div className="relative">
+													<div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-12">
+														<span className="text-gray-500 sm:text-sm">
+															Hours
+														</span>
+													</div>
+													<Input
+														type="number"
+														name="aircraft.tbo"
+														onChange={handleChange}
+														defaultValue={formData?.aircraft?.tbo}
+													/>
+												</div>
+											</HeadlessField>
+
+											<HeadlessField className="grid grid-flow-row gap-2">
+												<Label>Time Since Major Overhaul</Label>
+												<div className="relative">
+													<div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-12">
+														<span className="text-gray-500 sm:text-sm">
+															Hours
+														</span>
+													</div>
+													<Input
+														type="number"
+														name="aircraft.tsmoh"
+														onChange={handleChange}
+														defaultValue={formData?.aircraft?.tsmoh}
+														invalid={validationErrors?.tsmoh}
+													/>
+												</div>
+												{validationErrors.tsmoh && (
+													<ErrorMessage>
+														TSMOH cannot be greater than TBO
+													</ErrorMessage>
+												)}
+											</HeadlessField>
+										</div>
 									</div>
 								</div>
-							</div>
-							<div className="grid grid-flow-row gap-16">
-								{/* Costs */}
+								<div className="grid grid-flow-row gap-16">
+									{/* Fixed Operation Costs */}
+									<div className="grid grid-flow-row gap-6">
+										<h2 className="text-[#FF7124]">Fixed Operation Costs</h2>
+										<div className="grid grid-flow-row gap-4">
+											<HeadlessField className="grid grid-flow-row gap-2">
+												<Label>Hangar</Label>
+												<div className="relative">
+													<div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
+														<span className="text-gray-500 sm:text-sm">$</span>
+													</div>
+													<Input
+														type="number"
+														name="costs.operation.fixed.hangar"
+														onChange={handleChange}
+														defaultValue={
+															formData?.costs?.operation?.fixed?.hangar
+														}
+														value={formData?.costs?.operation?.fixed?.hangar}
+													/>
+													<div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-12">
+														<span className="text-gray-500 sm:text-sm">
+															{formData?.settings?.fixedCostsYearly
+																? '/year'
+																: '/month'}
+														</span>
+													</div>
+												</div>
+											</HeadlessField>
+
+											<HeadlessField className="grid grid-flow-row gap-2">
+												<Label>Insurance</Label>
+												<div className="relative">
+													<div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
+														<span className="text-gray-500 sm:text-sm">$</span>
+													</div>
+													<Input
+														type="number"
+														name="costs.operation.fixed.insurance"
+														onChange={handleChange}
+														defaultValue={
+															formData?.costs?.operation?.fixed?.insurance
+														}
+														value={formData?.costs?.operation?.fixed?.insurance}
+													/>
+													<div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-12">
+														<span className="text-gray-500 sm:text-sm">
+															{formData?.settings?.fixedCostsYearly
+																? '/year'
+																: '/month'}
+														</span>
+													</div>
+												</div>
+											</HeadlessField>
+
+											<HeadlessField className="grid grid-flow-row gap-2">
+												<Label>Annual Inspection</Label>
+												<div className="relative">
+													<div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
+														<span className="text-gray-500 sm:text-sm">$</span>
+													</div>
+													<Input
+														type="number"
+														name="costs.operation.fixed.annual"
+														onChange={handleChange}
+														defaultValue={
+															formData?.costs?.operation?.fixed?.annual
+														}
+														value={formData?.costs?.operation?.fixed?.annual}
+													/>
+													<div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-12">
+														<span className="text-gray-500 sm:text-sm">
+															{formData?.settings?.fixedCostsYearly
+																? '/year'
+																: '/month'}
+														</span>
+													</div>
+												</div>
+											</HeadlessField>
+
+											<HeadlessField className="grid grid-flow-row gap-2">
+												<Label>Installments</Label>
+												<div className="relative">
+													<div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
+														<span className="text-gray-500 sm:text-sm">$</span>
+													</div>
+													<Input
+														type="number"
+														name="costs.operation.fixed.financing"
+														onChange={handleChange}
+														value={formData?.costs?.operation?.fixed?.financing}
+													/>
+													<div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-12">
+														<span className="text-gray-500 sm:text-sm">
+															{formData?.settings?.fixedCostsYearly
+																? '/year'
+																: '/month'}
+														</span>
+													</div>
+												</div>
+											</HeadlessField>
+
+											<HeadlessField className="mt-4 grid grid-flow-col justify-between gap-2">
+												<Label>Use Yearly intervals</Label>
+												<Switch
+													name="settings.fixedCostsYearly"
+													onChange={handleFixedCostsYearlySwitchChange}
+												/>
+											</HeadlessField>
+										</div>
+									</div>
+								</div>
+
+								{/* Variable Operation Costs */}
 								<div className="grid grid-flow-row gap-6">
-									<h2 className="text-[#FF7124]">Costs</h2>
+									<h2 className="text-[#FF7124]">Variable Operation Costs</h2>
 									<div className="grid grid-flow-row gap-4">
 										<HeadlessField className="grid grid-flow-row gap-2">
-											<Label>Fuel Price</Label>
+											<Label>Fuel</Label>
 											<div className="relative">
 												<div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
 													<span className="text-gray-500 sm:text-sm">$</span>
 												</div>
 												<Input
 													type="number"
-													name="factors.fuelPrice"
+													name="costs.operation.variable.fuel"
+													value={formData?.costs?.operation?.variable?.fuel}
 													onChange={handleChange}
-													defaultValue={formData?.factors?.fuelPrice}
 												/>
 												<div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-12">
-													<span className="text-gray-500 sm:text-sm">/Gal</span>
+													<span className="text-gray-500 sm:text-sm">
+														/hour
+													</span>
 												</div>
 											</div>
 										</HeadlessField>
 
 										<HeadlessField className="grid grid-flow-row gap-2">
-											<Label>Engine Overhaul</Label>
+											<Label>Oil</Label>
 											<div className="relative">
 												<div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
 													<span className="text-gray-500 sm:text-sm">$</span>
 												</div>
 												<Input
 													type="number"
-													name="factors.engineOverhaul"
+													name="costs.operation.variable.oil"
 													onChange={handleChange}
-													defaultValue={formData?.factors?.engineOverhaul}
+													defaultValue={
+														formData?.costs?.operation?.variable?.oil
+													}
 												/>
+											</div>
+										</HeadlessField>
+
+										<HeadlessField className="grid grid-flow-row gap-2">
+											<Label>Engine Overhaul Reserve</Label>
+											<div className="relative">
+												<div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
+													<span className="text-gray-500 sm:text-sm">$</span>
+												</div>
+												<Input
+													type="number"
+													name="costs.operation.variable.reserve.engine"
+													onChange={handleChange}
+													defaultValue={
+														formData?.costs?.operation?.variable?.reserve
+															?.engine
+													}
+												/>
+												<div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-12">
+													<span className="text-gray-500 sm:text-sm">
+														/hour
+													</span>
+												</div>
+											</div>
+										</HeadlessField>
+
+										<HeadlessField className="grid grid-flow-row gap-2">
+											<Label>Maintenance Reserve</Label>
+											<div className="relative">
+												<div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
+													<span className="text-gray-500 sm:text-sm">$</span>
+												</div>
+												<Input
+													type="number"
+													name="costs.operation.variable.reserve.maintenance"
+													onChange={handleChange}
+													defaultValue={
+														formData?.costs?.operation?.variable?.reserve
+															?.maintenance
+													}
+												/>
+												<div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-12">
+													<span className="text-gray-500 sm:text-sm">
+														/hour
+													</span>
+												</div>
+											</div>
+										</HeadlessField>
+
+										<HeadlessField className="grid grid-flow-row gap-2">
+											<Label>Upgrades</Label>
+											<div className="relative">
+												<div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
+													<span className="text-gray-500 sm:text-sm">$</span>
+												</div>
+												<Input
+													type="number"
+													name="costs.operation.variable.upgrades"
+													onChange={handleChange}
+													defaultValue={
+														formData?.costs?.operation?.variable?.upgrades
+													}
+												/>
+												<div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-12">
+													<span className="text-gray-500 sm:text-sm">
+														/hour
+													</span>
+												</div>
+											</div>
+										</HeadlessField>
+
+										<HeadlessField className="grid grid-flow-row gap-2">
+											<Label>Cosmetic</Label>
+											<div className="relative">
+												<div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
+													<span className="text-gray-500 sm:text-sm">$</span>
+												</div>
+												<Input
+													type="number"
+													name="costs.operation.variable.cosmetic"
+													onChange={handleChange}
+													defaultValue={
+														formData?.costs?.operation?.variable?.cosmetic
+													}
+												/>
+												<div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-12">
+													<span className="text-gray-500 sm:text-sm">
+														/hour
+													</span>
+												</div>
 											</div>
 										</HeadlessField>
 									</div>
-								</div>
-
-								{/* Fixed Operation Costs */}
-								<div className="grid grid-flow-row gap-6">
-									<h2 className="text-[#FF7124]">Fixed Operation Costs</h2>
-									<div className="grid grid-flow-row gap-4">
-										<HeadlessField className="grid grid-flow-row gap-2">
-											<Label>Hangar</Label>
-											<div className="relative">
-												<div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
-													<span className="text-gray-500 sm:text-sm">$</span>
-												</div>
-												<Input
-													type="number"
-													name="costs.operation.fixed.hangar"
-													onChange={handleChange}
-													defaultValue={
-														formData?.costs?.operation?.fixed?.hangar
-													}
-												/>
-												<div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-12">
-													<span className="text-gray-500 sm:text-sm">
-														/month
-													</span>
-												</div>
-											</div>
-										</HeadlessField>
-
-										<HeadlessField className="grid grid-flow-row gap-2">
-											<Label>Insurance</Label>
-											<div className="relative">
-												<div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
-													<span className="text-gray-500 sm:text-sm">$</span>
-												</div>
-												<Input
-													type="number"
-													name="costs.operation.fixed.insurance"
-													onChange={handleChange}
-													defaultValue={
-														formData?.costs?.operation?.fixed?.insurance
-													}
-												/>
-												<div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-12">
-													<span className="text-gray-500 sm:text-sm">
-														/month
-													</span>
-												</div>
-											</div>
-										</HeadlessField>
-
-										<HeadlessField className="grid grid-flow-row gap-2">
-											<Label>Annual</Label>
-											<div className="relative">
-												<div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
-													<span className="text-gray-500 sm:text-sm">$</span>
-												</div>
-												<Input
-													type="number"
-													name="costs.operation.fixed.annual"
-													onChange={handleChange}
-													defaultValue={
-														formData?.costs?.operation?.fixed?.annual
-													}
-												/>
-												<div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-12">
-													<span className="text-gray-500 sm:text-sm">
-														/month
-													</span>
-												</div>
-											</div>
-										</HeadlessField>
-
-										<HeadlessField className="grid grid-flow-row gap-2">
-											<Label>Installments</Label>
-											<div className="relative">
-												<div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
-													<span className="text-gray-500 sm:text-sm">$</span>
-												</div>
-												<Input
-													type="number"
-													name="costs.operation.fixed.financing"
-													onChange={handleChange}
-													value={formData?.costs?.operation?.fixed?.financing}
-												/>
-												<div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-12">
-													<span className="text-gray-500 sm:text-sm">
-														/month
-													</span>
-												</div>
-											</div>
-										</HeadlessField>
-									</div>
-								</div>
-							</div>
-
-							{/* Variable Operation Costs */}
-							<div className="grid grid-flow-row gap-6">
-								<h2 className="text-[#FF7124]">Variable Operation Costs</h2>
-								<div className="grid grid-flow-row gap-4">
-									<HeadlessField className="grid grid-flow-row gap-2">
-										<Label>Fuel</Label>
-										<div className="relative">
-											<div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
-												<span className="text-gray-500 sm:text-sm">$</span>
-											</div>
-											<Input
-												type="number"
-												name="costs.operation.variable.fuel"
-												value={formData?.costs?.operation?.variable?.fuel}
-												onChange={handleChange}
-											/>
-											<div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-12">
-												<span className="text-gray-500 sm:text-sm">/hour</span>
-											</div>
-										</div>
-									</HeadlessField>
-
-									<HeadlessField className="grid grid-flow-row gap-2">
-										<Label>Oil</Label>
-										<div className="relative">
-											<div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
-												<span className="text-gray-500 sm:text-sm">$</span>
-											</div>
-											<Input
-												type="number"
-												name="costs.operation.variable.oil"
-												onChange={handleChange}
-												defaultValue={formData?.costs?.operation?.variable?.oil}
-											/>
-										</div>
-									</HeadlessField>
-
-									<HeadlessField className="grid grid-flow-row gap-2">
-										<Label>Engine Reserve</Label>
-										<div className="relative">
-											<div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
-												<span className="text-gray-500 sm:text-sm">$</span>
-											</div>
-											<Input
-												type="number"
-												name="costs.operation.variable.reserve.engine"
-												onChange={handleChange}
-												defaultValue={
-													formData?.costs?.operation?.variable?.reserve?.engine
-												}
-											/>
-										</div>
-									</HeadlessField>
-
-									<HeadlessField className="grid grid-flow-row gap-2">
-										<Label>Maintenance Reserve</Label>
-										<div className="relative">
-											<div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
-												<span className="text-gray-500 sm:text-sm">$</span>
-											</div>
-											<Input
-												type="number"
-												name="costs.operation.variable.reserve.maintenance"
-												onChange={handleChange}
-												defaultValue={
-													formData?.costs?.operation?.variable?.reserve
-														?.maintenance
-												}
-											/>
-										</div>
-									</HeadlessField>
-
-									<HeadlessField className="grid grid-flow-row gap-2">
-										<Label>Upgrades</Label>
-										<div className="relative">
-											<div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
-												<span className="text-gray-500 sm:text-sm">$</span>
-											</div>
-											<Input
-												type="number"
-												name="costs.operation.variable.upgrades"
-												onChange={handleChange}
-												defaultValue={
-													formData?.costs?.operation?.variable?.upgrades
-												}
-											/>
-										</div>
-									</HeadlessField>
-
-									<HeadlessField className="grid grid-flow-row gap-2">
-										<Label>Cosmetic</Label>
-										<div className="relative">
-											<div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
-												<span className="text-gray-500 sm:text-sm">$</span>
-											</div>
-											<Input
-												type="number"
-												name="costs.operation.variable.cosmetic"
-												onChange={handleChange}
-												defaultValue={
-													formData?.costs?.operation?.variable?.cosmetic
-												}
-											/>
-										</div>
-									</HeadlessField>
 								</div>
 							</div>
 						</div>
 
 						{/* RENTAL COSTS */}
 						<div className="rounded-lg border border-white/10 bg-white/5 p-8 hover:border-white/20">
-							<div className="grid grid-flow-row gap-6">
-								<h2 className="text-[#FF7124]">Rental Details</h2>
+							<div className="grid grid-flow-row gap-8">
+								<h1 className="text-xl text-white">Rental Costs</h1>
 								<div className="grid grid-flow-row gap-4">
 									<HeadlessField className="grid grid-flow-row gap-2">
 										<Label>Hourly Rate</Label>
@@ -697,7 +843,11 @@ export function Calculator({
 
 									<HeadlessField className="grid grid-flow-col justify-between gap-2">
 										<Label>Is fuel included?</Label>
-										<Switch name="costs.rental.isWet" defaultChecked />
+										<Switch
+											name="costs.rental.isWet"
+											defaultChecked
+											onChange={handleIsWetSwitchChange}
+										/>
 									</HeadlessField>
 								</div>
 							</div>

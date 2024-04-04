@@ -54,6 +54,10 @@ export interface PartnerData {
 	hoursPerPartner?: number;
 }
 
+export interface SettingsData {
+	fixedCostsYearly?: boolean;
+}
+
 export interface DetailedFormData {
 	aircraft?: AircraftData;
 	factors?: FactorData;
@@ -63,4 +67,5 @@ export interface DetailedFormData {
 		operation?: OperationData;
 	};
 	partners?: PartnerData;
+	settings?: SettingsData;
 }
