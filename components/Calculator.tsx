@@ -518,7 +518,7 @@ export function Calculator() {
 													<Input
 														type="number"
 														name="costs.acquisition.price"
-														value={50000}
+														value={formData.costs?.acquisition?.price}
 														onChange={handleChange}
 													/>
 												</div>
