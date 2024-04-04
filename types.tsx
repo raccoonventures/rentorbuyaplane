@@ -1,66 +1,66 @@
 export interface AircraftData {
-	make?: string
-	type?: string
-	fuelBurn?: number
-	tbo?: number
-	tsmoh?: number
+	make?: string;
+	type?: string;
+	fuelBurn?: number;
+	tbo?: number;
+	tsmoh?: number;
 }
 
 export interface FactorData {
-	fuelPrice?: number
-	engineOverhaul?: number
+	fuelPrice?: number;
+	engineOverhaul?: number;
 }
 
 export interface AcquisitionData {
-	price?: number
-	downPayment?: number
-	principal?: number
-	durationYears?: number
-	interestRate?: number
+	price?: number;
+	downPayment?: number;
+	principal?: number;
+	durationYears?: number;
+	interestRate?: number;
 }
 
 export interface RentalData {
-	hourlyRate?: number
-	isWet?: boolean
+	hourlyRate?: number;
+	isWet?: boolean;
 }
 
 export interface FixedOperationData {
-	hangar?: number
-	insurance?: number
-	annual?: number
-	financing?: number
+	hangar?: number;
+	insurance?: number;
+	annual?: number;
+	financing?: number;
 }
 
 export interface ReserveData {
-	engine?: number
-	maintenance?: number
+	engine?: number;
+	maintenance?: number;
 }
 
 export interface VariableOperationData {
-	fuel?: number
-	oil?: number
-	reserve?: ReserveData
-	upgrades?: number
-	cosmetic?: number
+	fuel?: number;
+	oil?: number;
+	reserve?: ReserveData;
+	upgrades?: number;
+	cosmetic?: number;
 }
 
 export interface OperationData {
-	fixed?: FixedOperationData
-	variable?: VariableOperationData
+	fixed?: FixedOperationData;
+	variable?: VariableOperationData;
 }
 
 export interface PartnerData {
-	number?: number
-	hoursPerPartner?: number
+	number?: number;
+	hoursPerPartner?: number;
 }
 
 export interface DetailedFormData {
-	aircraft?: AircraftData
-	factors?: FactorData
+	aircraft?: AircraftData;
+	factors?: FactorData;
 	costs?: {
-		acquisition?: AcquisitionData
-		rental?: RentalData
-		operation?: OperationData
-	}
-	partners?: PartnerData
+		acquisition?: AcquisitionData;
+		rental?: RentalData;
+		operation?: OperationData;
+	};
+	partners?: PartnerData;
 }

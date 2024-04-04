@@ -1,19 +1,19 @@
 import {
 	Button as HeadlessButton,
 	type ButtonProps as HeadlessButtonProps,
-} from '@headlessui/react'
-import clsx from 'clsx'
-import React from 'react'
-import { TouchTarget } from './button'
-import { Link } from './link'
+} from '@headlessui/react';
+import clsx from 'clsx';
+import React from 'react';
+import { TouchTarget } from './button';
+import { Link } from './link';
 
 type AvatarProps = {
-	src?: string | null
-	square?: boolean
-	initials?: string
-	alt?: string
-	className?: string
-}
+	src?: string | null;
+	square?: boolean;
+	initials?: string;
+	alt?: string;
+	className?: string;
+};
 
 export function Avatar({
 	src = null,
@@ -65,7 +65,7 @@ export function Avatar({
 				aria-hidden="true"
 			/>
 		</span>
-	)
+	);
 }
 
 export const AvatarButton = React.forwardRef(function AvatarButton(
@@ -84,7 +84,7 @@ export const AvatarButton = React.forwardRef(function AvatarButton(
 		className,
 		square ? 'rounded-lg' : 'rounded-full',
 		'relative focus:outline-none data-[focus]:outline data-[focus]:outline-2 data-[focus]:outline-offset-2 data-[focus]:outline-blue-500',
-	)
+	);
 
 	return 'href' in props ? (
 		<Link
@@ -102,5 +102,5 @@ export const AvatarButton = React.forwardRef(function AvatarButton(
 				<Avatar src={src} square={square} initials={initials} alt={alt} />
 			</TouchTarget>
 		</HeadlessButton>
-	)
-})
+	);
+});

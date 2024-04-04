@@ -1,47 +1,47 @@
-'use client'
+'use client';
 
 type Errors = {
-	has: (key: string) => boolean
-	get: (key: string) => any
-}
+	has: (key: string) => boolean;
+	get: (key: string) => any;
+};
 
-import { DetailedFormData } from '@/types'
+import { DetailedFormData } from '@/types';
 
 interface CalculatorProps {
-	errors?: Errors
+	errors?: Errors;
 }
 
 interface FormData {
 	[key: string]: {
-		[key: string]: string
-	}
+		[key: string]: string;
+	};
 }
 
-import { Field as HeadlessField } from '@headlessui/react'
-import { useEffect, useState } from 'react'
+import { Field as HeadlessField } from '@headlessui/react';
+import { useEffect, useState } from 'react';
 
 import {
 	Alert,
 	AlertActions,
 	AlertDescription,
 	AlertTitle,
-} from '@/catalyst/alert'
-import { Button } from '@/catalyst/button'
-import { Label } from '@/catalyst/fieldset'
-import { Input } from '@/catalyst/input'
-import { Select } from '@/catalyst/select'
+} from '@/catalyst/alert';
+import { Button } from '@/catalyst/button';
+import { Label } from '@/catalyst/fieldset';
+import { Input } from '@/catalyst/input';
+import { Select } from '@/catalyst/select';
 
-import { Switch } from '@/catalyst/switch'
+import { Switch } from '@/catalyst/switch';
 
-import Planes from '@/helpers/planes.json'
+import Planes from '@/helpers/planes.json';
 
-import Financials from '@/utils/financials'
+import Financials from '@/utils/financials';
 
 export function Calculator({
 	errors = { has: () => false, get: () => null },
 }: CalculatorProps) {
-	let [isOpen, setIsOpen] = useState(false)
-	let [isComplete, setIsComplete] = useState(false)
+	let [isOpen, setIsOpen] = useState(false);
+	let [isComplete, setIsComplete] = useState(false);
 
 	const [formData, setFormData] = useState<DetailedFormData>({
 		aircraft: {
@@ -89,11 +89,11 @@ export function Calculator({
 			number: 1,
 			hoursPerPartner: 52,
 		},
-	})
+	});
 
-	let [selectPlaneType, setSelectPlaneType] = useState('')
+	let [selectPlaneType, setSelectPlaneType] = useState('');
 	const handleSelectChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-		setSelectPlaneType(e.target.value)
+		setSelectPlaneType(e.target.value);
 
 		// Update the formData state for aircraft.type
 		setFormData((prevData) => ({
@@ -102,12 +102,12 @@ export function Calculator({
 				...prevData.aircraft,
 				type: e.target.value,
 			},
-		}))
-	}
+		}));
+	};
 
 	const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-		const { name, value } = e.target
-		const keys = name.split('.')
+		const { name, value } = e.target;
+		const keys = name.split('.');
 
 		setFormData((prevData) => {
 			// A recursive function to handle deep updates
@@ -116,29 +116,29 @@ export function Calculator({
 				keysArray: string[],
 				value: any,
 			): any => {
-				const key = keysArray[0]
+				const key = keysArray[0];
 				// If we're at the last key, update the value
 				if (keysArray.length === 1) {
-					return { ...data, [key]: value }
+					return { ...data, [key]: value };
 				}
 				// Otherwise, continue updating deeper in the object
 				return {
 					...data,
 					[key]: updateNestedData(data[key] || {}, keysArray.slice(1), value),
-				}
-			}
+				};
+			};
 
 			// Create a new form data object with the updated values
-			return updateNestedData(prevData, keys, value)
-		})
-	}
+			return updateNestedData(prevData, keys, value);
+		});
+	};
 
 	useEffect(() => {
 		// Logic for calculating fuel cost
-		const fuelBurn = formData.aircraft?.fuelBurn ?? 0
-		const fuelPrice = formData.factors?.fuelPrice ?? 0
+		const fuelBurn = formData.aircraft?.fuelBurn ?? 0;
+		const fuelPrice = formData.factors?.fuelPrice ?? 0;
 		if (fuelBurn && fuelPrice) {
-			const fuelCost = fuelBurn * fuelPrice
+			const fuelCost = fuelBurn * fuelPrice;
 			setFormData((prevData) => ({
 				...prevData,
 				costs: {
@@ -151,20 +151,20 @@ export function Calculator({
 						},
 					},
 				},
-			}))
+			}));
 		}
 
 		// Logic for calculating down payment and monthly payments
-		const acquisitionPrice = formData.costs?.acquisition?.price ?? 0
-		const interestRate = formData.costs?.acquisition?.interestRate ?? 0
-		const durationYears = formData.costs?.acquisition?.durationYears ?? 0
+		const acquisitionPrice = formData.costs?.acquisition?.price ?? 0;
+		const interestRate = formData.costs?.acquisition?.interestRate ?? 0;
+		const durationYears = formData.costs?.acquisition?.durationYears ?? 0;
 
 		if (acquisitionPrice) {
 			const downPayment = formData?.costs?.acquisition?.downPayment
 				? formData.costs.acquisition.downPayment
-				: acquisitionPrice * 0.2
-			const calculatedPrincipal = acquisitionPrice - downPayment
-			const principal = calculatedPrincipal > 0 ? calculatedPrincipal : 0
+				: acquisitionPrice * 0.2;
+			const calculatedPrincipal = acquisitionPrice - downPayment;
+			const principal = calculatedPrincipal > 0 ? calculatedPrincipal : 0;
 			const installments =
 				interestRate && durationYears
 					? Financials.calculateMonthlyPayment(
@@ -172,7 +172,7 @@ export function Calculator({
 							durationYears,
 							interestRate,
 						)
-					: 0
+					: 0;
 
 			setFormData((prevData) => ({
 				...prevData,
@@ -191,7 +191,7 @@ export function Calculator({
 						},
 					},
 				},
-			}))
+			}));
 		}
 	}, [
 		formData.aircraft?.fuelBurn, // Specific dependency
@@ -200,10 +200,10 @@ export function Calculator({
 		formData.costs?.acquisition?.durationYears, // Specific dependency
 		formData.costs?.acquisition?.interestRate, // Specific dependency
 		formData.costs?.acquisition?.downPayment, // Specific dependency
-	])
+	]);
 
 	const handleSubmit = async (e: any) => {
-		e.preventDefault()
+		e.preventDefault();
 		/* try {
 			const response = await fetch('/api/contact', {
 				method: 'POST',
@@ -223,8 +223,8 @@ export function Calculator({
 		} catch (error) {
 			console.error(error);
 		}*/
-		console.log(formData)
-	}
+		console.log(formData);
+	};
 
 	return (
 		<>
@@ -357,6 +357,7 @@ export function Calculator({
 
 					{/* RIGHT */}
 					<div className="grid grid-flow-row gap-12">
+						<h1 className="text-xl text-white">Start here</h1>
 						{/* OWNERSHIP COSTS */}
 						<div className="grid grid-flow-col items-start gap-24 rounded-lg border border-white/10 bg-white/5 p-8 hover:border-white/20">
 							{/* Financing Details */}
@@ -724,5 +725,5 @@ export function Calculator({
 				</AlertActions>
 			</Alert>
 		</>
-	)
+	);
 }

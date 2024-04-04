@@ -1,10 +1,10 @@
 import {
 	Button as HeadlessButton,
 	type ButtonProps as HeadlessButtonProps,
-} from '@headlessui/react'
-import { clsx } from 'clsx'
-import React from 'react'
-import { Link } from './link'
+} from '@headlessui/react';
+import { clsx } from 'clsx';
+import React from 'react';
+import { Link } from './link';
 
 const styles = {
 	base: [
@@ -177,7 +177,7 @@ const styles = {
 			'[--btn-icon:theme(colors.rose.300)] data-[active]:[--btn-icon:theme(colors.rose.200)] data-[hover]:[--btn-icon:theme(colors.rose.200)]',
 		],
 	},
-}
+};
 
 type ButtonProps = (
 	| { color?: keyof typeof styles.colors; outline?: never; plain?: never }
@@ -186,7 +186,7 @@ type ButtonProps = (
 ) & { children: React.ReactNode } & (
 		| HeadlessButtonProps
 		| React.ComponentPropsWithoutRef<typeof Link>
-	)
+	);
 
 export const Button = React.forwardRef(function Button(
 	{ color, outline, plain, className, children, ...props }: ButtonProps,
@@ -200,7 +200,7 @@ export const Button = React.forwardRef(function Button(
 			: plain
 				? styles.plain
 				: clsx(styles.solid, styles.colors[color ?? 'dark/zinc']),
-	)
+	);
 
 	return 'href' in props ? (
 		<Link
@@ -218,8 +218,8 @@ export const Button = React.forwardRef(function Button(
 		>
 			<TouchTarget>{children}</TouchTarget>
 		</HeadlessButton>
-	)
-})
+	);
+});
 
 /* Expand the hit area to at least 44×44px on touch devices */
 export function TouchTarget({ children }: { children: React.ReactNode }) {
@@ -231,5 +231,5 @@ export function TouchTarget({ children }: { children: React.ReactNode }) {
 				aria-hidden="true"
 			/>
 		</>
-	)
+	);
 }

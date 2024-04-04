@@ -1,4 +1,4 @@
-'use client'
+'use client';
 
 import {
 	Description as HeadlessDescription,
@@ -19,21 +19,21 @@ import {
 	type MenuProps as HeadlessMenuProps,
 	type MenuSectionProps as HeadlessMenuSectionProps,
 	type MenuSeparatorProps as HeadlessMenuSeparatorProps,
-} from '@headlessui/react'
-import clsx from 'clsx'
-import type React from 'react'
-import { Fragment } from 'react'
-import { Button } from './button'
-import { Link } from './link'
+} from '@headlessui/react';
+import clsx from 'clsx';
+import type React from 'react';
+import { Fragment } from 'react';
+import { Button } from './button';
+import { Link } from './link';
 
 export function Dropdown(props: HeadlessMenuProps) {
-	return <HeadlessMenu {...props} />
+	return <HeadlessMenu {...props} />;
 }
 
 export function DropdownButton<T extends React.ElementType = typeof Button>(
 	props: React.ComponentProps<typeof HeadlessMenuButton<T>>,
 ) {
-	return <HeadlessMenuButton as={Button} {...props} />
+	return <HeadlessMenuButton as={Button} {...props} />;
 }
 
 export function DropdownMenu({
@@ -83,7 +83,7 @@ export function DropdownMenu({
 				)}
 			/>
 		</HeadlessTransition>
-	)
+	);
 }
 
 export function DropdownItem(
@@ -120,7 +120,7 @@ export function DropdownItem(
 				'[&>[data-slot=icon]]:text-zinc-500 [&>[data-slot=icon]]:data-[focus]:text-white [&>[data-slot=icon]]:dark:text-zinc-500 [&>[data-slot=icon]]:data-[focus]:dark:text-white',
 			)}
 		/>
-	)
+	);
 }
 
 export function DropdownHeader({
@@ -132,7 +132,7 @@ export function DropdownHeader({
 			{...props}
 			className={clsx(className, 'col-span-5 px-3.5 pb-1 pt-2.5 sm:px-3')}
 		/>
-	)
+	);
 }
 
 export function DropdownSection({
@@ -148,7 +148,7 @@ export function DropdownSection({
 				'col-span-full supports-[grid-template-columns:subgrid]:grid supports-[grid-template-columns:subgrid]:grid-cols-[auto_1fr_1.5rem_0.5rem_auto]',
 			)}
 		/>
-	)
+	);
 }
 
 export function DropdownHeading({
@@ -163,7 +163,7 @@ export function DropdownHeading({
 				'col-span-full grid grid-cols-[1fr,auto] gap-x-12 px-3.5 pb-1 pt-2 text-sm/5 font-medium text-zinc-500 sm:px-3 sm:text-xs/5 dark:text-zinc-400',
 			)}
 		/>
-	)
+	);
 }
 
 export function DropdownSeparator({
@@ -178,7 +178,7 @@ export function DropdownSeparator({
 				'col-span-full mx-3.5 my-1 h-px border-0 bg-zinc-950/5 sm:mx-3 dark:bg-white/10 forced-colors:bg-[CanvasText]',
 			)}
 		/>
-	)
+	);
 }
 
 export function DropdownLabel({ className, ...props }: HeadlessLabelProps) {
@@ -189,7 +189,7 @@ export function DropdownLabel({ className, ...props }: HeadlessLabelProps) {
 			className={clsx(className, 'col-start-2 row-start-1')}
 			{...props}
 		/>
-	)
+	);
 }
 
 export function DropdownDescription({
@@ -205,7 +205,7 @@ export function DropdownDescription({
 				'col-span-2 col-start-2 row-start-2 text-sm/5 text-zinc-500 group-data-[focus]:text-white sm:text-xs/5 dark:text-zinc-400 forced-colors:group-data-[focus]:text-[HighlightText]',
 			)}
 		/>
-	)
+	);
 }
 
 export function DropdownShortcut({
@@ -236,5 +236,5 @@ export function DropdownShortcut({
 				</kbd>
 			))}
 		</HeadlessDescription>
-	)
+	);
 }
