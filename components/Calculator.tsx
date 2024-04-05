@@ -1145,7 +1145,7 @@ export function Calculator() {
 					</div>
 				</div>
 
-				<div className="grid grid-flow-row items-center justify-center gap-4 md:grid-flow-col lg:gap-12">
+				<div className="grid grid-flow-row items-center justify-center gap-12 md:grid-flow-col">
 					{/* Renting */}
 					<div
 						className={`h-full w-full rounded-lg  border md:min-w-96 lg:p-8 ${!formData.output?.isBuyingBest ? 'scale-110 border-emerald-500 bg-emerald-800/10 p-6 hover:border-emerald-950 dark:border-emerald-400/40 dark:bg-emerald-500/10 dark:hover:border-emerald-400' : 'border-black/10 bg-zinc-950/5 p-6 hover:border-black/20 dark:border-white/10 dark:bg-white/5 dark:hover:border-white/20'} `}
