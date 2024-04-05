@@ -1,7 +1,7 @@
 import Link from 'next/link';
 
 const navigation = [
-	//{ name: 'About', href: '/about' },
+	{ name: 'Home', href: '/' },
 ];
 
 export default function Footer() {
