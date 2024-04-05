@@ -1162,6 +1162,23 @@ export function Calculator() {
 								)}
 							</div>
 							<div className="grid min-h-48 grid-flow-row content-start gap-4">
+								{formData?.output?.estimatedHours && (
+									<>
+										<div className="flex flex-col items-baseline  gap-x-3 text-zinc-200 md:flex-row">
+											<span className="flex items-baseline gap-x-2">
+												<span className="text-3xl font-semibold tracking-tight text-zinc-950 md:text-4xl dark:text-white">
+													{commaNumber(formData?.output?.estimatedHours)}
+												</span>
+												<span className="text-sm text-zinc-800 dark:text-zinc-400">
+													hours
+												</span>
+											</span>
+										</div>
+										<span className="text-4xl font-bold text-zinc-800 dark:text-zinc-400">
+											×
+										</span>
+									</>
+								)}
 								<div className="flex items-baseline gap-x-2  text-zinc-200">
 									<span>
 										<span className="text-3xl font-semibold tracking-tight text-zinc-950 md:text-4xl dark:text-white ">
@@ -1179,6 +1196,23 @@ export function Calculator() {
 									</dt>
 								</div>
 							</div>
+							{formData?.output?.estimatedHours && (
+								<div className="grid grid-flow-col items-center justify-start gap-4 border-t-2 border-zinc-800 pt-4  dark:border-zinc-400">
+									<span className="text-4xl font-bold text-zinc-800 dark:text-zinc-400">
+										{formData?.output?.estimatedHours == 200 ? '≥' : '='}
+									</span>
+									<span className="text-3xl font-semibold tracking-tight text-zinc-950 md:text-4xl dark:text-white">
+										$
+										{commaNumber(
+											(formData?.output?.renting?.perHour ?? 0) *
+												formData?.output?.estimatedHours,
+										)}
+									</span>
+									<span className="text-sm text-zinc-800 dark:text-zinc-400">
+										/year
+									</span>
+								</div>
+							)}
 						</div>
 					</div>
 					{/* or */}
@@ -1204,8 +1238,25 @@ export function Calculator() {
 								)}
 							</div>
 							<div className="grid min-h-48 grid-flow-row content-start gap-4">
+								{formData?.output?.estimatedHours && (
+									<>
+										<div className="flex flex-col items-baseline  gap-x-2 text-zinc-200 md:flex-row">
+											<span className="flex items-baseline gap-x-2">
+												<span className="text-3xl font-semibold tracking-tight text-zinc-950 md:text-4xl dark:text-white">
+													{commaNumber(formData?.output?.estimatedHours)}
+												</span>
+												<span className="text-sm text-zinc-800 dark:text-zinc-400">
+													hours
+												</span>
+											</span>
+										</div>
+										<span className="text-4xl font-bold text-zinc-800 dark:text-zinc-400">
+											×
+										</span>
+									</>
+								)}
 								<div className="flex flex-col items-baseline  gap-x-2 text-zinc-200 md:flex-row">
-									<span>
+									<span className="flex items-baseline gap-x-2">
 										<span className="text-3xl font-semibold tracking-tight text-zinc-950 md:text-4xl dark:text-white">
 											${commaNumber(formData?.output?.owning?.perHour)}
 										</span>
@@ -1226,8 +1277,8 @@ export function Calculator() {
 								<span className="text-4xl font-bold text-zinc-800 dark:text-zinc-400">
 									+
 								</span>
-								<div className="flex flex-col items-baseline gap-x-2 text-zinc-200  md:flex-row">
-									<span>
+								<div className="flex flex-col items-baseline gap-x-3 text-zinc-200  md:flex-row">
+									<span className="flex items-baseline gap-x-2">
 										<span className="text-3xl font-semibold tracking-tight text-zinc-950 md:text-4xl dark:text-white">
 											${commaNumber(formData?.output?.owning?.fixed?.perYear)}
 										</span>
@@ -1244,6 +1295,24 @@ export function Calculator() {
 									</dt>
 								</div>
 							</div>
+							{formData?.output?.estimatedHours && (
+								<div className="grid grid-flow-col items-center justify-start gap-4 border-t-2 border-zinc-800 pt-4  dark:border-zinc-400">
+									<span className="text-4xl font-bold text-zinc-800 dark:text-zinc-400">
+										{formData?.output?.estimatedHours == 200 ? '≥' : '='}
+									</span>
+									<span className="text-3xl font-semibold tracking-tight text-zinc-950 md:text-4xl dark:text-white">
+										$
+										{commaNumber(
+											(formData?.output?.owning?.perHour ?? 0) *
+												(formData?.output?.estimatedHours ?? 0) +
+												(formData?.output?.owning?.fixed?.perYear ?? 0),
+										)}
+									</span>
+									<span className="text-sm text-zinc-800 dark:text-zinc-400">
+										/year
+									</span>
+								</div>
+							)}
 						</div>
 					</div>
 				</div>
