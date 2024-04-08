@@ -243,7 +243,9 @@ export function Calculator() {
 							interestRate,
 						)
 					: 0;
-			const installments: number = formData?.settings?.fixedCostsYearly ? installmentsMonthly * 12 : installmentsMonthly;
+			const installments: number = formData?.settings?.fixedCostsYearly
+				? installmentsMonthly * 12
+				: installmentsMonthly;
 
 			setFormData((prevData) => ({
 				...prevData,

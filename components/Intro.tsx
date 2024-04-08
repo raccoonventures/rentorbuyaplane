@@ -20,6 +20,7 @@ export default function Intro() {
 					the financial feasibility of owning your own aircraft compared to
 					renting one.
 				</p>
+				{/*
 				<p>
 					At rentorbuyaplane.com, we&apos;re committed to simplicity and
 					transparency. Our user-friendly interface empowers you to make
@@ -37,13 +38,14 @@ export default function Intro() {
 					Ready to take control of your aviation destiny? Try our plane cost
 					calculator today and soar towards smarter ownership decisions.
 				</p>
+				*/}
 			</div>
-			<div className="grid max-w-4xl items-center justify-center">
+			<div className="hidden max-w-4xl items-center justify-center lg:grid">
 				<Image
 					alt="illustration of an isometric plane"
 					src="/isometric-plane.png"
-					width="360"
-					height="360"
+					width="180"
+					height="180"
 				/>
 			</div>
 		</section>
