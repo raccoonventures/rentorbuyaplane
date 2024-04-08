@@ -31,6 +31,7 @@ import { Switch } from '@/catalyst/switch';
 import Planes from '@/helpers/planes.json';
 
 import { Badge } from '@/catalyst/badge';
+import { Preregister } from '@/components/preregister';
 import Financials from '@/utils/financials';
 
 export function Calculator() {
@@ -234,7 +235,7 @@ export function Calculator() {
 				: acquisitionPrice * 0.2;
 			const calculatedPrincipal = acquisitionPrice - downPayment;
 			const principal = calculatedPrincipal > 0 ? calculatedPrincipal : 0;
-			const installments: number =
+			const installmentsMonthly: number =
 				interestRate && durationYears
 					? Financials.calculateMonthlyPayment(
 							principal,
@@ -242,6 +243,7 @@ export function Calculator() {
 							interestRate,
 						)
 					: 0;
+			const installments: number = formData?.settings?.fixedCostsYearly ? installmentsMonthly * 12 : installmentsMonthly;
 
 			setFormData((prevData) => ({
 				...prevData,
@@ -322,6 +324,7 @@ export function Calculator() {
 		formData.costs?.acquisition?.downPayment,
 		formData.output?.breakEven,
 		formData.output?.estimatedHours,
+		formData.settings?.fixedCostsYearly,
 	]);
 
 	const validationErrors = useMemo(() => {
@@ -913,7 +916,11 @@ export function Calculator() {
 												</HeadlessField>
 
 												<HeadlessField className="mt-4 grid grid-flow-col justify-between gap-2">
-													<Label>Use Yearly intervals</Label>
+													<Label>
+														{formData?.settings?.fixedCostsYearly
+															? 'Converted to yearly costs'
+															: 'Convert to yearly costs'}
+													</Label>
 													<Switch
 														name="settings.fixedCostsYearly"
 														onChange={handleFixedCostsYearlySwitchChange}
@@ -1105,21 +1112,26 @@ export function Calculator() {
 					{/* CTA */}
 
 					<div className="mx-auto max-w-7xl px-6 py-12 lg:flex lg:items-center lg:justify-between lg:px-8">
-						<h2 className="text-3xl font-bold tracking-tight text-zinc-950 sm:text-4xl dark:text-zinc-50">
-							Get a copy of these results
-							<br />
-							Download now for free
-						</h2>
+						<div className="grid grid-flow-row justify-start gap-4">
+							<h2 className="text-3xl font-bold tracking-tight text-zinc-950 sm:text-4xl dark:text-zinc-50">
+								Get a complete tailored financial analysis
+							</h2>
+							<p className="max-w-2xl text-xl tracking-tight text-zinc-950 dark:text-zinc-100">
+								Based on the numbers you provided, our downloadable report will
+								help you take that decision with visualizations and multi-year
+								calculations
+							</p>
+						</div>
 						<div className="mt-10 flex items-center gap-x-6 lg:mt-0 lg:flex-shrink-0">
-							<Button color="green" type="submit">
-								Submit
-							</Button>
-							<a
-								href="#"
-								className="text-sm font-semibold leading-6 text-zinc-950 dark:text-zinc-50"
+							<Button
+								color="green"
+								type="submit"
+								className="cursor-not-allowed"
+								disabled
 							>
-								Learn more <span aria-hidden="true">→</span>
-							</a>
+								Download
+							</Button>
+							<Preregister />
 						</div>
 					</div>
 				</form>
