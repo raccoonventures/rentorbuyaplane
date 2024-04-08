@@ -1,8 +1,6 @@
 import Link from 'next/link';
 
-const navigation = [
-	{ name: 'Home', href: '/' },
-];
+const navigation = [{ name: 'Home', href: '/' }];
 
 export default function Footer() {
 	return (

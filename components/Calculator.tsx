@@ -482,7 +482,7 @@ export function Calculator() {
 			{/* Calculator */}
 			<section>
 				<form onSubmit={handleSubmit}>
-					<div className="grid grid-flow-row items-start gap-12 pb-12 lg:grid-flow-col">
+					<div className="grid grid-flow-row items-start gap-12 pb-12 xl:grid-flow-col">
 						{/* LEFT */}
 						<div className="grid h-full grid-flow-row content-start items-start gap-16 rounded-lg border border-black/10 bg-zinc-950/5 p-6 hover:border-black/20 lg:p-8 dark:border-white/10 dark:bg-white/5 dark:hover:border-white/20">
 							<div className="grid grid-flow-row gap-8">
@@ -532,7 +532,7 @@ export function Calculator() {
 											<HeadlessField className="grid grid-flow-row gap-2">
 												<Label>Fuel Burn</Label>
 												<div className="relative">
-													<div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-12">
+													<div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-8 xl:pr-10">
 														<span className="text-zinc-500 sm:text-sm">
 															GPH
 														</span>
@@ -558,7 +558,7 @@ export function Calculator() {
 														onChange={handleChange}
 														value={formData?.factors?.fuelPrice}
 													/>
-													<div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-12">
+													<div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-8 xl:pr-10">
 														<span className="text-zinc-500 sm:text-sm">
 															/gal
 														</span>
@@ -569,7 +569,7 @@ export function Calculator() {
 											<HeadlessField className="grid grid-flow-row gap-2">
 												<Label>Oil refill every</Label>
 												<div className="relative">
-													<div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-12">
+													<div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-8 xl:pr-10">
 														<span className="text-zinc-500 sm:text-sm">
 															hours
 														</span>
@@ -595,7 +595,7 @@ export function Calculator() {
 														onChange={handleChange}
 														value={formData?.factors?.oilPrice}
 													/>
-													<div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-12">
+													<div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-8 xl:pr-10">
 														<span className="text-zinc-500 sm:text-sm">
 															/qt
 														</span>
@@ -617,7 +617,7 @@ export function Calculator() {
 									<HeadlessField className="grid grid-flow-row gap-2">
 										<Label>Number of Partners</Label>
 										<div className="relative">
-											<div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-12">
+											<div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-8 xl:pr-10">
 												<span className="text-zinc-500 sm:text-sm">
 													Partner
 													{(formData?.partners?.number ?? 0) > 1 ? 's' : ''}
@@ -632,10 +632,10 @@ export function Calculator() {
 										</div>
 									</HeadlessField>
 
-									<HeadlessField className="grid grid-flow-row gap-2">
+									<HeadlessField className="grid hidden grid-flow-row gap-2">
 										<Label>Hours Per Partner</Label>
 										<div className="relative">
-											<div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-12">
+											<div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-8 xl:pr-10">
 												<span className="text-zinc-500 sm:text-sm">/year</span>
 											</div>
 											<Input
@@ -697,41 +697,48 @@ export function Calculator() {
 													</div>
 												</HeadlessField>
 
-												<div className="grid max-w-64 grid-flow-col items-baseline gap-2 lg:max-w-none">
-													<HeadlessField className="grid grid-flow-row gap-2">
-														<Label>Duration (Years)</Label>
-														<Input
-															type="number"
-															name="costs.acquisition.durationYears"
-															value={
-																formData?.costs?.acquisition?.durationYears
-															}
-															className="max-w-28"
-															onChange={handleChange}
-														/>
+												<div className="grid grid-flow-col items-baseline justify-items-stretch gap-2 md:justify-items-start lg:max-w-none lg:grid-flow-row xl:grid-flow-col">
+													<HeadlessField className="grid max-w-48 grid-flow-row gap-2">
+														<Label>Duration</Label>
+														<div className="relative">
+															<Input
+																type="number"
+																name="costs.acquisition.durationYears"
+																value={
+																	formData?.costs?.acquisition?.durationYears
+																}
+																className="min-w-24 max-w-28"
+																onChange={handleChange}
+															/>
+															<div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-8 xl:pr-10">
+																<span className="text-zinc-500 sm:text-sm">
+																	years
+																</span>
+															</div>
+														</div>
 													</HeadlessField>
 
-													<span className="px-0.5 text-zinc-500 sm:text-sm">
+													<span className="max-w-10 px-0.5 text-zinc-500 sm:text-sm">
 														@
 													</span>
 
-													<HeadlessField className="grid grid-flow-row gap-2">
+													<HeadlessField className="grid max-w-48 grid-flow-row gap-2">
 														<Label className="text-right">Interest Rate</Label>
 														<div className="relative">
-															<div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-14">
-																<span className="text-zinc-500 sm:text-sm">
-																	%
-																</span>
-															</div>
 															<Input
 																type="number"
 																name="costs.acquisition.interestRate"
 																onChange={handleChange}
-																className="max-w-28"
+																className="min-w-24 max-w-28"
 																value={
 																	formData?.costs?.acquisition?.interestRate
 																}
 															/>
+															<div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-7 md:pr-12">
+																<span className="text-zinc-500 sm:text-sm">
+																	%
+																</span>
+															</div>
 														</div>
 													</HeadlessField>
 												</div>
@@ -761,9 +768,9 @@ export function Calculator() {
 												<HeadlessField className="grid grid-flow-row gap-2">
 													<Label>Time Before Overhaul</Label>
 													<div className="relative">
-														<div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-12">
+														<div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-8 xl:pr-10">
 															<span className="text-zinc-500 sm:text-sm">
-																Hours
+																hours
 															</span>
 														</div>
 														<Input
@@ -778,9 +785,9 @@ export function Calculator() {
 												<HeadlessField className="grid grid-flow-row gap-2">
 													<Label>Time Since Major Overhaul</Label>
 													<div className="relative">
-														<div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-12">
+														<div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-8 xl:pr-10">
 															<span className="text-zinc-500 sm:text-sm">
-																Hours
+																hours
 															</span>
 														</div>
 														<Input
@@ -819,7 +826,7 @@ export function Calculator() {
 															onChange={handleChange}
 															value={formData?.costs?.operation?.fixed?.hangar}
 														/>
-														<div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-12">
+														<div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-8 xl:pr-10">
 															<span className="text-zinc-500 sm:text-sm">
 																{formData?.settings?.fixedCostsYearly
 																	? '/year'
@@ -845,7 +852,7 @@ export function Calculator() {
 																formData?.costs?.operation?.fixed?.insurance
 															}
 														/>
-														<div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-12">
+														<div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-8 xl:pr-10">
 															<span className="text-zinc-500 sm:text-sm">
 																{formData?.settings?.fixedCostsYearly
 																	? '/year'
@@ -869,7 +876,7 @@ export function Calculator() {
 															onChange={handleChange}
 															value={formData?.costs?.operation?.fixed?.annual}
 														/>
-														<div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-12">
+														<div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-8 xl:pr-10">
 															<span className="text-zinc-500 sm:text-sm">
 																{formData?.settings?.fixedCostsYearly
 																	? '/year'
@@ -895,7 +902,7 @@ export function Calculator() {
 																formData?.costs?.operation?.fixed?.financing
 															}
 														/>
-														<div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-12">
+														<div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-8 xl:pr-10">
 															<span className="text-zinc-500 sm:text-sm">
 																{formData?.settings?.fixedCostsYearly
 																	? '/year'
@@ -932,7 +939,7 @@ export function Calculator() {
 														value={formData?.costs?.operation?.variable?.fuel}
 														onChange={handleChange}
 													/>
-													<div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-12">
+													<div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-8 xl:pr-10">
 														<span className="text-zinc-500 sm:text-sm">
 															/hour
 														</span>
@@ -952,7 +959,7 @@ export function Calculator() {
 														onChange={handleChange}
 														value={formData?.costs?.operation?.variable?.oil}
 													/>
-													<div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-12">
+													<div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-8 xl:pr-10">
 														<span className="text-zinc-500 sm:text-sm">
 															/hour
 														</span>
@@ -975,7 +982,7 @@ export function Calculator() {
 																?.engine
 														}
 													/>
-													<div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-12">
+													<div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-8 xl:pr-10">
 														<span className="text-zinc-500 sm:text-sm">
 															/hour
 														</span>
@@ -998,7 +1005,7 @@ export function Calculator() {
 																?.maintenance
 														}
 													/>
-													<div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-12">
+													<div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-8 xl:pr-10">
 														<span className="text-zinc-500 sm:text-sm">
 															/hour
 														</span>
@@ -1020,7 +1027,7 @@ export function Calculator() {
 															formData?.costs?.operation?.variable?.upgrades
 														}
 													/>
-													<div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-12">
+													<div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-8 xl:pr-10">
 														<span className="text-zinc-500 sm:text-sm">
 															/hour
 														</span>
@@ -1042,7 +1049,7 @@ export function Calculator() {
 															formData?.costs?.operation?.variable?.cosmetic
 														}
 													/>
-													<div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-12">
+													<div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-8 xl:pr-10">
 														<span className="text-zinc-500 sm:text-sm">
 															/hour
 														</span>
@@ -1073,7 +1080,7 @@ export function Calculator() {
 													onChange={handleChange}
 													value={formData?.costs?.rental?.hourlyRate}
 												/>
-												<div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-12">
+												<div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-8 xl:pr-10">
 													<span className="text-zinc-500 sm:text-sm">
 														/hour
 													</span>
