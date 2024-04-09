@@ -1,4 +1,4 @@
-import { Calculator } from '@/components/Calculator';
+import { Calculator } from '@/components/forms/Calculator';
 import Intro from '@/components/Intro';
 
 export default function Home() {
