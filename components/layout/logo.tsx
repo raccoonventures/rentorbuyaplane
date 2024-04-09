@@ -4,7 +4,7 @@ import Link from 'next/link';
 
 export const Logo = () => {
 	return (
-		<div className="mb-4 grid items-center px-3 py-1">
+		<div className="grid items-center">
 			<Link href="/">
 				<svg
 					xmlns="http://www.w3.org/2000/svg"
