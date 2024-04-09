@@ -19,7 +19,7 @@ export default function Header() {
 
 	return (
 		<header
-			className={`grid ${isHomePage ? 'grid-flow-col justify-between' : ' grid-flow-row justify-center'} gap-2`}
+			className={`grid ${isHomePage ? 'grid-flow-col justify-between' : ' grid-flow-row justify-center'} sticky top-0 z-50 gap-2 bg-gradient-to-b from-zinc-50/95 from-60% to-transparent px-3 pb-12 pt-6 dark:from-[#202124]/95`}
 		>
 			<Logo />
 			<div>
