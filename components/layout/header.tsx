@@ -23,7 +23,7 @@ export default function Header() {
 		>
 			<Logo />
 			<div>
-				<ul className="grid grid-flow-col items-baseline justify-around gap-3 rounded-full bg-white/90 px-4 py-1 text-sm font-medium text-zinc-800 shadow-lg shadow-zinc-800/5 ring-1 ring-zinc-900/5 backdrop-blur dark:bg-zinc-800/90 dark:text-zinc-200 dark:ring-white/10">
+				<ul className="grid grid-flow-col items-baseline justify-around gap-3 rounded-full bg-white/90 px-4 py-1 text-sm font-medium text-zinc-800 shadow-lg shadow-zinc-800/5 ring-1 ring-zinc-900/5 backdrop-blur hover:ring-zinc-900/15 dark:bg-zinc-800/90 dark:text-zinc-200 dark:ring-white/10 hover:dark:ring-white/15">
 					{navigation.map((item) =>
 						item.notification ? (
 							<li
