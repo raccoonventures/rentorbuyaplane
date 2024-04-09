@@ -518,7 +518,9 @@ export function Calculator() {
 												<Label>Acquisition Price</Label>
 												<div className="relative">
 													<div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
-														<span className="text-zinc-500 sm:text-sm">$</span>
+														<span className="z-10 text-zinc-500 sm:text-sm">
+															$
+														</span>
 													</div>
 													<Input
 														type="number"
@@ -538,7 +540,7 @@ export function Calculator() {
 												<Label>Fuel Burn</Label>
 												<div className="relative">
 													<div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-8 xl:pr-10">
-														<span className="text-zinc-500 sm:text-sm">
+														<span className="z-10 text-zinc-500 sm:text-sm">
 															GPH
 														</span>
 													</div>
@@ -555,7 +557,9 @@ export function Calculator() {
 												<Label>Fuel Price</Label>
 												<div className="relative">
 													<div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
-														<span className="text-zinc-500 sm:text-sm">$</span>
+														<span className="z-10 text-zinc-500 sm:text-sm">
+															$
+														</span>
 													</div>
 													<Input
 														type="number"
@@ -564,7 +568,7 @@ export function Calculator() {
 														value={formData?.factors?.fuelPrice}
 													/>
 													<div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-8 xl:pr-10">
-														<span className="text-zinc-500 sm:text-sm">
+														<span className="z-10 text-zinc-500 sm:text-sm">
 															/gal
 														</span>
 													</div>
@@ -575,7 +579,7 @@ export function Calculator() {
 												<Label>Oil refill every</Label>
 												<div className="relative">
 													<div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-8 xl:pr-10">
-														<span className="text-zinc-500 sm:text-sm">
+														<span className="z-10 text-zinc-500 sm:text-sm">
 															hours
 														</span>
 													</div>
@@ -592,7 +596,9 @@ export function Calculator() {
 												<Label>Oil Price</Label>
 												<div className="relative">
 													<div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
-														<span className="text-zinc-500 sm:text-sm">$</span>
+														<span className="z-10 text-zinc-500 sm:text-sm">
+															$
+														</span>
 													</div>
 													<Input
 														type="number"
@@ -601,7 +607,7 @@ export function Calculator() {
 														value={formData?.factors?.oilPrice}
 													/>
 													<div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-8 xl:pr-10">
-														<span className="text-zinc-500 sm:text-sm">
+														<span className="z-10 text-zinc-500 sm:text-sm">
 															/qt
 														</span>
 													</div>
@@ -623,7 +629,7 @@ export function Calculator() {
 										<Label>Number of Partners</Label>
 										<div className="relative">
 											<div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-8 xl:pr-10">
-												<span className="text-zinc-500 sm:text-sm">
+												<span className="z-10 text-zinc-500 sm:text-sm">
 													Partner
 													{(formData?.partners?.number ?? 0) > 1 ? 's' : ''}
 												</span>
@@ -641,7 +647,9 @@ export function Calculator() {
 										<Label>Hours Per Partner</Label>
 										<div className="relative">
 											<div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-8 xl:pr-10">
-												<span className="text-zinc-500 sm:text-sm">/year</span>
+												<span className="z-10 text-zinc-500 sm:text-sm">
+													/year
+												</span>
 											</div>
 											<Input
 												type="number"
@@ -672,7 +680,7 @@ export function Calculator() {
 													<Label>Down Payment</Label>
 													<div className="relative">
 														<div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
-															<span className="text-zinc-500 sm:text-sm">
+															<span className="z-10 text-zinc-500 sm:text-sm">
 																$
 															</span>
 														</div>
@@ -689,7 +697,7 @@ export function Calculator() {
 													<Label>Principal</Label>
 													<div className="relative">
 														<div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
-															<span className="text-zinc-500 sm:text-sm">
+															<span className="z-10 text-zinc-500 sm:text-sm">
 																$
 															</span>
 														</div>
@@ -716,7 +724,7 @@ export function Calculator() {
 																onChange={handleChange}
 															/>
 															<div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-8 xl:pr-10">
-																<span className="text-zinc-500 sm:text-sm">
+																<span className="z-10 text-zinc-500 sm:text-sm">
 																	years
 																</span>
 															</div>
@@ -740,7 +748,7 @@ export function Calculator() {
 																}
 															/>
 															<div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-7 md:pr-12">
-																<span className="text-zinc-500 sm:text-sm">
+																<span className="z-10 text-zinc-500 sm:text-sm">
 																	%
 																</span>
 															</div>
@@ -757,7 +765,7 @@ export function Calculator() {
 													<Label>Overhaul Cost</Label>
 													<div className="relative">
 														<div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
-															<span className="text-zinc-500 sm:text-sm">
+															<span className="z-10 text-zinc-500 sm:text-sm">
 																$
 															</span>
 														</div>
@@ -774,7 +782,7 @@ export function Calculator() {
 													<Label>Time Before Overhaul</Label>
 													<div className="relative">
 														<div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-8 xl:pr-10">
-															<span className="text-zinc-500 sm:text-sm">
+															<span className="z-10 text-zinc-500 sm:text-sm">
 																hours
 															</span>
 														</div>
@@ -791,7 +799,7 @@ export function Calculator() {
 													<Label>Time Since Major Overhaul</Label>
 													<div className="relative">
 														<div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-8 xl:pr-10">
-															<span className="text-zinc-500 sm:text-sm">
+															<span className="z-10 text-zinc-500 sm:text-sm">
 																hours
 															</span>
 														</div>
@@ -820,8 +828,8 @@ export function Calculator() {
 												<HeadlessField className="grid grid-flow-row gap-2">
 													<Label>Hangar</Label>
 													<div className="relative">
-														<div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
-															<span className="text-zinc-500 sm:text-sm">
+														<div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-1 lg:pl-3">
+															<span className="z-10 text-zinc-500 sm:text-sm">
 																$
 															</span>
 														</div>
@@ -832,7 +840,7 @@ export function Calculator() {
 															value={formData?.costs?.operation?.fixed?.hangar}
 														/>
 														<div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-8 xl:pr-10">
-															<span className="text-zinc-500 sm:text-sm">
+															<span className="z-10 text-zinc-500 sm:text-sm">
 																{formData?.settings?.fixedCostsYearly
 																	? '/year'
 																	: '/month'}
@@ -845,7 +853,7 @@ export function Calculator() {
 													<Label>Insurance</Label>
 													<div className="relative">
 														<div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
-															<span className="text-zinc-500 sm:text-sm">
+															<span className="z-10 text-zinc-500 sm:text-sm">
 																$
 															</span>
 														</div>
@@ -858,7 +866,7 @@ export function Calculator() {
 															}
 														/>
 														<div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-8 xl:pr-10">
-															<span className="text-zinc-500 sm:text-sm">
+															<span className="z-10 text-zinc-500 sm:text-sm">
 																{formData?.settings?.fixedCostsYearly
 																	? '/year'
 																	: '/month'}
@@ -871,7 +879,7 @@ export function Calculator() {
 													<Label>Annual Inspection</Label>
 													<div className="relative">
 														<div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
-															<span className="text-zinc-500 sm:text-sm">
+															<span className="z-10 text-zinc-500 sm:text-sm">
 																$
 															</span>
 														</div>
@@ -882,7 +890,7 @@ export function Calculator() {
 															value={formData?.costs?.operation?.fixed?.annual}
 														/>
 														<div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-8 xl:pr-10">
-															<span className="text-zinc-500 sm:text-sm">
+															<span className="z-10 text-zinc-500 sm:text-sm">
 																{formData?.settings?.fixedCostsYearly
 																	? '/year'
 																	: '/month'}
@@ -895,7 +903,7 @@ export function Calculator() {
 													<Label>Installments</Label>
 													<div className="relative">
 														<div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
-															<span className="text-zinc-500 sm:text-sm">
+															<span className="z-10 text-zinc-500 sm:text-sm">
 																$
 															</span>
 														</div>
@@ -908,7 +916,7 @@ export function Calculator() {
 															}
 														/>
 														<div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-8 xl:pr-10">
-															<span className="text-zinc-500 sm:text-sm">
+															<span className="z-10 text-zinc-500 sm:text-sm">
 																{formData?.settings?.fixedCostsYearly
 																	? '/year'
 																	: '/month'}
@@ -940,7 +948,9 @@ export function Calculator() {
 												<Label>Fuel</Label>
 												<div className="relative">
 													<div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
-														<span className="text-zinc-500 sm:text-sm">$</span>
+														<span className="z-10 text-zinc-500 sm:text-sm">
+															$
+														</span>
 													</div>
 													<Input
 														type="number"
@@ -949,7 +959,7 @@ export function Calculator() {
 														onChange={handleChange}
 													/>
 													<div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-8 xl:pr-10">
-														<span className="text-zinc-500 sm:text-sm">
+														<span className="z-10 text-zinc-500 sm:text-sm">
 															/hour
 														</span>
 													</div>
@@ -960,7 +970,9 @@ export function Calculator() {
 												<Label>Oil</Label>
 												<div className="relative">
 													<div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
-														<span className="text-zinc-500 sm:text-sm">$</span>
+														<span className="z-10 text-zinc-500 sm:text-sm">
+															$
+														</span>
 													</div>
 													<Input
 														type="number"
@@ -969,7 +981,7 @@ export function Calculator() {
 														value={formData?.costs?.operation?.variable?.oil}
 													/>
 													<div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-8 xl:pr-10">
-														<span className="text-zinc-500 sm:text-sm">
+														<span className="z-10 text-zinc-500 sm:text-sm">
 															/hour
 														</span>
 													</div>
@@ -980,7 +992,9 @@ export function Calculator() {
 												<Label>Engine Overhaul Reserve</Label>
 												<div className="relative">
 													<div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
-														<span className="text-zinc-500 sm:text-sm">$</span>
+														<span className="z-10 text-zinc-500 sm:text-sm">
+															$
+														</span>
 													</div>
 													<Input
 														type="number"
@@ -992,7 +1006,7 @@ export function Calculator() {
 														}
 													/>
 													<div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-8 xl:pr-10">
-														<span className="text-zinc-500 sm:text-sm">
+														<span className="z-10 text-zinc-500 sm:text-sm">
 															/hour
 														</span>
 													</div>
@@ -1003,7 +1017,9 @@ export function Calculator() {
 												<Label>Maintenance Reserve</Label>
 												<div className="relative">
 													<div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
-														<span className="text-zinc-500 sm:text-sm">$</span>
+														<span className="z-10 text-zinc-500 sm:text-sm">
+															$
+														</span>
 													</div>
 													<Input
 														type="number"
@@ -1015,7 +1031,7 @@ export function Calculator() {
 														}
 													/>
 													<div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-8 xl:pr-10">
-														<span className="text-zinc-500 sm:text-sm">
+														<span className="z-10 text-zinc-500 sm:text-sm">
 															/hour
 														</span>
 													</div>
@@ -1026,7 +1042,9 @@ export function Calculator() {
 												<Label>Upgrades</Label>
 												<div className="relative">
 													<div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
-														<span className="text-zinc-500 sm:text-sm">$</span>
+														<span className="z-10 text-zinc-500 sm:text-sm">
+															$
+														</span>
 													</div>
 													<Input
 														type="number"
@@ -1037,7 +1055,7 @@ export function Calculator() {
 														}
 													/>
 													<div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-8 xl:pr-10">
-														<span className="text-zinc-500 sm:text-sm">
+														<span className="z-10 text-zinc-500 sm:text-sm">
 															/hour
 														</span>
 													</div>
@@ -1048,7 +1066,9 @@ export function Calculator() {
 												<Label>Cosmetic</Label>
 												<div className="relative">
 													<div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
-														<span className="text-zinc-500 sm:text-sm">$</span>
+														<span className="z-10 text-zinc-500 sm:text-sm">
+															$
+														</span>
 													</div>
 													<Input
 														type="number"
@@ -1059,7 +1079,7 @@ export function Calculator() {
 														}
 													/>
 													<div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-8 xl:pr-10">
-														<span className="text-zinc-500 sm:text-sm">
+														<span className="z-10 text-zinc-500 sm:text-sm">
 															/hour
 														</span>
 													</div>
@@ -1081,7 +1101,9 @@ export function Calculator() {
 											<Label>Hourly Rate</Label>
 											<div className="relative">
 												<div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
-													<span className="text-zinc-500 sm:text-sm">$</span>
+													<span className="z-10 text-zinc-500 sm:text-sm">
+														$
+													</span>
 												</div>
 												<Input
 													type="number"
@@ -1090,7 +1112,7 @@ export function Calculator() {
 													value={formData?.costs?.rental?.hourlyRate}
 												/>
 												<div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-8 xl:pr-10">
-													<span className="text-zinc-500 sm:text-sm">
+													<span className="z-10 text-zinc-500 sm:text-sm">
 														/hour
 													</span>
 												</div>
