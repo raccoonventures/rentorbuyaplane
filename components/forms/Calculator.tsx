@@ -1116,12 +1116,12 @@ export function Calculator() {
 					<div className="mx-auto max-w-7xl px-6 py-12 lg:flex lg:items-center lg:justify-between lg:px-8">
 						<div className="grid grid-flow-row justify-start gap-4">
 							<h2 className="text-3xl font-bold tracking-tight text-zinc-950 sm:text-4xl dark:text-zinc-50">
-								Get a complete tailored financial analysis
+								Get your comprehensive ownership analysis
 							</h2>
 							<p className="max-w-2xl text-xl tracking-tight text-zinc-950 dark:text-zinc-100">
-								Based on the numbers you provided, our downloadable report will
-								help you take that decision with visualizations and multi-year
-								calculations
+								Receive a downloadable report tailored to your inputs, featuring
+								visualizations and multi-year calculations to guide your
+								ownership choice effectively
 							</p>
 						</div>
 						<div className="mt-10 flex items-center gap-x-6 lg:mt-0 lg:flex-shrink-0">
