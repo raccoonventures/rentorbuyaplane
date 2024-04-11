@@ -1151,7 +1151,7 @@ export function Calculator() {
 								color="green"
 								type="submit"
 								className="cursor-not-allowed"
-								disabled
+								disabled={false}
 							>
 								Download
 							</Button>
