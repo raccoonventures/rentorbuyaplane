@@ -1,6 +1,6 @@
 export default function Intro() {
 	return (
-		<section className="grid grid-flow-row gap-24 py-12 text-zinc-900 lg:grid-flow-col dark:text-zinc-100">
+		<section className="grid grid-flow-row gap-x-24 gap-y-6 py-6 text-zinc-900 md:py-12 lg:grid-flow-col dark:text-zinc-100">
 			<p>
 				Welcome to rentorbuyaplane.com, your go-to destination for answering the
 				age-old aviation question: should you rent or buy a plane? Our intuitive

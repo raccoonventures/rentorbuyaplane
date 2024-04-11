@@ -1,7 +1,3 @@
-'use client';
-
-import { usePathname } from 'next/navigation';
-
 import { Logo } from '@/components/layout/logo';
 import Link from 'next/link';
 
@@ -12,14 +8,9 @@ const navigation = [
 ];
 
 export default function Header() {
-	const pathname = usePathname();
-
-	// Check if the current page is the homepage
-	const isHomePage = pathname === '/';
-
 	return (
 		<header
-			className={`grid ${isHomePage ? 'grid-flow-col justify-between' : ' grid-flow-row justify-center'} sticky top-0 z-50 gap-2 bg-gradient-to-b from-zinc-50/95 from-60% to-transparent px-3 pb-12 pt-6 dark:from-[#202124]/95`}
+			className={`sticky top-0 z-50 grid grid-flow-row justify-center gap-2 bg-gradient-to-b from-zinc-50/95 from-60% to-transparent px-3 pb-6 pt-6 md:grid-flow-col md:justify-between md:pb-12 dark:from-[#202124]/95`}
 		>
 			<Logo />
 			<div>
