@@ -1141,15 +1141,24 @@ export function Calculator() {
 							</p>
 						</div>
 						<div className="mt-10 flex items-center gap-x-6 lg:mt-0 lg:flex-shrink-0">
-							<Button
-								color="green"
-								type="submit"
-								//className="cursor-not-allowed"
-								className="cursor-pointer"
-								disabled={false}
-							>
-								Download
-							</Button>
+							{formData?.output?.estimatedHours != undefined ? (
+								<Button
+									color="green"
+									type="submit"
+									className={
+										formData?.output?.estimatedHours == undefined
+											? 'cursor-not-allowed'
+											: 'cursor-pointer'
+									}
+									disabled={
+										formData?.output?.estimatedHours == undefined ? true : false
+									}
+								>
+									Get your preview
+								</Button>
+							) : (
+								<></>
+							)}
 							<Preregister />
 						</div>
 					</div>

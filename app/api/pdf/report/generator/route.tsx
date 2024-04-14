@@ -2,6 +2,8 @@ import { type NextRequest } from 'next/server';
 
 const commaNumber = require('comma-number');
 
+import { generateChartData } from '@/utils/charts';
+
 import { Analytics } from '@customerio/cdp-analytics-node';
 const analytics = new Analytics({
 	writeKey: `${process.env.CIO_CDP_API_KEY}`,
@@ -206,6 +208,12 @@ export async function GET(request: NextRequest) {
 
 	console.log(params);
 
+	const chartData = generateChartData(
+		params?.output?.renting?.perHour,
+		params?.output?.owning?.perHour,
+		params.output.owning.fixed.perYear,
+	);
+
 	const MyDocument = () => (
 		<Document
 			title={`RentOrBuyAPlane — Report for ${params.aircraft.type}`}
@@ -232,7 +240,7 @@ export async function GET(request: NextRequest) {
 					<Text style={styles.paragraph}>
 						Based on the numbers you provided, you would break even at{' '}
 						{params.output.breakEven} hours of flying per year. Therefore{' '}
-						{params.output.isBuyingBest ? 'buying' : 'renting'} would be most
+						{params.output.isBuyingBest ? 'buying' : 'renting'} would be more
 						cost-effective.
 					</Text>
 				</View>

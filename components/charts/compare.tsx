@@ -6,7 +6,6 @@ import { generateChartData } from '@/utils/charts';
 import theme from './theme';
 
 const themeOutput = theme();
-console.log(themeOutput);
 
 export function Chart(properties: any) {
 	const chartData = generateChartData(
