@@ -1,5 +1,7 @@
 import { type NextRequest } from 'next/server';
 
+const commaNumber = require('comma-number');
+
 import { Analytics } from '@customerio/cdp-analytics-node';
 const analytics = new Analytics({
 	writeKey: `${process.env.CIO_CDP_API_KEY}`,
@@ -33,9 +35,33 @@ const styles = StyleSheet.create({
 		flexDirection: 'row',
 		alignItems: 'center',
 	},
+	colFlexTop: {
+		flexDirection: 'row',
+		alignItems: 'flex-start',
+	},
 	header: {
 		fontSize: 20,
 		fontWeight: 700,
+		paddingVertical: 8,
+	},
+	subHeader: {
+		fontSize: 16,
+		fontWeight: 700,
+		paddingVertical: 4,
+	},
+	paragraph: {
+		paddingVertical: 6,
+	},
+	list: {
+		paddingVertical: 3,
+		paddingHorizontal: 12,
+		flexDirection: 'column',
+	},
+	costItem: {
+		flexDirection: 'row',
+		alignItems: 'center',
+		justifyContent: 'space-between',
+		paddingVertical: 2,
 	},
 	badge: {
 		display: 'flex',
@@ -96,6 +122,50 @@ const Logo = () => (
 	</Svg>
 );
 
+function outputObjectValues(
+	obj: {
+		[key: string]: number | { [key: string]: number };
+	},
+	label: string,
+): JSX.Element[] {
+	// Helper function to capitalize the first letter of a string
+	const capitalize = (s: string) => s.charAt(0).toUpperCase() + s.slice(1);
+
+	const output: JSX.Element[] = [];
+
+	// Iterate over the keys and values of the object
+	for (const key in obj) {
+		const value = obj[key];
+
+		// If the value is an object, iterate over its keys and values
+		if (typeof value === 'object' && value !== null) {
+			for (const subKey in value) {
+				const subValue = value[subKey];
+				output.push(
+					<View style={styles.costItem} key={`${key}-${subKey}`}>
+						<Text>- {capitalize(subKey)}:</Text>
+						<Text style={{ paddingLeft: 24 }}>
+							${commaNumber(subValue)} /{label}
+						</Text>
+					</View>,
+				);
+			}
+		} else {
+			// Output the key and value directly
+			output.push(
+				<View style={styles.costItem} key={`${key}`}>
+					<Text>- {capitalize(key)}:</Text>
+					<Text style={{ paddingLeft: 24 }}>
+						${commaNumber(value)} /{label}
+					</Text>
+				</View>,
+			);
+		}
+	}
+
+	return output;
+}
+
 export async function GET(request: NextRequest) {
 	const searchParams = request.nextUrl.searchParams;
 
@@ -111,7 +181,7 @@ export async function GET(request: NextRequest) {
 		setNestedObject(params, nestedKeys, value);
 	});
 
-	console.log(typeof params.output.isBuyingBest);
+	console.log(params);
 
 	const MyDocument = () => (
 		<Document
@@ -127,11 +197,20 @@ export async function GET(request: NextRequest) {
 					<Logo />
 				</View>
 				<View style={styles.section}>
-					<Text>
-						For a {params.aircraft.type} burning {params.aircraft.fuelBurn} GPH
-						and requiring an oil refill every {params.aircraft.oilRefill}{' '}
-						hours—and with {params.aircraft.tbo - params.aircraft.tsmoh} hours
-						before an engine overhaul.
+					<Text style={styles.paragraph}>
+						{params.output?.estimatedHours == undefined
+							? 'For'
+							: `You plan on flying ${params.output.estimatedHours == 200 ? `at least ${params.output.estimatedHours}` : params.output.estimatedHours} hours per year on`}{' '}
+						a {params.aircraft.type} burning {params.aircraft.fuelBurn} GPH and
+						requiring an oil refill every {params.aircraft.oilRefill} hours—and
+						with {commaNumber(params.aircraft.tbo - params.aircraft.tsmoh)}{' '}
+						hours before an engine overhaul.
+					</Text>
+					<Text style={styles.paragraph}>
+						Based on the numbers you provided, you would break even at{' '}
+						{params.output.breakEven} hours of flying per year. Therefore{' '}
+						{params.output.isBuyingBest ? 'buying' : 'renting'} would be most
+						cost-effective.
 					</Text>
 				</View>
 				<View style={styles.section}>
@@ -145,10 +224,50 @@ export async function GET(request: NextRequest) {
 							</View>
 						)}
 					</View>
-					<Text></Text>
+					<Text style={styles.paragraph}>
+						Your rental is ${commaNumber(params?.output?.renting?.perHour)} /
+						hour (fuel {params.costs.rental.isWet ? '' : 'not '}included)
+					</Text>
+					<Text style={styles.paragraph}>
+						Which equals to $
+						{commaNumber(
+							params?.output?.renting?.perHour * params.output.estimatedHours,
+						)}{' '}
+						/ year
+					</Text>
 				</View>
 				<View style={styles.section}>
-					<Text style={styles.header}>Buying</Text>
+					<View style={styles.colFlex}>
+						<Text style={styles.header}>Buying</Text>
+						{params.output.isBuyingBest ? (
+							<View style={styles.badge}>
+								<Text>Best Option</Text>
+							</View>
+						) : (
+							<></>
+						)}
+					</View>
+					<Text style={styles.paragraph}>
+						Your hourly cost is ${commaNumber(params?.output?.owning?.perHour)}
+					</Text>
+					<View style={styles.colFlexTop}>
+						<View style={styles.list}>
+							<Text style={styles.subHeader}>Variable costs</Text>
+							{outputObjectValues(params.costs.operation.variable, 'hour')}
+						</View>
+						<View style={styles.list}>
+							<Text style={styles.subHeader}>Fixed costs</Text>
+							{outputObjectValues(params.costs.operation.fixed, 'month')}
+						</View>
+					</View>
+					<Text style={styles.paragraph}>
+						Which equals to $
+						{commaNumber(
+							params?.output?.owning?.perHour * params.output.estimatedHours +
+								params.output.owning.fixed.perYear,
+						)}{' '}
+						/ year
+					</Text>
 				</View>
 			</Page>
 		</Document>
