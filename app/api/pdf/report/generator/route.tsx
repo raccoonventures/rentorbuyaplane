@@ -29,9 +29,9 @@ const styles = StyleSheet.create({
 	section: {
 		padding: 10,
 	},
-	colFlex:{
+	colFlex: {
 		flexDirection: 'row',
-		alignItems: 'center'
+		alignItems: 'center',
 	},
 	header: {
 		fontSize: 20,
