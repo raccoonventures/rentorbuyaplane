@@ -38,14 +38,7 @@ function setNestedObject(obj: any, path: string[], value: string) {
 		current = current[key];
 	}
 	const lastKey = path[path.length - 1];
-	if (current[lastKey]) {
-		if (!Array.isArray(current[lastKey])) {
-			current[lastKey] = [current[lastKey] as string];
-		}
-		current[lastKey].push(value);
-	} else {
-		current[lastKey] = value;
-	}
+	current[lastKey] = value;
 }
 
 const Logo = () => (
@@ -91,28 +84,18 @@ const Logo = () => (
 
 export async function GET(request: NextRequest) {
 	const searchParams = request.nextUrl.searchParams;
+	console.log(searchParams);
 
 	// Create an empty object to hold the parameters
 	const params: any = {};
 
 	// Iterate over the search parameters and add them to the object
 	searchParams.forEach((value, key) => {
-		// Check if the key has nested keys
-		const nestedKeys = key.match(/[^[\]]+(?=])/g);
-		if (nestedKeys) {
-			// Construct the nested object
-			setNestedObject(params, nestedKeys, value);
-		} else {
-			// Otherwise, handle it as a non-nested key
-			if (params.hasOwnProperty(key)) {
-				if (!Array.isArray(params[key])) {
-					params[key] = [params[key] as string];
-				}
-				params[key].push(value);
-			} else {
-				params[key] = value;
-			}
-		}
+		// Split the key string by '[' and ']' to get the top-level key and sub-keys
+		const nestedKeys = key.split(/\[|\]/).filter((k) => k);
+
+		// Use the array of keys as the path for the setNestedObject function
+		setNestedObject(params, nestedKeys, value);
 	});
 
 	console.log(params);
@@ -122,7 +105,7 @@ export async function GET(request: NextRequest) {
 			<Page size="A4" style={styles.page}>
 				<View style={styles.section}>
 					<Logo />
-					<Text>Plane: {params.type}</Text>
+					<Text>Plane: {params.aircraft.type}</Text>
 				</View>
 				<View style={styles.section}>
 					<Text>Section #2</Text>
