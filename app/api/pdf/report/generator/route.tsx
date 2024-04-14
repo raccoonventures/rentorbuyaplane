@@ -16,19 +16,23 @@ import ReactPDF, {
 	View,
 } from '@react-pdf/renderer';
 
+import { setNestedObject } from '@/utils/searchParamsHelpers';
+
 const styles = StyleSheet.create({
 	page: {
 		flexDirection: 'column',
 		backgroundColor: '#F5F5F5',
+		alignItems: 'flex-start',
+	},
+	header: {
+		padding: 5,
 	},
 	section: {
-		margin: 10,
 		padding: 10,
-		flexGrow: 1,
 	},
 });
 
-function setNestedObject(obj: any, path: string[], value: string) {
+/*function setNestedObject(obj: any, path: string[], value: string) {
 	let current = obj;
 	for (let i = 0; i < path.length - 1; i++) {
 		const key = path[i];
@@ -39,7 +43,7 @@ function setNestedObject(obj: any, path: string[], value: string) {
 	}
 	const lastKey = path[path.length - 1];
 	current[lastKey] = value;
-}
+}*/
 
 const Logo = () => (
 	<Svg viewBox="0 0 441 55" width="320" height="40">
@@ -105,7 +109,14 @@ export async function GET(request: NextRequest) {
 			<Page size="A4" style={styles.page}>
 				<View style={styles.section}>
 					<Logo />
-					<Text>Plane: {params.aircraft.type}</Text>
+				</View>
+				<View style={styles.section}>
+					<Text>
+						For a {params.aircraft.type} burning {params.aircraft.fuelBurn} GPH
+						and requiring an oil refill every {params.aircraft.oilRefill}{' '}
+						hours—and with {params.aircraft.tbo - params.aircraft.tsmoh} hours
+						before an engine overhaul.
+					</Text>
 				</View>
 				<View style={styles.section}>
 					<Text>Section #2</Text>

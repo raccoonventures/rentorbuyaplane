@@ -33,6 +33,7 @@ import Planes from '@/helpers/planes.json';
 import { Badge } from '@/catalyst/badge';
 import { Preregister } from '@/components/preregister';
 import Financials from '@/utils/financials';
+import { toQueryString } from '@/utils/searchParamsHelpers';
 
 export function Calculator() {
 	let [isOpen, setIsOpen] = useState(false);
@@ -459,26 +460,13 @@ export function Calculator() {
 
 	// Handle the submit
 	const handleSubmit = async (e: any) => {
-		e.preventDefault();
-		/* try {
-			const response = await fetch('/api/contact', {
-				method: 'POST',
-				headers: {
-					'Content-Type': 'application/json',
-				},
-				body: JSON.stringify(formData),
-			});
-			if (response.ok) {
-				// Handle success response here
-				console.log('Form submitted successfully');
-				setIsOpen(true);
-			} else {
-				// Handle error response here
-				console.error('Failed to submit form');
-			}
-		} catch (error) {
-			console.error(error);
-		}*/
+		e.preventDefault(); // Prevent the default form submit action
+
+		// Serialize the formData object into a query string
+		const queryString = toQueryString(formData);
+
+		// Open the new page with the search parameters
+		window.open(`/api/pdf/report/generator?${queryString}`, '_blank');
 		console.log(formData);
 	};
 
@@ -1150,7 +1138,8 @@ export function Calculator() {
 							<Button
 								color="green"
 								type="submit"
-								className="cursor-not-allowed"
+								//className="cursor-not-allowed"
+								className="cursor-pointer"
 								disabled={false}
 							>
 								Download
