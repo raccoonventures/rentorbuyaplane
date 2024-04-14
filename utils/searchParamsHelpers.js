@@ -8,7 +8,22 @@ export function setNestedObject(obj, path, value) {
 		current = current[key];
 	}
 	const lastKey = path[path.length - 1];
-	current[lastKey] = value;
+
+	// Try to parse the value to preserve the type
+	let parsedValue;
+	if (value === 'true') {
+		parsedValue = true;
+	} else if (value === 'false') {
+		parsedValue = false;
+	} else if (!isNaN(value) && value.trim() !== '') {
+		// We use the unary plus operator to convert the string to a number
+		// It is equivalent to parseFloat for strings that represent floating-point numbers
+		parsedValue = +value;
+	} else {
+		parsedValue = value;
+	}
+
+	current[lastKey] = parsedValue;
 }
 
 export function toQueryString(params, prefix = '') {

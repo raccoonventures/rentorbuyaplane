@@ -23,27 +23,37 @@ const styles = StyleSheet.create({
 		flexDirection: 'column',
 		backgroundColor: '#F5F5F5',
 		alignItems: 'flex-start',
-	},
-	header: {
-		padding: 5,
+		fontSize: 14,
+		fontWeight: 400,
 	},
 	section: {
 		padding: 10,
 	},
+	colFlex:{
+		flexDirection: 'row',
+		alignItems: 'center'
+	},
+	header: {
+		fontSize: 20,
+		fontWeight: 700,
+	},
+	badge: {
+		display: 'flex',
+		marginLeft: 12,
+		marginTop: 2,
+		paddingVertical: 2,
+		paddingHorizontal: 6,
+		fontWeight: 700,
+		fontSize: 10,
+		textTransform: 'uppercase',
+		alignItems: 'center',
+		borderWidth: 1,
+		borderRadius: 12,
+		borderColor: '#a3e635',
+		backgroundColor: '#a3e63533',
+		color: '#4d7c0f',
+	},
 });
-
-/*function setNestedObject(obj: any, path: string[], value: string) {
-	let current = obj;
-	for (let i = 0; i < path.length - 1; i++) {
-		const key = path[i];
-		if (!current[key]) {
-			current[key] = {};
-		}
-		current = current[key];
-	}
-	const lastKey = path[path.length - 1];
-	current[lastKey] = value;
-}*/
 
 const Logo = () => (
 	<Svg viewBox="0 0 441 55" width="320" height="40">
@@ -88,7 +98,6 @@ const Logo = () => (
 
 export async function GET(request: NextRequest) {
 	const searchParams = request.nextUrl.searchParams;
-	console.log(searchParams);
 
 	// Create an empty object to hold the parameters
 	const params: any = {};
@@ -102,10 +111,17 @@ export async function GET(request: NextRequest) {
 		setNestedObject(params, nestedKeys, value);
 	});
 
-	console.log(params);
+	console.log(typeof params.output.isBuyingBest);
 
 	const MyDocument = () => (
-		<Document>
+		<Document
+			title={`RentOrBuyAPlane — Report for ${params.aircraft.type}`}
+			author="RentOrBuyAPlane.com"
+			creator="RentOrBuyAPlane.com"
+			producer="RentOrBuyAPlane.com"
+			subject="Renting vs buying a plane financial report"
+			language="en"
+		>
 			<Page size="A4" style={styles.page}>
 				<View style={styles.section}>
 					<Logo />
@@ -119,7 +135,20 @@ export async function GET(request: NextRequest) {
 					</Text>
 				</View>
 				<View style={styles.section}>
-					<Text>Section #2</Text>
+					<View style={styles.colFlex}>
+						<Text style={styles.header}>Renting</Text>
+						{params.output.isBuyingBest ? (
+							<></>
+						) : (
+							<View style={styles.badge}>
+								<Text>Best Option</Text>
+							</View>
+						)}
+					</View>
+					<Text></Text>
+				</View>
+				<View style={styles.section}>
+					<Text style={styles.header}>Buying</Text>
 				</View>
 			</Page>
 		</Document>
