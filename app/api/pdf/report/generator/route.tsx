@@ -38,6 +38,7 @@ const styles = StyleSheet.create({
 	colFlexTop: {
 		flexDirection: 'row',
 		alignItems: 'flex-start',
+		justifyContent: 'space-between',
 	},
 	header: {
 		fontSize: 20,
@@ -62,6 +63,13 @@ const styles = StyleSheet.create({
 		alignItems: 'center',
 		justifyContent: 'space-between',
 		paddingVertical: 2,
+	},
+	costItemTotal: {
+		flexDirection: 'row',
+		alignItems: 'center',
+		justifyContent: 'space-between',
+		paddingVertical: 6,
+		borderTopWidth: 1,
 	},
 	badge: {
 		display: 'flex',
@@ -131,6 +139,7 @@ function outputObjectValues(
 	// Helper function to capitalize the first letter of a string
 	const capitalize = (s: string) => s.charAt(0).toUpperCase() + s.slice(1);
 
+	let totalValue = 0;
 	const output: JSX.Element[] = [];
 
 	// Iterate over the keys and values of the object
@@ -141,6 +150,8 @@ function outputObjectValues(
 		if (typeof value === 'object' && value !== null) {
 			for (const subKey in value) {
 				const subValue = value[subKey];
+				totalValue += subValue; // Add sub-value to total
+
 				output.push(
 					<View style={styles.costItem} key={`${key}-${subKey}`}>
 						<Text>- {capitalize(subKey)}:</Text>
@@ -151,9 +162,11 @@ function outputObjectValues(
 				);
 			}
 		} else {
+			totalValue += value; // Add value to total
+
 			// Output the key and value directly
 			output.push(
-				<View style={styles.costItem} key={`${key}`}>
+				<View style={styles.costItem} key={key}>
 					<Text>- {capitalize(key)}:</Text>
 					<Text style={{ paddingLeft: 24 }}>
 						${commaNumber(value)} /{label}
@@ -162,6 +175,16 @@ function outputObjectValues(
 			);
 		}
 	}
+
+	// Add the total value element after the loop
+	output.push(
+		<View style={styles.costItemTotal} key="total">
+			<Text>TOTAL:</Text>
+			<Text style={{ paddingLeft: 24 }}>
+				${commaNumber(totalValue)} /{label}
+			</Text>
+		</View>,
+	);
 
 	return output;
 }
@@ -233,7 +256,7 @@ export async function GET(request: NextRequest) {
 						{commaNumber(
 							params?.output?.renting?.perHour * params.output.estimatedHours,
 						)}{' '}
-						/ year
+						/ year for {params.output.estimatedHours} hours
 					</Text>
 				</View>
 				<View style={styles.section}>
@@ -248,11 +271,13 @@ export async function GET(request: NextRequest) {
 						)}
 					</View>
 					<Text style={styles.paragraph}>
-						Your hourly cost is ${commaNumber(params?.output?.owning?.perHour)}
+						Your hourly operating cost is $
+						{commaNumber(params?.output?.owning?.perHour)} and your yearly fixed
+						costs are ${commaNumber(params.output.owning.fixed.perYear)}
 					</Text>
 					<View style={styles.colFlexTop}>
 						<View style={styles.list}>
-							<Text style={styles.subHeader}>Variable costs</Text>
+							<Text style={styles.subHeader}>Operating/Variable costs</Text>
 							{outputObjectValues(params.costs.operation.variable, 'hour')}
 						</View>
 						<View style={styles.list}>
@@ -266,7 +291,13 @@ export async function GET(request: NextRequest) {
 							params?.output?.owning?.perHour * params.output.estimatedHours +
 								params.output.owning.fixed.perYear,
 						)}{' '}
-						/ year
+						/ year for {params.output.estimatedHours} hours (or ~$
+						{Math.round(
+							(params?.output?.owning?.perHour * params.output.estimatedHours +
+								params.output.owning.fixed.perYear) /
+								params.output.estimatedHours,
+						)}{' '}
+						/ hour all-included )
 					</Text>
 				</View>
 			</Page>
