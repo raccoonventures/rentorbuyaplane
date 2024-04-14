@@ -21,17 +21,18 @@ import { Field as HeadlessField } from '@headlessui/react';
 import { useEffect, useMemo, useState } from 'react';
 const commaNumber = require('comma-number');
 
+import { Badge } from '@/catalyst/badge';
 import { Button } from '@/catalyst/button';
 import { ErrorMessage, Label } from '@/catalyst/fieldset';
 import { Input } from '@/catalyst/input';
 import { Select } from '@/catalyst/select';
-
 import { Switch } from '@/catalyst/switch';
 
 import Planes from '@/helpers/planes.json';
 
-import { Badge } from '@/catalyst/badge';
+import { Chart } from '@/components/charts/compare';
 import { Preregister } from '@/components/preregister';
+
 import Financials from '@/utils/financials';
 import { toQueryString } from '@/utils/searchParamsHelpers';
 
@@ -1354,6 +1355,14 @@ export function Calculator() {
 					</div>
 				</div>
 			</section>
+
+			{/* Chart */}
+			<Chart
+				rentCost={formData?.output?.renting?.perHour ?? 0}
+				operationCost={formData?.output?.owning?.perHour ?? 0}
+				fixedCost={formData?.output?.owning?.fixed?.perYear ?? 0}
+				breakEven={formData?.output?.breakEven ?? null}
+			/>
 		</>
 	);
 }
