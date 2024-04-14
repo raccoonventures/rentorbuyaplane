@@ -21,18 +21,20 @@ import { Field as HeadlessField } from '@headlessui/react';
 import { useEffect, useMemo, useState } from 'react';
 const commaNumber = require('comma-number');
 
+import { Badge } from '@/catalyst/badge';
 import { Button } from '@/catalyst/button';
 import { ErrorMessage, Label } from '@/catalyst/fieldset';
 import { Input } from '@/catalyst/input';
 import { Select } from '@/catalyst/select';
-
 import { Switch } from '@/catalyst/switch';
 
 import Planes from '@/helpers/planes.json';
 
-import { Badge } from '@/catalyst/badge';
+import { Chart } from '@/components/charts/compare';
 import { Preregister } from '@/components/preregister';
+
 import Financials from '@/utils/financials';
+import { toQueryString } from '@/utils/searchParamsHelpers';
 
 export function Calculator() {
 	let [isOpen, setIsOpen] = useState(false);
@@ -459,26 +461,13 @@ export function Calculator() {
 
 	// Handle the submit
 	const handleSubmit = async (e: any) => {
-		e.preventDefault();
-		/* try {
-			const response = await fetch('/api/contact', {
-				method: 'POST',
-				headers: {
-					'Content-Type': 'application/json',
-				},
-				body: JSON.stringify(formData),
-			});
-			if (response.ok) {
-				// Handle success response here
-				console.log('Form submitted successfully');
-				setIsOpen(true);
-			} else {
-				// Handle error response here
-				console.error('Failed to submit form');
-			}
-		} catch (error) {
-			console.error(error);
-		}*/
+		e.preventDefault(); // Prevent the default form submit action
+
+		// Serialize the formData object into a query string
+		const queryString = toQueryString(formData);
+
+		// Open the new page with the search parameters
+		window.open(`/api/pdf/report/generator?${queryString}`, '_blank');
 		console.log(formData);
 	};
 
@@ -1137,9 +1126,14 @@ export function Calculator() {
 
 					<div className="mx-auto max-w-7xl px-6 py-12 lg:flex lg:items-center lg:justify-between lg:px-8">
 						<div className="grid grid-flow-row justify-start gap-4">
-							<h2 className="text-3xl font-bold tracking-tight text-zinc-950 sm:text-4xl dark:text-zinc-50">
-								Get your comprehensive ownership analysis
-							</h2>
+							<div className="grid grid-flow-col items-center gap-x-4">
+								<h2 className="text-3xl font-bold tracking-tight text-zinc-950 sm:text-4xl dark:text-zinc-50">
+									Get your comprehensive ownership analysis
+								</h2>
+								<span className="mt-1 rounded-full bg-yellow-600/10 px-3 py-1 text-sm font-semibold text-yellow-500 ring-1 ring-inset ring-yellow-600/20">
+									Coming soon
+								</span>
+							</div>
 							<p className="max-w-2xl text-xl tracking-tight text-zinc-950 dark:text-zinc-100">
 								Receive a downloadable report tailored to your inputs, featuring
 								visualizations and multi-year calculations to guide your
@@ -1147,14 +1141,24 @@ export function Calculator() {
 							</p>
 						</div>
 						<div className="mt-10 flex items-center gap-x-6 lg:mt-0 lg:flex-shrink-0">
-							<Button
-								color="green"
-								type="submit"
-								className="cursor-not-allowed"
-								disabled
-							>
-								Download
-							</Button>
+							{formData?.output?.estimatedHours != undefined ? (
+								<Button
+									color="green"
+									type="submit"
+									className={
+										formData?.output?.estimatedHours == undefined
+											? 'cursor-not-allowed'
+											: 'cursor-pointer'
+									}
+									disabled={
+										formData?.output?.estimatedHours == undefined ? true : false
+									}
+								>
+									Get your preview
+								</Button>
+							) : (
+								<></>
+							)}
 							<Preregister />
 						</div>
 					</div>
@@ -1360,6 +1364,14 @@ export function Calculator() {
 					</div>
 				</div>
 			</section>
+
+			{/* Chart */}
+			<Chart
+				rentCost={formData?.output?.renting?.perHour ?? 0}
+				operationCost={formData?.output?.owning?.perHour ?? 0}
+				fixedCost={formData?.output?.owning?.fixed?.perYear ?? 0}
+				breakEven={formData?.output?.breakEven ?? null}
+			/>
 		</>
 	);
 }
