@@ -1125,9 +1125,14 @@ export function Calculator() {
 
 					<div className="mx-auto max-w-7xl px-6 py-12 lg:flex lg:items-center lg:justify-between lg:px-8">
 						<div className="grid grid-flow-row justify-start gap-4">
-							<h2 className="text-3xl font-bold tracking-tight text-zinc-950 sm:text-4xl dark:text-zinc-50">
-								Get your comprehensive ownership analysis
-							</h2>
+							<div className="grid grid-flow-col items-center gap-x-4">
+								<h2 className="text-3xl font-bold tracking-tight text-zinc-950 sm:text-4xl dark:text-zinc-50">
+									Get your comprehensive ownership analysis
+								</h2>
+								<span className="mt-1 rounded-full bg-yellow-600/10 px-3 py-1 text-sm font-semibold text-yellow-500 ring-1 ring-inset ring-yellow-600/20">
+									Coming soon
+								</span>
+							</div>
 							<p className="max-w-2xl text-xl tracking-tight text-zinc-950 dark:text-zinc-100">
 								Receive a downloadable report tailored to your inputs, featuring
 								visualizations and multi-year calculations to guide your

@@ -60,13 +60,15 @@ export const Preregister = () => {
 			>
 				Learn more →
 			</Button>
-			<Dialog open={isOpen} onClose={setIsOpen}>
+			<Dialog open={isOpen} onClose={setIsOpen} size="xl">
 				<DialogTitle>
 					Be the first to know when this feature becomes available
 				</DialogTitle>
 				<DialogDescription>
-					We&apos;re hard at work building custom financial reports for
-					RentOrBuyAPlane.com.
+					You can already download a summary report today, but we&apos;re hard
+					at work building extensive custom financial reports with
+					visualizations, charts, and multi-year calculations.
+					<br />
 					<br />
 					Leave your email below and we&apos;ll reach out once it&apos;s ready
 					for you
