@@ -1145,6 +1145,7 @@ export function Calculator() {
 								<Button
 									color="green"
 									type="submit"
+									data-umami-event="get-report-button"
 									className={
 										formData?.output?.estimatedHours == undefined
 											? 'cursor-not-allowed'

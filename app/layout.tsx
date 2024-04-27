@@ -1,6 +1,8 @@
 import Footer from '@/components/layout/footer';
 import Header from '@/components/layout/header';
 import type { Metadata } from 'next';
+import Script from 'next/script';
+
 import './globals.css';
 
 export const metadata: Metadata = {
@@ -21,6 +23,10 @@ export default function RootLayout({
 				<main className="p-3">{children}</main>
 				<Footer />
 			</body>
+			<Script
+				data-website-id={`${process.env.NEXT_PUBLIC_UMAMI_DATA_WEBSITE_ID}`}
+				src="https://analytics.jpvalery.com/script.js"
+			/>
 		</html>
 	);
 }
