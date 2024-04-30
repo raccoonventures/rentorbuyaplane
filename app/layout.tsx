@@ -9,6 +9,15 @@ export const metadata: Metadata = {
 	title: 'RentOrBuyAPlane.com',
 	description:
 		'Estimate the cost of owning vs renting a plane, and discover the exact # of hours to break even',
+	openGraph: {
+		images: [
+			{
+				url: 'https://rentorbuyaplane.com/og.webp', // Must be an absolute URL
+				width: 1200,
+				height: 603,
+			},
+		],
+	},
 };
 
 export default function RootLayout({
