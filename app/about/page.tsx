@@ -1,5 +1,18 @@
 import Image from 'next/image';
 
+const redditUsers = [
+	'BillySpacs',
+	'fenuxjde',
+	'theanswriz42',
+	'Capt-Soliman',
+	'Sufficient_Rate1032',
+	'FridayMcNight',
+	'Rhyick',
+	'Ictalbot',
+	'sarge46',
+	'Badjo',
+];
+
 const AboutPage = () => {
 	return (
 		<section className="grid grid-flow-row items-center justify-center gap-8">
@@ -144,6 +157,20 @@ const AboutPage = () => {
 					height="180"
 					className="rounded-full"
 				/>
+			</div>
+			<div className="prose prose-lg prose-zinc mx-auto mt-24 grid justify-center text-center tracking-tight dark:prose-invert">
+				<h4>
+					Thanks to the following users from the /r/flying subreddit for their
+					feedback
+				</h4>
+				<p>
+					{redditUsers.map((value, index) => (
+						<span key={value}>
+							{value}
+							{index != redditUsers.length - 1 ? ', ' : ' '}
+						</span>
+					))}
+				</p>
 			</div>
 		</section>
 	);
