@@ -159,13 +159,16 @@ export function Calculator() {
 	const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
 		const { name, value: rawValue } = e.target;
 		const keys = name.split('.');
+
 		// Parse value as an integer if name is 'output.estimatedHours'
 		const value =
-			name === 'output.estimatedHours' || name === 'costs.rental.fixedFees'
-				? parseInt(rawValue, 10)
+			(name === 'output.estimatedHours' || name === 'costs.rental.fixedFees') &&
+			rawValue != ''
+				? Number(rawValue)
 				: rawValue == ''
 					? 0
-					: rawValue;
+					: Number(rawValue);
+
 		// Updaten FormData
 		setFormData((prevData) => {
 			// A recursive function to handle deep updates

@@ -11,6 +11,10 @@ const redditUsers = [
 	'Ictalbot',
 	'sarge46',
 	'Badjo',
+	'KITTYONFYRE',
+	'lavionverte',
+	'Zestyclose-Glove2559',
+	'iguanayou',
 ];
 
 const AboutPage = () => {
