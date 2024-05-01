@@ -24,6 +24,7 @@ export interface AcquisitionData {
 export interface RentalData {
 	hourlyRate?: number;
 	isWet?: boolean;
+	fixedFees?: number;
 }
 
 export interface FixedOperationData {
@@ -63,6 +64,7 @@ export interface SettingsData {
 export interface OutputData {
 	renting?: {
 		perHour?: number;
+		fixed?: number;
 	};
 	owning?: {
 		perHour?: number;

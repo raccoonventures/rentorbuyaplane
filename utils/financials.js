@@ -15,16 +15,17 @@ module.exports = {
 
 		return Math.ceil(monthlyPayment);
 	},
-	findBreakEven(rentingPerHour, owningPerHour, owningFixedTotal) {
+	findBreakEven(rentingPerHour, rentingFixed, owningPerHour, owningFixedTotal) {
 		const denominator = Math.ceil(rentingPerHour) - Math.ceil(owningPerHour);
 		if (denominator == 0) {
 			return 0;
 		}
-		const formula = Math.ceil(owningFixedTotal) / denominator;
+		const formula =
+			(Math.ceil(owningFixedTotal) - Math.ceil(rentingFixed)) / denominator;
 		if (formula < 0) {
 			return 0;
 		} else {
-			return Math.ceil(formula);
+			return Math.round(formula);
 		}
 	},
 };

@@ -33,6 +33,7 @@ import Planes from '@/helpers/planes.json';
 import { Chart } from '@/components/charts/compare';
 import { Preregister } from '@/components/preregister';
 
+import { Checkbox } from '@/catalyst/checkbox';
 import Financials from '@/utils/financials';
 import { toQueryString } from '@/utils/searchParamsHelpers';
 
@@ -64,6 +65,7 @@ export function Calculator() {
 			rental: {
 				hourlyRate: 200.0,
 				isWet: true,
+				fixedFees: 0,
 			},
 			operation: {
 				fixed: {
@@ -159,7 +161,11 @@ export function Calculator() {
 		const keys = name.split('.');
 		// Parse value as an integer if name is 'output.estimatedHours'
 		const value =
-			name === 'output.estimatedHours' ? parseInt(rawValue, 10) : rawValue;
+			name === 'output.estimatedHours' || name === 'costs.rental.fixedFees'
+				? parseInt(rawValue, 10)
+				: rawValue == ''
+					? 0
+					: rawValue;
 		// Updaten FormData
 		setFormData((prevData) => {
 			// A recursive function to handle deep updates
@@ -183,6 +189,7 @@ export function Calculator() {
 			// Create a new form data object with the updated values
 			return updateNestedData(prevData, keys, value);
 		});
+		//console.log(formData)
 	};
 
 	useEffect(() => {
@@ -234,7 +241,8 @@ export function Calculator() {
 		if (acquisitionPrice) {
 			const downPayment = formData?.costs?.acquisition?.downPayment
 				? formData.costs.acquisition.downPayment
-				: acquisitionPrice * 0.2;
+				: // : acquisitionPrice * 0.2;
+					0;
 			const calculatedPrincipal = acquisitionPrice - downPayment;
 			const principal = calculatedPrincipal > 0 ? calculatedPrincipal : 0;
 			const installmentsMonthly: number =
@@ -354,6 +362,8 @@ export function Calculator() {
 				: (formData.costs?.rental?.hourlyRate ?? 0) +
 					(formData.costs?.operation?.variable?.fuel ?? 0);
 
+		const rentingFixed = formData?.costs?.rental?.fixedFees ?? 0;
+
 		const fixedCosts = formData.costs?.operation?.fixed ?? {};
 		const variableCosts = formData.costs?.operation?.variable ?? {};
 		const owningPerHour =
@@ -365,14 +375,14 @@ export function Calculator() {
 			(variableCosts?.cosmetic ?? 0);
 
 		const owningFixedTotal = formData.settings?.fixedCostsYearly
-			? (fixedCosts?.hangar ?? 0) +
-				(fixedCosts?.insurance ?? 0) +
-				(fixedCosts?.annual ?? 0) +
-				(fixedCosts?.financing ?? 0)
-			: ((fixedCosts?.hangar ?? 0) +
-					(fixedCosts?.insurance ?? 0) +
-					(fixedCosts?.annual ?? 0) +
-					(fixedCosts?.financing ?? 0)) *
+			? (Number(fixedCosts?.hangar) ?? 0) +
+				(Number(fixedCosts?.insurance) ?? 0) +
+				(Number(fixedCosts?.annual) ?? 0) +
+				(Number(fixedCosts?.financing) ?? 0)
+			: ((Number(fixedCosts?.hangar) ?? 0) +
+					(Number(fixedCosts?.insurance) ?? 0) +
+					(Number(fixedCosts?.annual) ?? 0) +
+					(Number(fixedCosts?.financing) ?? 0)) *
 				12;
 
 		const owningFixedPerHour =
@@ -382,6 +392,7 @@ export function Calculator() {
 
 		const breakEven = Financials.findBreakEven(
 			rentingPerHour,
+			rentingFixed,
 			owningPerHour,
 			owningFixedTotal,
 		);
@@ -390,6 +401,7 @@ export function Calculator() {
 			renting: {
 				...formData.output?.renting,
 				perHour: Math.ceil(rentingPerHour),
+				fixed: rentingFixed,
 			},
 			owning: {
 				...formData.output?.owning,
@@ -405,6 +417,7 @@ export function Calculator() {
 	}, [
 		formData.costs?.rental?.isWet,
 		formData.costs?.rental?.hourlyRate,
+		formData.costs?.rental?.fixedFees,
 		formData.costs?.operation?.fixed,
 		formData.costs?.operation?.variable,
 		formData.partners?.number,
@@ -419,6 +432,8 @@ export function Calculator() {
 			formData.output?.breakEven !== calculatedOutput.breakEven;
 		const shouldUpdateRenting =
 			formData.output?.renting?.perHour !== calculatedOutput.renting.perHour;
+		const shouldUpdateRentingFixed =
+			formData.output?.renting?.fixed !== calculatedOutput.renting.fixed;
 		const shouldUpdateOwningPerHour =
 			formData.output?.owning?.perHour !== calculatedOutput.owning.perHour;
 		const shouldUpdateOwningFixedPerYear =
@@ -431,6 +446,7 @@ export function Calculator() {
 		if (
 			shouldUpdateBreakEven ||
 			shouldUpdateRenting ||
+			shouldUpdateRentingFixed ||
 			shouldUpdateOwningPerHour ||
 			shouldUpdateOwningFixedPerYear ||
 			shouldUpdateOwningFixedPerHourFlight
@@ -444,6 +460,7 @@ export function Calculator() {
 					renting: {
 						...prevData.output?.renting,
 						perHour: calculatedOutput.renting.perHour,
+						fixed: calculatedOutput.renting.fixed,
 					},
 					owning: {
 						...prevData?.output?.owning,
@@ -468,7 +485,9 @@ export function Calculator() {
 
 		// Open the new page with the search parameters
 		window.open(`/api/pdf/report/generator?${queryString}`, '_blank');
-		console.log(formData);
+
+		// Logging for debugging
+		//console.log(formData);
 	};
 
 	return (
@@ -768,7 +787,7 @@ export function Calculator() {
 												</HeadlessField>
 
 												<HeadlessField className="grid grid-flow-row gap-2">
-													<Label>Time Before Overhaul</Label>
+													<Label>Time Between Overhauls</Label>
 													<div className="relative">
 														<div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-8 xl:pr-10">
 															<span className="z-10 text-zinc-500 sm:text-sm">
@@ -1108,13 +1127,42 @@ export function Calculator() {
 											</div>
 										</HeadlessField>
 
-										<HeadlessField className="grid grid-flow-col justify-between gap-2">
-											<Label>Is fuel included?</Label>
-											<Switch
+										<HeadlessField className="grid grid-flow-col items-center justify-start gap-2">
+											<Label className=" w-52">
+												{formData.costs?.rental?.isWet
+													? 'Fuel is included (wet rental)'
+													: 'Fuel is not included (dry rental)'}
+											</Label>
+											<Checkbox
 												name="costs.rental.isWet"
 												defaultChecked
+												color="teal"
 												onChange={handleIsWetSwitchChange}
 											/>
+										</HeadlessField>
+
+										<HeadlessField className="grid grid-flow-row gap-2">
+											<Label>
+												Additional fixed fees (e.g. yearly membership)
+											</Label>
+											<div className="relative">
+												<div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
+													<span className="z-10 text-zinc-500 sm:text-sm">
+														$
+													</span>
+												</div>
+												<Input
+													type="number"
+													name="costs.rental.fixedFees"
+													onChange={handleChange}
+													value={formData?.costs?.rental?.fixedFees}
+												/>
+												<div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-8 xl:pr-10">
+													<span className="z-10 text-zinc-500 sm:text-sm">
+														/year
+													</span>
+												</div>
+											</div>
 										</HeadlessField>
 									</div>
 								</div>
@@ -1243,6 +1291,32 @@ export function Calculator() {
 										</span>
 									</dt>
 								</div>
+								{formData?.output?.renting?.fixed ? (
+									<>
+										<span className="text-4xl font-bold text-zinc-800 dark:text-zinc-400">
+											+
+										</span>
+										<div className="flex flex-col items-baseline gap-x-3 text-zinc-200  md:flex-row">
+											<span className="flex items-baseline gap-x-2">
+												<span className="text-3xl font-semibold tracking-tight text-zinc-950 md:text-4xl dark:text-white">
+													${commaNumber(formData?.output?.renting?.fixed)}
+												</span>
+												<span className="text-sm text-zinc-800 dark:text-zinc-400">
+													/year
+												</span>
+											</span>
+											<dt className="group relative grid grid-flow-col items-center text-zinc-600 dark:text-zinc-200">
+												<span className="cursor-help">of fixed costs</span>
+												<span className="absolute -right-2 top-8 z-[999] w-max max-w-48 scale-0 rounded bg-zinc-700 px-3 py-2 text-center text-xs font-normal text-white shadow-xl group-hover:scale-100">
+													The yearly total for yearly fees for your rental such
+													as membership fees
+												</span>
+											</dt>
+										</div>
+									</>
+								) : (
+									<></>
+								)}
 							</div>
 							{formData?.output?.estimatedHours && (
 								<div className="grid grid-flow-col items-center justify-start gap-4 border-t-2 border-zinc-800 pt-4  dark:border-zinc-400">
@@ -1253,7 +1327,8 @@ export function Calculator() {
 										$
 										{commaNumber(
 											(formData?.output?.renting?.perHour ?? 0) *
-												formData?.output?.estimatedHours,
+												formData?.output?.estimatedHours +
+												(formData?.output?.renting?.fixed ?? 0),
 										)}
 									</span>
 									<span className="text-sm text-zinc-800 dark:text-zinc-400">
