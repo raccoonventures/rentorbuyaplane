@@ -53,9 +53,9 @@ const AboutPage = () => {
 					<p>
 						rentorbuyaplane.com is the brainchild of Jp, a dedicated aviation
 						enthusiast and the visionary behind Raccoon Ventures Inc. With a
-						profound passion for flight and a forthcoming Private Pilot License,
-						Jp combines his love for aviation with his expertise in web
-						development to create a valuable resource for fellow avgeeks.
+						profound passion for flight and a Private Pilot License, Jp combines
+						his love for aviation with his expertise in web development to
+						create a valuable resource for fellow avgeeks.
 					</p>
 				</div>
 			</div>

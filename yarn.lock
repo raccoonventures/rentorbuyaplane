@@ -408,6 +408,14 @@
     "@nodelib/fs.scandir" "2.1.5"
     fastq "^1.6.0"
 
+"@number-flow/react@^0.2.0":
+  version "0.2.0"
+  resolved "https://registry.yarnpkg.com/@number-flow/react/-/react-0.2.0.tgz#c3ea38597e22317ea1e63e41690a69cfc7c71085"
+  integrity sha512-yrSR8aiXk8cJYvGCwq9nBSfj77Evg4atdTyqGdsvGwGo3mk7LkQmg1DEBC6VUsMWe8Gc9rHdaV5NSUR+p7mmJg==
+  dependencies:
+    esm-env "^1.0.0"
+    number-flow "0.3.0"
+
 "@pkgjs/parseargs@^0.11.0":
   version "0.11.0"
   resolved "https://registry.yarnpkg.com/@pkgjs/parseargs/-/parseargs-0.11.0.tgz#a77ea742fab25775145434eb1d2328cf5013ac33"
@@ -1871,6 +1879,11 @@ eslint@^8:
     strip-ansi "^6.0.1"
     text-table "^0.2.0"
 
+esm-env@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/esm-env/-/esm-env-1.0.0.tgz#b124b40b180711690a4cb9b00d16573391950413"
+  integrity sha512-Cf6VksWPsTuW01vU9Mk/3vRue91Zevka5SjyNf3nEpokFRuqt/KjUQoGAwq9qMmhpLTHmXzSIrFRw8zxWzmFBA==
+
 espree@^9.6.0, espree@^9.6.1:
   version "9.6.1"
   resolved "https://registry.yarnpkg.com/espree/-/espree-9.6.1.tgz#a2a17b8e434690a5432f2f8018ce71d331a48c6f"
@@ -2776,6 +2789,13 @@ normalize-svg-path@^1.1.0:
   integrity sha512-r9KHKG2UUeB5LoTouwDzBy2VxXlHsiM6fyLQvnJa0S5hrhzqElH/CH7TUGhT1fVvIYBIKf3OpY4YJ4CK+iaqHg==
   dependencies:
     svg-arc-to-cubic-bezier "^3.0.0"
+
+number-flow@0.3.0:
+  version "0.3.0"
+  resolved "https://registry.yarnpkg.com/number-flow/-/number-flow-0.3.0.tgz#d14e0b2d085e836b255c20d724a066dd3c2173cd"
+  integrity sha512-Aog+XsC2App/t/nM8mICf5z+dHXAVUaBfWAb7YgPQX5XHxBc5O5ho6dZsvGEn6nfcI3Ty+NUCpqfQ9zDQ/5+rA==
+  dependencies:
+    esm-env "^1.0.0"
 
 object-assign@^4.0.1, object-assign@^4.1.1:
   version "4.1.1"

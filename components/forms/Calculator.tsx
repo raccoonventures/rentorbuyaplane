@@ -18,6 +18,7 @@ interface FormData {
 }
 
 import { Field as HeadlessField } from '@headlessui/react';
+import NumberFlow from '@number-flow/react';
 import { useEffect, useMemo, useState } from 'react';
 const commaNumber = require('comma-number');
 
@@ -628,12 +629,13 @@ export function Calculator() {
 									</div>
 								</div>
 							</div>
+							{/* Partnership Section — Currently unused */}
+							{/*
 							<div className="grid grid-flow-row gap-8">
 								<h1 className="text-xl font-semibold dark:text-white">
 									About the owner
 									{(formData?.partners?.number ?? 0) > 1 ? 's' : ''}
 								</h1>
-								{/* Partnership Details */}
 
 								<div className="grid grid-flow-row gap-4">
 									<HeadlessField className="grid grid-flow-row gap-2">
@@ -672,6 +674,7 @@ export function Calculator() {
 									</HeadlessField>
 								</div>
 							</div>
+							*/}
 						</div>
 
 						{/* RIGHT */}
@@ -1220,12 +1223,22 @@ export function Calculator() {
 			{/* Output Results */}
 			<section className="grid grid-flow-row items-center justify-center">
 				<div className="grid grid-flow-row items-center justify-center py-16">
-					<h2 className="pb-6 text-center text-lg font-bold text-zinc-950 dark:text-zinc-50">
-						{' '}
-						{formData.output?.estimatedHours == undefined
-							? 'How many hours do you plan on flying per year?'
-							: `You plan on flying ${formData.output.estimatedHours == 200 ? `at least ${formData.output.estimatedHours}` : formData.output.estimatedHours} hours per year`}{' '}
+					<h2 className="pb-6 text-center text-xl font-bold text-zinc-950 dark:text-zinc-50">
+						{formData.output?.estimatedHours === undefined ? (
+							'How many hours do you plan on flying per year?'
+						) : (
+							<>
+								You plan on flying{' '}
+								{formData.output?.estimatedHours === 200 ? 'at least ' : ''}
+								<NumberFlow
+									value={formData.output?.estimatedHours}
+									format={{ notation: 'compact' }}
+								/>{' '}
+								hours per year
+							</>
+						)}
 					</h2>
+
 					<div className="grid grid-flow-col items-center gap-2">
 						<span className="w-10 text-right text-zinc-600 dark:text-zinc-200">
 							0
@@ -1266,7 +1279,10 @@ export function Calculator() {
 										<div className="flex flex-col items-baseline  gap-x-3 text-zinc-200 md:flex-row">
 											<span className="flex items-baseline gap-x-2">
 												<span className="text-3xl font-semibold tracking-tight text-zinc-950 md:text-4xl dark:text-white">
-													{commaNumber(formData?.output?.estimatedHours)}
+													<NumberFlow
+														value={formData?.output?.estimatedHours || 0}
+														locales="en-US"
+													/>
 												</span>
 												<span className="text-sm text-zinc-800 dark:text-zinc-400">
 													hours
@@ -1281,7 +1297,11 @@ export function Calculator() {
 								<div className="flex items-baseline gap-x-2  text-zinc-200">
 									<span>
 										<span className="text-3xl font-semibold tracking-tight text-zinc-950 md:text-4xl dark:text-white ">
-											${commaNumber(formData?.output?.renting?.perHour)}
+											$
+											<NumberFlow
+												value={formData?.output?.renting?.perHour || 0}
+												locales="en-US"
+											/>
 										</span>
 										<span className="text-sm text-zinc-800 dark:text-zinc-400">
 											/hour
@@ -1302,7 +1322,11 @@ export function Calculator() {
 										<div className="flex flex-col items-baseline gap-x-3 text-zinc-200  md:flex-row">
 											<span className="flex items-baseline gap-x-2">
 												<span className="text-3xl font-semibold tracking-tight text-zinc-950 md:text-4xl dark:text-white">
-													${commaNumber(formData?.output?.renting?.fixed)}
+													$
+													<NumberFlow
+														value={formData?.output?.renting?.fixed}
+														locales="en-US"
+													/>
 												</span>
 												<span className="text-sm text-zinc-800 dark:text-zinc-400">
 													/year
@@ -1328,11 +1352,14 @@ export function Calculator() {
 									</span>
 									<span className="text-3xl font-semibold tracking-tight text-zinc-950 md:text-4xl dark:text-white">
 										$
-										{commaNumber(
-											(formData?.output?.renting?.perHour ?? 0) *
-												formData?.output?.estimatedHours +
-												(formData?.output?.renting?.fixed ?? 0),
-										)}
+										<NumberFlow
+											value={
+												(formData?.output?.renting?.perHour ?? 0) *
+													formData?.output?.estimatedHours +
+												(formData?.output?.renting?.fixed ?? 0)
+											}
+											locales="en-US"
+										/>
 									</span>
 									<span className="text-sm text-zinc-800 dark:text-zinc-400">
 										/year
@@ -1369,7 +1396,10 @@ export function Calculator() {
 										<div className="flex flex-col items-baseline  gap-x-2 text-zinc-200 md:flex-row">
 											<span className="flex items-baseline gap-x-2">
 												<span className="text-3xl font-semibold tracking-tight text-zinc-950 md:text-4xl dark:text-white">
-													{commaNumber(formData?.output?.estimatedHours)}
+													<NumberFlow
+														value={formData?.output?.estimatedHours || 0}
+														locales="en-US"
+													/>
 												</span>
 												<span className="text-sm text-zinc-800 dark:text-zinc-400">
 													hours
@@ -1384,7 +1414,11 @@ export function Calculator() {
 								<div className="flex flex-col items-baseline  gap-x-2 text-zinc-200 md:flex-row">
 									<span className="flex items-baseline gap-x-2">
 										<span className="text-3xl font-semibold tracking-tight text-zinc-950 md:text-4xl dark:text-white">
-											${commaNumber(formData?.output?.owning?.perHour)}
+											$
+											<NumberFlow
+												value={formData?.output?.owning?.perHour || 0}
+												locales="en-US"
+											/>
 										</span>
 										<span className="text-sm text-zinc-800 dark:text-zinc-400">
 											/hour
@@ -1406,7 +1440,11 @@ export function Calculator() {
 								<div className="flex flex-col items-baseline gap-x-3 text-zinc-200  md:flex-row">
 									<span className="flex items-baseline gap-x-2">
 										<span className="text-3xl font-semibold tracking-tight text-zinc-950 md:text-4xl dark:text-white">
-											${commaNumber(formData?.output?.owning?.fixed?.perYear)}
+											$
+											<NumberFlow
+												value={formData?.output?.owning?.fixed?.perYear || 0}
+												locales="en-US"
+											/>
 										</span>
 										<span className="text-sm text-zinc-800 dark:text-zinc-400">
 											/year
@@ -1428,11 +1466,14 @@ export function Calculator() {
 									</span>
 									<span className="text-3xl font-semibold tracking-tight text-zinc-950 md:text-4xl dark:text-white">
 										$
-										{commaNumber(
-											(formData?.output?.owning?.perHour ?? 0) *
-												(formData?.output?.estimatedHours ?? 0) +
-												(formData?.output?.owning?.fixed?.perYear ?? 0),
-										)}
+										<NumberFlow
+											value={
+												(formData?.output?.owning?.perHour ?? 0) *
+													(formData?.output?.estimatedHours ?? 0) +
+													(formData?.output?.owning?.fixed?.perYear ?? 0) || 0
+											}
+											locales="en-US"
+										/>
 									</span>
 									<span className="text-sm text-zinc-800 dark:text-zinc-400">
 										/year
