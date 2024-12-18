@@ -95,7 +95,12 @@ export function Contact() {
 						<Label>Your message</Label>
 						<Textarea name="message" onChange={handleChange} />
 					</Field>
-					<Button color="green" type="submit" disabled={!isComplete} className="cursor-pointer">
+					<Button
+						color="green"
+						type="submit"
+						disabled={!isComplete}
+						className="cursor-pointer"
+					>
 						Send message
 					</Button>
 				</form>

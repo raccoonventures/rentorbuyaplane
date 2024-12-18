@@ -22,6 +22,8 @@ import ReactPDF, {
 
 import { setNestedObject } from '@/utils/searchParamsHelpers';
 
+import type { JSX } from 'react';
+
 const styles = StyleSheet.create({
 	page: {
 		flexDirection: 'column',
