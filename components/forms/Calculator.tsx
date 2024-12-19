@@ -17,7 +17,7 @@ interface FormData {
 	};
 }
 
-import { Field as HeadlessField } from '@headlessui/react';
+import { Field } from '@headlessui/react';
 import NumberFlow from '@number-flow/react';
 import { useEffect, useMemo, useState } from 'react';
 const commaNumber = require('comma-number');
@@ -511,7 +511,7 @@ export function Calculator() {
 									<div className="grid grid-flow-row gap-6">
 										<h2 className="text-[#FF7124]">Aircraft Details</h2>
 										<div className="grid grid-flow-row gap-4">
-											<HeadlessField className="grid grid-flow-row gap-2">
+											<Field className="grid grid-flow-row gap-2">
 												<Label>Type</Label>
 												<Select
 													name="aircraft.type"
@@ -524,12 +524,12 @@ export function Calculator() {
 														</option>
 													))}
 												</Select>
-											</HeadlessField>
+											</Field>
 
-											<HeadlessField className="grid grid-flow-row gap-2">
+											<Field className="grid grid-flow-row gap-2">
 												<Label>Acquisition Price</Label>
 												<div className="relative">
-													<div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
+													<div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-2">
 														<span className="z-10 text-zinc-500 sm:text-sm">
 															$
 														</span>
@@ -541,14 +541,14 @@ export function Calculator() {
 														onChange={handleChange}
 													/>
 												</div>
-											</HeadlessField>
+											</Field>
 										</div>
 									</div>
 									{/* Consumption Details */}
 									<div className="grid grid-flow-row gap-6">
 										<h2 className="text-[#FF7124]">Consumption Details</h2>
 										<div className="grid grid-flow-row gap-4">
-											<HeadlessField className="grid grid-flow-row gap-2">
+											<Field className="grid grid-flow-row gap-2">
 												<Label>Fuel Burn</Label>
 												<div className="relative">
 													<div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-8 xl:pr-10">
@@ -563,12 +563,12 @@ export function Calculator() {
 														value={formData?.aircraft?.fuelBurn}
 													/>
 												</div>
-											</HeadlessField>
+											</Field>
 
-											<HeadlessField className="grid grid-flow-row gap-2">
+											<Field className="grid grid-flow-row gap-2">
 												<Label>Fuel Price</Label>
 												<div className="relative">
-													<div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
+													<div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-2">
 														<span className="z-10 text-zinc-500 sm:text-sm">
 															$
 														</span>
@@ -585,9 +585,9 @@ export function Calculator() {
 														</span>
 													</div>
 												</div>
-											</HeadlessField>
+											</Field>
 
-											<HeadlessField className="grid grid-flow-row gap-2">
+											<Field className="grid grid-flow-row gap-2">
 												<Label>Oil refill every</Label>
 												<div className="relative">
 													<div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-8 xl:pr-10">
@@ -602,12 +602,12 @@ export function Calculator() {
 														value={formData?.aircraft?.oilRefill}
 													/>
 												</div>
-											</HeadlessField>
+											</Field>
 
-											<HeadlessField className="grid grid-flow-row gap-2">
+											<Field className="grid grid-flow-row gap-2">
 												<Label>Oil Price</Label>
 												<div className="relative">
-													<div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
+													<div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-2">
 														<span className="z-10 text-zinc-500 sm:text-sm">
 															$
 														</span>
@@ -624,7 +624,7 @@ export function Calculator() {
 														</span>
 													</div>
 												</div>
-											</HeadlessField>
+											</Field>
 										</div>
 									</div>
 								</div>
@@ -638,7 +638,7 @@ export function Calculator() {
 								</h1>
 
 								<div className="grid grid-flow-row gap-4">
-									<HeadlessField className="grid grid-flow-row gap-2">
+									<Field className="grid grid-flow-row gap-2">
 										<Label>Number of Partners</Label>
 										<div className="relative">
 											<div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-8 xl:pr-10">
@@ -654,9 +654,9 @@ export function Calculator() {
 												onChange={handleChange}
 											/>
 										</div>
-									</HeadlessField>
+									</Field>
 
-									<HeadlessField className="grid hidden grid-flow-row gap-2">
+									<Field className="grid hidden grid-flow-row gap-2">
 										<Label>Hours Per Partner</Label>
 										<div className="relative">
 											<div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-8 xl:pr-10">
@@ -671,7 +671,7 @@ export function Calculator() {
 												value={formData.partners?.hoursPerPartner}
 											/>
 										</div>
-									</HeadlessField>
+									</Field>
 								</div>
 							</div>
 							*/}
@@ -690,10 +690,10 @@ export function Calculator() {
 										<div className="grid grid-flow-row gap-6">
 											<h2 className="text-[#FF7124]">Financing Details</h2>
 											<div className="grid grid-flow-row gap-4">
-												<HeadlessField className="grid grid-flow-row gap-2">
+												<Field className="grid grid-flow-row gap-2">
 													<Label>Down Payment</Label>
 													<div className="relative">
-														<div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
+														<div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-2">
 															<span className="z-10 text-zinc-500 sm:text-sm">
 																$
 															</span>
@@ -705,12 +705,12 @@ export function Calculator() {
 															value={formData?.costs?.acquisition?.downPayment}
 														/>
 													</div>
-												</HeadlessField>
+												</Field>
 
-												<HeadlessField className="grid grid-flow-row gap-2">
+												<Field className="grid grid-flow-row gap-2">
 													<Label>Principal</Label>
 													<div className="relative">
-														<div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
+														<div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-2">
 															<span className="z-10 text-zinc-500 sm:text-sm">
 																$
 															</span>
@@ -722,10 +722,10 @@ export function Calculator() {
 															value={formData?.costs?.acquisition?.principal}
 														/>
 													</div>
-												</HeadlessField>
+												</Field>
 
 												<div className="grid grid-flow-col items-baseline justify-items-stretch gap-2 md:justify-items-start lg:max-w-none lg:grid-flow-row xl:grid-flow-col">
-													<HeadlessField className="grid max-w-48 grid-flow-row gap-2">
+													<Field className="grid max-w-48 grid-flow-row gap-2">
 														<Label>Duration</Label>
 														<div className="relative">
 															<Input
@@ -743,13 +743,13 @@ export function Calculator() {
 																</span>
 															</div>
 														</div>
-													</HeadlessField>
+													</Field>
 
 													<span className="max-w-10 px-0.5 text-zinc-500 sm:text-sm">
 														@
 													</span>
 
-													<HeadlessField className="grid max-w-48 grid-flow-row gap-2">
+													<Field className="grid max-w-48 grid-flow-row gap-2">
 														<Label className="text-right">Interest Rate</Label>
 														<div className="relative">
 															<Input
@@ -767,7 +767,7 @@ export function Calculator() {
 																</span>
 															</div>
 														</div>
-													</HeadlessField>
+													</Field>
 												</div>
 											</div>
 										</div>
@@ -775,10 +775,10 @@ export function Calculator() {
 										<div className="grid grid-flow-row gap-6">
 											<h2 className="text-[#FF7124]">Engine Overhaul</h2>
 											<div className="grid grid-flow-row gap-4">
-												<HeadlessField className="grid grid-flow-row gap-2">
+												<Field className="grid grid-flow-row gap-2">
 													<Label>Overhaul Cost</Label>
 													<div className="relative">
-														<div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
+														<div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-2">
 															<span className="z-10 text-zinc-500 sm:text-sm">
 																$
 															</span>
@@ -790,9 +790,9 @@ export function Calculator() {
 															value={formData?.factors?.engineOverhaul}
 														/>
 													</div>
-												</HeadlessField>
+												</Field>
 
-												<HeadlessField className="grid grid-flow-row gap-2">
+												<Field className="grid grid-flow-row gap-2">
 													<Label>Time Between Overhauls</Label>
 													<div className="relative">
 														<div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-8 xl:pr-10">
@@ -807,9 +807,9 @@ export function Calculator() {
 															value={formData?.aircraft?.tbo}
 														/>
 													</div>
-												</HeadlessField>
+												</Field>
 
-												<HeadlessField className="grid grid-flow-row gap-2">
+												<Field className="grid grid-flow-row gap-2">
 													<Label>Time Since Major Overhaul</Label>
 													<div className="relative">
 														<div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-8 xl:pr-10">
@@ -830,7 +830,7 @@ export function Calculator() {
 															TSMOH cannot be greater than TBO
 														</ErrorMessage>
 													)}
-												</HeadlessField>
+												</Field>
 											</div>
 										</div>
 									</div>
@@ -839,7 +839,7 @@ export function Calculator() {
 										<div className="grid grid-flow-row gap-6">
 											<h2 className="text-[#FF7124]">Fixed Operation Costs</h2>
 											<div className="grid grid-flow-row gap-4">
-												<HeadlessField className="grid grid-flow-row gap-2">
+												<Field className="grid grid-flow-row gap-2">
 													<Label>Hangar</Label>
 													<div className="relative">
 														<div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-1 lg:pl-3">
@@ -861,12 +861,12 @@ export function Calculator() {
 															</span>
 														</div>
 													</div>
-												</HeadlessField>
+												</Field>
 
-												<HeadlessField className="grid grid-flow-row gap-2">
+												<Field className="grid grid-flow-row gap-2">
 													<Label>Insurance</Label>
 													<div className="relative">
-														<div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
+														<div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-2">
 															<span className="z-10 text-zinc-500 sm:text-sm">
 																$
 															</span>
@@ -887,12 +887,12 @@ export function Calculator() {
 															</span>
 														</div>
 													</div>
-												</HeadlessField>
+												</Field>
 
-												<HeadlessField className="grid grid-flow-row gap-2">
+												<Field className="grid grid-flow-row gap-2">
 													<Label>Annual Inspection</Label>
 													<div className="relative">
-														<div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
+														<div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-2">
 															<span className="z-10 text-zinc-500 sm:text-sm">
 																$
 															</span>
@@ -911,12 +911,12 @@ export function Calculator() {
 															</span>
 														</div>
 													</div>
-												</HeadlessField>
+												</Field>
 
-												<HeadlessField className="grid grid-flow-row gap-2">
+												<Field className="grid grid-flow-row gap-2">
 													<Label>Installments</Label>
 													<div className="relative">
-														<div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
+														<div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-2">
 															<span className="z-10 text-zinc-500 sm:text-sm">
 																$
 															</span>
@@ -937,9 +937,9 @@ export function Calculator() {
 															</span>
 														</div>
 													</div>
-												</HeadlessField>
+												</Field>
 
-												<HeadlessField className="mt-4 grid grid-flow-col justify-between gap-2">
+												<Field className="mt-4 grid grid-flow-col justify-between gap-2">
 													<Label>
 														{formData?.settings?.fixedCostsYearly
 															? 'Converted to yearly costs'
@@ -949,7 +949,7 @@ export function Calculator() {
 														name="settings.fixedCostsYearly"
 														onChange={handleFixedCostsYearlySwitchChange}
 													/>
-												</HeadlessField>
+												</Field>
 											</div>
 										</div>
 									</div>
@@ -958,10 +958,10 @@ export function Calculator() {
 									<div className="grid grid-flow-row gap-6">
 										<h2 className="text-[#FF7124]">Variable Operation Costs</h2>
 										<div className="grid grid-flow-row gap-4">
-											<HeadlessField className="grid grid-flow-row gap-2">
+											<Field className="grid grid-flow-row gap-2">
 												<Label>Fuel</Label>
 												<div className="relative">
-													<div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
+													<div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-2">
 														<span className="z-10 text-zinc-500 sm:text-sm">
 															$
 														</span>
@@ -978,12 +978,12 @@ export function Calculator() {
 														</span>
 													</div>
 												</div>
-											</HeadlessField>
+											</Field>
 
-											<HeadlessField className="grid grid-flow-row gap-2">
+											<Field className="grid grid-flow-row gap-2">
 												<Label>Oil</Label>
 												<div className="relative">
-													<div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
+													<div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-2">
 														<span className="z-10 text-zinc-500 sm:text-sm">
 															$
 														</span>
@@ -1000,12 +1000,12 @@ export function Calculator() {
 														</span>
 													</div>
 												</div>
-											</HeadlessField>
+											</Field>
 
-											<HeadlessField className="grid grid-flow-row gap-2">
+											<Field className="grid grid-flow-row gap-2">
 												<Label>Engine Overhaul Reserve</Label>
 												<div className="relative">
-													<div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
+													<div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-2">
 														<span className="z-10 text-zinc-500 sm:text-sm">
 															$
 														</span>
@@ -1025,12 +1025,12 @@ export function Calculator() {
 														</span>
 													</div>
 												</div>
-											</HeadlessField>
+											</Field>
 
-											<HeadlessField className="grid grid-flow-row gap-2">
+											<Field className="grid grid-flow-row gap-2">
 												<Label>Maintenance Reserve</Label>
 												<div className="relative">
-													<div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
+													<div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-2">
 														<span className="z-10 text-zinc-500 sm:text-sm">
 															$
 														</span>
@@ -1050,12 +1050,12 @@ export function Calculator() {
 														</span>
 													</div>
 												</div>
-											</HeadlessField>
+											</Field>
 
-											<HeadlessField className="grid grid-flow-row gap-2">
+											<Field className="grid grid-flow-row gap-2">
 												<Label>Upgrades</Label>
 												<div className="relative">
-													<div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
+													<div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-2">
 														<span className="z-10 text-zinc-500 sm:text-sm">
 															$
 														</span>
@@ -1074,12 +1074,12 @@ export function Calculator() {
 														</span>
 													</div>
 												</div>
-											</HeadlessField>
+											</Field>
 
-											<HeadlessField className="grid grid-flow-row gap-2">
+											<Field className="grid grid-flow-row gap-2">
 												<Label>Cosmetic</Label>
 												<div className="relative">
-													<div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
+													<div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-2">
 														<span className="z-10 text-zinc-500 sm:text-sm">
 															$
 														</span>
@@ -1098,7 +1098,7 @@ export function Calculator() {
 														</span>
 													</div>
 												</div>
-											</HeadlessField>
+											</Field>
 										</div>
 									</div>
 								</div>
@@ -1111,10 +1111,10 @@ export function Calculator() {
 										Rental Costs
 									</h1>
 									<div className="grid grid-flow-row gap-4">
-										<HeadlessField className="grid grid-flow-row gap-2">
+										<Field className="grid grid-flow-row gap-2">
 											<Label>Hourly Rate</Label>
 											<div className="relative">
-												<div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
+												<div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-2">
 													<span className="z-10 text-zinc-500 sm:text-sm">
 														$
 													</span>
@@ -1131,9 +1131,9 @@ export function Calculator() {
 													</span>
 												</div>
 											</div>
-										</HeadlessField>
+										</Field>
 
-										<HeadlessField className="grid grid-flow-col items-center justify-start gap-2">
+										<Field className="grid grid-flow-col items-center justify-start gap-2">
 											<Label className=" w-52">
 												{formData.costs?.rental?.isWet
 													? 'Fuel is included (wet rental)'
@@ -1145,14 +1145,14 @@ export function Calculator() {
 												color="teal"
 												onChange={handleIsWetSwitchChange}
 											/>
-										</HeadlessField>
+										</Field>
 
-										<HeadlessField className="grid grid-flow-row gap-2">
+										<Field className="grid grid-flow-row gap-2">
 											<Label>
 												Additional fixed fees (e.g. yearly membership)
 											</Label>
 											<div className="relative">
-												<div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
+												<div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-2">
 													<span className="z-10 text-zinc-500 sm:text-sm">
 														$
 													</span>
@@ -1169,7 +1169,7 @@ export function Calculator() {
 													</span>
 												</div>
 											</div>
-										</HeadlessField>
+										</Field>
 									</div>
 								</div>
 							</div>
