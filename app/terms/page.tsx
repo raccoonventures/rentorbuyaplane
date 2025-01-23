@@ -8,7 +8,7 @@ const TermsPage = () => {
 				<p className="text-base font-semibold">Last updated April 8, 2024</p>
 			</div>
 			<section className="grid justify-center p-8">
-				<div className="prose prose-lg prose-zinc tracking-tight dark:prose-invert">
+				<div className="prose prose-lg prose-zinc dark:prose-invert tracking-tight">
 					<p>
 						<span className="font-semibold">AGREEMENT TO OUR LEGAL TERMS </span>
 					</p>

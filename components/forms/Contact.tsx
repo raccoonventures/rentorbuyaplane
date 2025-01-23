@@ -57,7 +57,7 @@ export function Contact() {
 			{/* Calculator */}
 			<section className="grid grid-flow-row gap-6 py-12 md:grid-flow-col">
 				<div className="grid max-w-2xl grid-flow-row content-start justify-start gap-2">
-					<div className="prose prose-lg prose-zinc grid justify-center tracking-tight dark:prose-invert">
+					<div className="prose prose-lg prose-zinc dark:prose-invert grid justify-center tracking-tight">
 						<h2>Have questions or feedback about rentorbuyaplane.com?</h2>
 						<p>
 							We&apos;d love to hear from you! Reach out to us using the form

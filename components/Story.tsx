@@ -114,7 +114,7 @@ export default function Carousel({ items }: { items: CarouselItem[] }) {
 				{items.map((item, index) => (
 					<button
 						key={index}
-						className="group rounded p-2 focus:outline-none focus-visible:ring focus-visible:ring-lime-300"
+						className="group rounded-sm p-2 focus:outline-hidden focus-visible:ring-3 focus-visible:ring-lime-300"
 						onClick={() => {
 							setActive(index);
 							setProgress(0);

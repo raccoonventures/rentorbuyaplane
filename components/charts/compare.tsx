@@ -32,7 +32,7 @@ export function Chart(properties: any) {
 	};
 
 	return (
-		<section className=" h-96 min-h-[800px]">
+		<section className="h-96 min-h-[800px]">
 			<ResponsiveLine
 				data={chartData}
 				margin={{ top: 150, right: 75, bottom: 150, left: 75 }}

@@ -21,7 +21,7 @@ const AboutPage = () => {
 	return (
 		<section className="grid grid-flow-row items-center justify-center gap-8">
 			<div className="grid grid-flow-col items-center justify-start gap-12">
-				<div className="prose prose-lg prose-zinc grid justify-center tracking-tight dark:prose-invert">
+				<div className="prose prose-lg prose-zinc dark:prose-invert grid justify-center tracking-tight">
 					<h2 id="our-mission">Our Mission</h2>
 					<p>
 						Welcome to rentorbuyaplane.com, your trusted resource for navigating
@@ -48,7 +48,7 @@ const AboutPage = () => {
 					height="180"
 					className="rounded-full"
 				/>
-				<div className="prose prose-lg prose-zinc grid justify-center tracking-tight dark:prose-invert">
+				<div className="prose prose-lg prose-zinc dark:prose-invert grid justify-center tracking-tight">
 					<h2 id="meet-our-founder">Meet Our Founder</h2>
 					<p>
 						rentorbuyaplane.com is the brainchild of Jp, a dedicated aviation
@@ -61,7 +61,7 @@ const AboutPage = () => {
 			</div>
 
 			<div className="grid grid-flow-col items-center justify-start gap-12">
-				<div className="prose prose-lg prose-zinc grid justify-center tracking-tight dark:prose-invert">
+				<div className="prose prose-lg prose-zinc dark:prose-invert grid justify-center tracking-tight">
 					<h2 id="our-commitment">Our Commitment</h2>
 					<p>
 						At rentorbuyaplane.com, we are committed to empowering our community
@@ -89,7 +89,7 @@ const AboutPage = () => {
 					height="180"
 					className="rounded-full"
 				/>
-				<div className="prose prose-lg prose-zinc grid justify-center tracking-tight dark:prose-invert">
+				<div className="prose prose-lg prose-zinc dark:prose-invert grid justify-center tracking-tight">
 					<h2 id="why-choose-us-">Why Choose Us?</h2>
 					<p>
 						Choosing between renting and buying a plane is a significant
@@ -103,7 +103,7 @@ const AboutPage = () => {
 			</div>
 
 			<div className="grid grid-flow-col items-center justify-start gap-12">
-				<div className="prose prose-lg prose-zinc grid justify-center tracking-tight dark:prose-invert">
+				<div className="prose prose-lg prose-zinc dark:prose-invert grid justify-center tracking-tight">
 					<h2 id="how-it-works">How It Works</h2>
 					<p>
 						Using our cost calculator is easy. Simply enter your flight
@@ -130,7 +130,7 @@ const AboutPage = () => {
 					height="180"
 					className="rounded-full"
 				/>
-				<div className="prose prose-lg prose-zinc grid justify-center tracking-tight dark:prose-invert">
+				<div className="prose prose-lg prose-zinc dark:prose-invert grid justify-center tracking-tight">
 					<h2 id="join-our-community">Join Our Community</h2>
 					<p>
 						Join our growing community of aviation enthusiasts! Whether
@@ -143,7 +143,7 @@ const AboutPage = () => {
 			</div>
 
 			<div className="grid grid-flow-col items-center justify-start gap-12">
-				<div className="prose prose-lg prose-zinc grid justify-center tracking-tight dark:prose-invert">
+				<div className="prose prose-lg prose-zinc dark:prose-invert grid justify-center tracking-tight">
 					<h2 id="get-in-touch">Get in Touch</h2>
 					<p>
 						Ready to take flight with rentorbuyaplane.com? Explore our
@@ -162,7 +162,7 @@ const AboutPage = () => {
 					className="rounded-full"
 				/>
 			</div>
-			<div className="prose prose-lg prose-zinc mx-auto mt-24 grid justify-center text-center tracking-tight dark:prose-invert">
+			<div className="prose prose-lg prose-zinc dark:prose-invert mx-auto mt-24 grid justify-center text-center tracking-tight">
 				<h4>
 					Thanks to the following users from the /r/flying subreddit for their
 					feedback

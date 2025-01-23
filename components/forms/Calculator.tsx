@@ -680,11 +680,11 @@ export function Calculator() {
 						{/* RIGHT */}
 						<div className="grid grid-flow-row gap-12">
 							{/* OWNERSHIP COSTS */}
-							<div className="grid grid-flow-row items-start gap-8  rounded-lg border border-black/10 bg-zinc-950/5 p-6 hover:border-black/20 lg:p-8 dark:border-white/10 dark:bg-white/5 dark:hover:border-white/20">
+							<div className="grid grid-flow-row items-start gap-8 rounded-lg border border-black/10 bg-zinc-950/5 p-6 hover:border-black/20 lg:p-8 dark:border-white/10 dark:bg-white/5 dark:hover:border-white/20">
 								<h1 className="text-xl font-semibold dark:text-white">
 									Ownership Costs
 								</h1>
-								<div className="grid grid-flow-row content-start items-start  gap-24 lg:grid-flow-col">
+								<div className="grid grid-flow-row content-start items-start gap-24 lg:grid-flow-col">
 									<div className="grid grid-flow-row gap-16">
 										{/* Financing Details */}
 										<div className="grid grid-flow-row gap-6">
@@ -734,7 +734,7 @@ export function Calculator() {
 																value={
 																	formData?.costs?.acquisition?.durationYears
 																}
-																className="min-w-24 max-w-28"
+																className="max-w-28 min-w-24"
 																onChange={handleChange}
 															/>
 															<div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-8 xl:pr-10">
@@ -756,7 +756,7 @@ export function Calculator() {
 																type="number"
 																name="costs.acquisition.interestRate"
 																onChange={handleChange}
-																className="min-w-24 max-w-28"
+																className="max-w-28 min-w-24"
 																value={
 																	formData?.costs?.acquisition?.interestRate
 																}
@@ -1134,7 +1134,7 @@ export function Calculator() {
 										</Field>
 
 										<Field className="grid grid-flow-col items-center justify-start gap-2">
-											<Label className=" w-52">
+											<Label className="w-52">
 												{formData.costs?.rental?.isWet
 													? 'Fuel is included (wet rental)'
 													: 'Fuel is not included (dry rental)'}
@@ -1184,7 +1184,7 @@ export function Calculator() {
 								<h2 className="text-3xl font-bold tracking-tight text-zinc-950 sm:text-4xl dark:text-zinc-50">
 									Get your comprehensive ownership analysis
 								</h2>
-								<span className="mt-1 rounded-full bg-yellow-600/10 px-3 py-1 text-sm font-semibold text-yellow-500 ring-1 ring-inset ring-yellow-600/20">
+								<span className="mt-1 rounded-full bg-yellow-600/10 px-3 py-1 text-sm font-semibold text-yellow-500 ring-1 ring-yellow-600/20 ring-inset">
 									Coming soon
 								</span>
 							</div>
@@ -1194,7 +1194,7 @@ export function Calculator() {
 								ownership choice effectively
 							</p>
 						</div>
-						<div className="mt-10 flex items-center gap-x-6 lg:mt-0 lg:flex-shrink-0">
+						<div className="mt-10 flex items-center gap-x-6 lg:mt-0 lg:shrink-0">
 							{formData?.output?.estimatedHours != undefined ? (
 								<Button
 									color="green"
@@ -1260,7 +1260,7 @@ export function Calculator() {
 				<div className="grid grid-flow-row items-center justify-center gap-12 md:grid-flow-col">
 					{/* Renting */}
 					<div
-						className={`h-full w-full rounded-lg  border md:min-w-96 lg:p-8 ${!formData.output?.isBuyingBest ? 'scale-110 border-emerald-500 bg-emerald-800/10 p-6 hover:border-emerald-950 dark:border-emerald-400/40 dark:bg-emerald-500/10 dark:hover:border-emerald-400' : 'border-black/10 bg-zinc-950/5 p-6 hover:border-black/20 dark:border-white/10 dark:bg-white/5 dark:hover:border-white/20'} `}
+						className={`h-full w-full rounded-lg border md:min-w-96 lg:p-8 ${!formData.output?.isBuyingBest ? 'scale-110 border-emerald-500 bg-emerald-800/10 p-6 hover:border-emerald-950 dark:border-emerald-400/40 dark:bg-emerald-500/10 dark:hover:border-emerald-400' : 'border-black/10 bg-zinc-950/5 p-6 hover:border-black/20 dark:border-white/10 dark:bg-white/5 dark:hover:border-white/20'} `}
 					>
 						<div className="grid grid-flow-row gap-8">
 							<div className="flex items-center gap-2">
@@ -1276,7 +1276,7 @@ export function Calculator() {
 							<div className="grid min-h-48 grid-flow-row content-start gap-4">
 								{formData?.output?.estimatedHours && (
 									<>
-										<div className="flex flex-col items-baseline  gap-x-3 text-zinc-200 md:flex-row">
+										<div className="flex flex-col items-baseline gap-x-3 text-zinc-200 md:flex-row">
 											<span className="flex items-baseline gap-x-2">
 												<span className="text-3xl font-semibold tracking-tight text-zinc-950 md:text-4xl dark:text-white">
 													<NumberFlow
@@ -1294,9 +1294,9 @@ export function Calculator() {
 										</span>
 									</>
 								)}
-								<div className="flex items-baseline gap-x-2  text-zinc-200">
+								<div className="flex items-baseline gap-x-2 text-zinc-200">
 									<span>
-										<span className="text-3xl font-semibold tracking-tight text-zinc-950 md:text-4xl dark:text-white ">
+										<span className="text-3xl font-semibold tracking-tight text-zinc-950 md:text-4xl dark:text-white">
 											$
 											<NumberFlow
 												value={formData?.output?.renting?.perHour || 0}
@@ -1309,7 +1309,7 @@ export function Calculator() {
 									</span>
 									<dt className="group relative grid grid-flow-col items-center text-zinc-600 dark:text-zinc-200">
 										<span className="cursor-help">of renting</span>
-										<span className="absolute -right-2 top-8 z-[999] w-max max-w-48 scale-0 rounded bg-zinc-700 px-3 py-2 text-center text-xs font-normal text-white shadow-xl group-hover:scale-100">
+										<span className="absolute top-8 -right-2 z-999 w-max max-w-48 scale-0 rounded-sm bg-zinc-700 px-3 py-2 text-center text-xs font-normal text-white shadow-xl group-hover:scale-100">
 											The hourly rate for renting the plane
 										</span>
 									</dt>
@@ -1319,7 +1319,7 @@ export function Calculator() {
 										<span className="text-4xl font-bold text-zinc-800 dark:text-zinc-400">
 											+
 										</span>
-										<div className="flex flex-col items-baseline gap-x-3 text-zinc-200  md:flex-row">
+										<div className="flex flex-col items-baseline gap-x-3 text-zinc-200 md:flex-row">
 											<span className="flex items-baseline gap-x-2">
 												<span className="text-3xl font-semibold tracking-tight text-zinc-950 md:text-4xl dark:text-white">
 													$
@@ -1334,7 +1334,7 @@ export function Calculator() {
 											</span>
 											<dt className="group relative grid grid-flow-col items-center text-zinc-600 dark:text-zinc-200">
 												<span className="cursor-help">of fixed costs</span>
-												<span className="absolute -right-2 top-8 z-[999] w-max max-w-48 scale-0 rounded bg-zinc-700 px-3 py-2 text-center text-xs font-normal text-white shadow-xl group-hover:scale-100">
+												<span className="absolute top-8 -right-2 z-999 w-max max-w-48 scale-0 rounded-sm bg-zinc-700 px-3 py-2 text-center text-xs font-normal text-white shadow-xl group-hover:scale-100">
 													The yearly total for yearly fees for your rental such
 													as membership fees
 												</span>
@@ -1346,7 +1346,7 @@ export function Calculator() {
 								)}
 							</div>
 							{formData?.output?.estimatedHours && (
-								<div className="grid grid-flow-col items-center justify-start gap-4 border-t-2 border-zinc-800 pt-4  dark:border-zinc-400">
+								<div className="grid grid-flow-col items-center justify-start gap-4 border-t-2 border-zinc-800 pt-4 dark:border-zinc-400">
 									<span className="text-4xl font-bold text-zinc-800 dark:text-zinc-400">
 										{formData?.output?.estimatedHours == 200 ? '≥' : '='}
 									</span>
@@ -1370,14 +1370,14 @@ export function Calculator() {
 					</div>
 					{/* or */}
 					<div className="hidden h-10 w-10 items-center justify-center lg:grid">
-						<span className="text-2xl font-bold uppercase italic text-white/50">
+						<span className="text-2xl font-bold text-white/50 uppercase italic">
 							or
 						</span>
 					</div>
 					{/* Owning */}
 
 					<div
-						className={`h-full w-full rounded-lg  border md:min-w-96 lg:p-8 ${formData.output?.isBuyingBest ? 'scale-110 border-emerald-500 bg-emerald-800/10 p-6 hover:border-emerald-950 dark:border-emerald-400/40 dark:bg-emerald-500/10 dark:hover:border-emerald-400' : 'border-black/10 bg-zinc-950/5 p-6 hover:border-black/20 dark:border-white/10 dark:bg-white/5 dark:hover:border-white/20'} `}
+						className={`h-full w-full rounded-lg border md:min-w-96 lg:p-8 ${formData.output?.isBuyingBest ? 'scale-110 border-emerald-500 bg-emerald-800/10 p-6 hover:border-emerald-950 dark:border-emerald-400/40 dark:bg-emerald-500/10 dark:hover:border-emerald-400' : 'border-black/10 bg-zinc-950/5 p-6 hover:border-black/20 dark:border-white/10 dark:bg-white/5 dark:hover:border-white/20'} `}
 					>
 						<div className="grid grid-flow-row gap-8">
 							<div className="flex items-center gap-2">
@@ -1393,7 +1393,7 @@ export function Calculator() {
 							<div className="grid min-h-48 grid-flow-row content-start gap-4">
 								{formData?.output?.estimatedHours && (
 									<>
-										<div className="flex flex-col items-baseline  gap-x-2 text-zinc-200 md:flex-row">
+										<div className="flex flex-col items-baseline gap-x-2 text-zinc-200 md:flex-row">
 											<span className="flex items-baseline gap-x-2">
 												<span className="text-3xl font-semibold tracking-tight text-zinc-950 md:text-4xl dark:text-white">
 													<NumberFlow
@@ -1411,7 +1411,7 @@ export function Calculator() {
 										</span>
 									</>
 								)}
-								<div className="flex flex-col items-baseline  gap-x-2 text-zinc-200 md:flex-row">
+								<div className="flex flex-col items-baseline gap-x-2 text-zinc-200 md:flex-row">
 									<span className="flex items-baseline gap-x-2">
 										<span className="text-3xl font-semibold tracking-tight text-zinc-950 md:text-4xl dark:text-white">
 											$
@@ -1428,7 +1428,7 @@ export function Calculator() {
 										<span className="cursor-help">
 											of variable operation costs
 										</span>
-										<span className="absolute -right-2 top-8 z-[999] w-max max-w-48 scale-0 rounded bg-zinc-700 px-3 py-2 text-center text-xs font-normal text-white shadow-xl group-hover:scale-100">
+										<span className="absolute top-8 -right-2 z-999 w-max max-w-48 scale-0 rounded-sm bg-zinc-700 px-3 py-2 text-center text-xs font-normal text-white shadow-xl group-hover:scale-100">
 											The hourly costs for fuel, oil, and reserve funds for
 											overhaul and maintenance
 										</span>
@@ -1437,7 +1437,7 @@ export function Calculator() {
 								<span className="text-4xl font-bold text-zinc-800 dark:text-zinc-400">
 									+
 								</span>
-								<div className="flex flex-col items-baseline gap-x-3 text-zinc-200  md:flex-row">
+								<div className="flex flex-col items-baseline gap-x-3 text-zinc-200 md:flex-row">
 									<span className="flex items-baseline gap-x-2">
 										<span className="text-3xl font-semibold tracking-tight text-zinc-950 md:text-4xl dark:text-white">
 											$
@@ -1452,7 +1452,7 @@ export function Calculator() {
 									</span>
 									<dt className="group relative grid grid-flow-col items-center text-zinc-600 dark:text-zinc-200">
 										<span className="cursor-help">of fixed costs</span>
-										<span className="absolute -right-2 top-8 z-[999] w-max max-w-48 scale-0 rounded bg-zinc-700 px-3 py-2 text-center text-xs font-normal text-white shadow-xl group-hover:scale-100">
+										<span className="absolute top-8 -right-2 z-999 w-max max-w-48 scale-0 rounded-sm bg-zinc-700 px-3 py-2 text-center text-xs font-normal text-white shadow-xl group-hover:scale-100">
 											The yearly total for insurance, annual inspection,
 											financing, and hangaring
 										</span>
@@ -1460,7 +1460,7 @@ export function Calculator() {
 								</div>
 							</div>
 							{formData?.output?.estimatedHours && (
-								<div className="grid grid-flow-col items-center justify-start gap-4 border-t-2 border-zinc-800 pt-4  dark:border-zinc-400">
+								<div className="grid grid-flow-col items-center justify-start gap-4 border-t-2 border-zinc-800 pt-4 dark:border-zinc-400">
 									<span className="text-4xl font-bold text-zinc-800 dark:text-zinc-400">
 										{formData?.output?.estimatedHours == 200 ? '≥' : '='}
 									</span>
