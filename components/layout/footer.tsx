@@ -16,7 +16,7 @@ export default function Footer() {
 						href="https://trimcarbon.com"
 						className="text-xs leading-5 text-zinc-500 hover:text-zinc-200"
 					>
-						Offset your flights' carbon emissions
+						Offset your flights&apos; carbon emissions
 					</Link>
 					<Link
 						href="https://safety-briefing.com"
