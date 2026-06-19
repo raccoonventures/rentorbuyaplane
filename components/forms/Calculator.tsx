@@ -13,7 +13,8 @@ type Mode = "basic" | "advanced";
 export function Calculator() {
 	const [mode, setMode] = useState<Mode>("basic");
 	const state = useCalculator();
-	const { formData, output, estimatedHours, handleHoursChange } = state;
+	const { formData, output, estimatedHours, handleHoursChange, stepHours } =
+		state;
 
 	const openReport = () => {
 		const queryString = toQueryString({ ...formData, output });
@@ -53,8 +54,10 @@ export function Calculator() {
 			{/* Results */}
 			<ResultCards
 				output={output}
+				formData={formData}
 				estimatedHours={estimatedHours}
 				onHoursChange={handleHoursChange}
+				onHoursStep={stepHours}
 			/>
 
 			{/* CTA */}

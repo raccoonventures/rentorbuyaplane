@@ -1,19 +1,19 @@
 "use client";
 
-import { Field } from "@headlessui/react";
 import NumberFlow from "@number-flow/react";
 import { Badge } from "@/catalyst/badge";
-import { Label } from "@/catalyst/fieldset";
-import { Input } from "@/catalyst/input";
 import { Chart } from "@/components/charts/compare";
-import type { OutputData } from "@/types";
+import { MAX_HOURS } from "@/hooks/useCalculator";
+import type { DetailedFormData, OutputData } from "@/types";
 
 const commaNumber = require("comma-number");
 
 interface ResultCardsProps {
 	output: OutputData;
+	formData: DetailedFormData;
 	estimatedHours: number;
 	onHoursChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+	onHoursStep: (delta: number) => void;
 }
 
 const winnerClass =
@@ -37,16 +37,20 @@ function CompareCard({
 	best,
 	total,
 	atLeast,
+	perHourFlown,
 	children,
 }: {
 	title: string;
 	best: boolean;
 	total: number;
 	atLeast: boolean;
+	perHourFlown: number | null;
 	children: React.ReactNode;
 }) {
 	return (
-		<div className={`rounded-lg border p-5 ${best ? winnerClass : idleClass}`}>
+		<div
+			className={`flex flex-col rounded-lg border p-5 ${best ? winnerClass : idleClass}`}
+		>
 			<div className="flex items-center justify-between">
 				<h3 className="text-lg font-semibold text-zinc-950 dark:text-white">
 					{title}
@@ -67,17 +71,86 @@ function CompareCard({
 			<dl className="mt-4 grid gap-1.5 border-t border-black/5 pt-3 text-sm dark:border-white/10">
 				{children}
 			</dl>
+			{perHourFlown !== null && (
+				<div className="mt-auto flex items-baseline justify-between gap-4 border-t border-black/5 pt-3 text-sm dark:border-white/10">
+					<dt className="font-medium text-zinc-700 dark:text-zinc-300">
+						Cost per hour flown
+					</dt>
+					<dd className="font-semibold text-zinc-950 tabular-nums dark:text-white">
+						${commaNumber(perHourFlown)}/hr
+					</dd>
+				</div>
+			)}
+		</div>
+	);
+}
+
+function HoursStepper({
+	hours,
+	onHoursChange,
+	onHoursStep,
+}: {
+	hours: number;
+	onHoursChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+	onHoursStep: (delta: number) => void;
+}) {
+	const btn =
+		"flex size-9 shrink-0 items-center justify-center rounded-full border border-black/10 bg-white text-xl font-medium text-zinc-700 transition hover:bg-zinc-50 disabled:cursor-not-allowed disabled:opacity-40 dark:border-white/15 dark:bg-white/10 dark:text-zinc-200 dark:hover:bg-white/15";
+	return (
+		<div className="flex flex-col items-start gap-1.5 sm:items-end">
+			<span className="text-sm text-zinc-500 dark:text-zinc-400">
+				Hours flown per year
+			</span>
+			<div className="flex items-center gap-3">
+				<button
+					type="button"
+					aria-label="Decrease hours"
+					className={btn}
+					disabled={hours <= 0}
+					onClick={() => onHoursStep(-10)}
+				>
+					−
+				</button>
+				<div className="relative w-24 text-center">
+					<NumberFlow
+						value={hours}
+						locales="en-US"
+						className="text-4xl font-bold tracking-tight text-zinc-950 dark:text-white"
+					/>
+					<input
+						type="number"
+						name="estimatedHours"
+						min={0}
+						max={MAX_HOURS}
+						value={hours}
+						onChange={onHoursChange}
+						aria-label="Hours flown per year"
+						className="absolute inset-0 w-full bg-transparent text-center text-4xl font-bold tracking-tight text-transparent caret-zinc-900 outline-none [appearance:textfield] dark:caret-white [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
+					/>
+				</div>
+				<button
+					type="button"
+					aria-label="Increase hours"
+					className={btn}
+					disabled={hours >= MAX_HOURS}
+					onClick={() => onHoursStep(10)}
+				>
+					+
+				</button>
+			</div>
 		</div>
 	);
 }
 
 export function ResultCards({
 	output,
+	formData,
 	estimatedHours,
 	onHoursChange,
+	onHoursStep,
 }: ResultCardsProps) {
 	const hours = estimatedHours;
-	const atLeast = hours >= 200;
+	const atLeast = hours >= MAX_HOURS;
 	const isBuyingBest = output.isBuyingBest ?? false;
 	const breakEven = output.breakEven ?? 0;
 
@@ -86,11 +159,21 @@ export function ResultCards({
 	const ownPerHour = output.owning?.perHour ?? 0;
 	const ownFixed = output.owning?.fixed?.perYear ?? 0;
 
+	const rentRate = formData.costs?.rental?.hourlyRate ?? 0;
+	const rentFuel = formData.costs?.operation?.variable?.fuel ?? 0;
+	const rentIsWet = formData.costs?.rental?.isWet ?? false;
+
 	const rentTotal = rentPerHour * hours + rentFixed;
 	const ownTotal = ownPerHour * hours + ownFixed;
 
+	const rentPerHourFlown = hours > 0 ? Math.round(rentTotal / hours) : null;
+	const ownPerHourFlown = hours > 0 ? Math.round(ownTotal / hours) : null;
+
 	return (
-		<section className="my-10 grid grid-flow-row gap-8 rounded-lg border border-black/10 bg-zinc-950/5 p-6 lg:p-8 dark:border-white/10 dark:bg-white/5">
+		<section
+			id="results"
+			className="my-10 grid scroll-mt-6 grid-flow-row gap-8 rounded-lg border border-black/10 bg-zinc-950/5 p-6 lg:p-8 dark:border-white/10 dark:bg-white/5"
+		>
 			{/* Header: verdict + hours input */}
 			<div className="grid gap-4 sm:flex sm:items-end sm:justify-between">
 				<div>
@@ -114,19 +197,11 @@ export function ResultCards({
 						)}
 					</p>
 				</div>
-				<Field className="flex items-center gap-3">
-					<Label className="text-sm whitespace-nowrap">Hours flown per year</Label>
-					<div className="w-24">
-						<Input
-							type="number"
-							name="estimatedHours"
-							min={0}
-							max={200}
-							value={hours}
-							onChange={onHoursChange}
-						/>
-					</div>
-				</Field>
+				<HoursStepper
+					hours={hours}
+					onHoursChange={onHoursChange}
+					onHoursStep={onHoursStep}
+				/>
 			</div>
 
 			{/* Comparison */}
@@ -136,11 +211,18 @@ export function ResultCards({
 					best={!isBuyingBest}
 					total={rentTotal}
 					atLeast={atLeast}
+					perHourFlown={rentPerHourFlown}
 				>
 					<BreakdownRow
-						label="Hourly rate"
-						value={`$${commaNumber(rentPerHour)}/hr × ${hours} hrs`}
+						label={rentIsWet ? "Hourly rate (wet)" : "Hourly rate (dry)"}
+						value={`$${commaNumber(rentRate)}/hr × ${hours} hrs`}
 					/>
+					{!rentIsWet && rentFuel ? (
+						<BreakdownRow
+							label="Fuel"
+							value={`$${commaNumber(rentFuel)}/hr × ${hours} hrs`}
+						/>
+					) : null}
 					{rentFixed ? (
 						<BreakdownRow
 							label="Fixed fees"
@@ -154,6 +236,7 @@ export function ResultCards({
 					best={isBuyingBest}
 					total={ownTotal}
 					atLeast={atLeast}
+					perHourFlown={ownPerHourFlown}
 				>
 					<BreakdownRow
 						label="Variable costs"

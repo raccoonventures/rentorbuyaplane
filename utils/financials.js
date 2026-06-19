@@ -77,7 +77,13 @@ module.exports = {
 			estimatedHours === undefined || estimatedHours === null
 				? undefined
 				: estimatedHours;
-		const isBuyingBest = hours !== undefined && hours > breakEven;
+		// Compare the actual totals at the requested hours. Relying on
+		// `hours > breakEven` is wrong when there is no positive break-even:
+		// findBreakEven clamps to 0 both when buying always wins and when renting
+		// always wins, which would otherwise flag buying as best for any hours > 0.
+		const rentingTotal = rentingPerHour * (hours ?? 0) + rentingFixed;
+		const owningTotal = owningPerHour * (hours ?? 0) + owningFixedTotal;
+		const isBuyingBest = hours !== undefined && owningTotal < rentingTotal;
 
 		return {
 			renting: {

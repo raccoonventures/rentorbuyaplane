@@ -31,6 +31,7 @@ export function AdvancedWizard({ state }: { state: CalculatorState }) {
 	} = state;
 
 	const period = formData.settings?.fixedCostsYearly ? "/year" : "/month";
+	const isLastStep = step === STEPS.length - 1;
 
 	return (
 		<div className="grid grid-flow-row gap-8 rounded-lg border border-black/10 bg-zinc-950/5 p-6 lg:p-8 dark:border-white/10 dark:bg-white/5">
@@ -332,8 +333,8 @@ export function AdvancedWizard({ state }: { state: CalculatorState }) {
 				<div className="grid grid-flow-row gap-6">
 					<SectionHeading>Renting</SectionHeading>
 					<p className="text-sm text-zinc-500 dark:text-zinc-400">
-						Finally, what renting the same aircraft would cost you. Then set your
-						hours on the slider below.
+						Finally, what renting the same aircraft would cost you. Set your annual
+						hours with the results below.
 					</p>
 					<div className="grid grid-flow-row gap-4 sm:grid-cols-2">
 						<NumberField
@@ -387,11 +388,16 @@ export function AdvancedWizard({ state }: { state: CalculatorState }) {
 				<Button
 					type="button"
 					color="orange"
-					disabled={step === STEPS.length - 1}
-					className="cursor-pointer disabled:cursor-not-allowed"
-					onClick={() => setStep((s) => Math.min(STEPS.length - 1, s + 1))}
+					className="cursor-pointer"
+					onClick={() =>
+						isLastStep
+							? document
+									.getElementById("results")
+									?.scrollIntoView({ behavior: "smooth" })
+							: setStep((s) => Math.min(STEPS.length - 1, s + 1))
+					}
 				>
-					Next →
+					{isLastStep ? "See results →" : "Next →"}
 				</Button>
 			</div>
 		</div>

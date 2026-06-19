@@ -34,8 +34,22 @@ export function AssumptionsPanel({
 	const factors = formData.factors ?? {};
 	const aircraft = formData.aircraft ?? {};
 
+	const hourlyTotal =
+		(variable.fuel ?? 0) +
+		(variable.oil ?? 0) +
+		(variable.reserve?.engine ?? 0) +
+		(variable.reserve?.maintenance ?? 0) +
+		(variable.upgrades ?? 0) +
+		(variable.cosmetic ?? 0);
+	const fixedTotal =
+		(fixed.hangar ?? 0) +
+		(fixed.insurance ?? 0) +
+		(fixed.annual ?? 0) +
+		(fixed.financing ?? 0);
+	const fixedPeriod = formData.settings?.fixedCostsYearly ? "/year" : "/mo";
+
 	return (
-		<div className="grid grid-flow-row gap-6 rounded-lg border border-black/10 bg-zinc-950/5 p-6 lg:p-8 dark:border-white/10 dark:bg-white/5">
+		<div className="grid h-full grid-flow-row gap-6 rounded-lg border border-black/10 bg-zinc-950/5 p-6 lg:p-8 dark:border-white/10 dark:bg-white/5">
 			<div className="flex items-center gap-4">
 				<PlaneIllustration
 					category={preset.category}
@@ -80,6 +94,26 @@ export function AssumptionsPanel({
 					/>
 				</dl>
 			</div>
+
+			<dl className="grid gap-x-10 gap-y-0 border-t border-black/10 pt-3 sm:grid-cols-2 dark:border-white/10">
+				<div className="flex items-baseline justify-between gap-4 py-1.5">
+					<dt className="text-sm font-medium text-zinc-700 dark:text-zinc-300">
+						Hourly operating expenses
+					</dt>
+					<dd className="text-sm font-semibold text-zinc-950 tabular-nums dark:text-white">
+						{money(hourlyTotal)}/hr
+					</dd>
+				</div>
+				<div className="flex items-baseline justify-between gap-4 py-1.5">
+					<dt className="text-sm font-medium text-zinc-700 dark:text-zinc-300">
+						Fixed costs total
+					</dt>
+					<dd className="text-sm font-semibold text-zinc-950 tabular-nums dark:text-white">
+						{money(fixedTotal)}
+						{fixedPeriod}
+					</dd>
+				</div>
+			</dl>
 
 			<div className="flex flex-col items-start justify-between gap-3 sm:flex-row sm:items-center">
 				<p className="text-xs text-zinc-500 dark:text-zinc-400">

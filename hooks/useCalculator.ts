@@ -60,6 +60,9 @@ function formDataFromPreset(preset: AircraftPreset): DetailedFormData {
 
 const INITIAL_TYPE = "Cessna 172";
 
+/** Upper bound for the annual-hours input. */
+export const MAX_HOURS = 500;
+
 export function useCalculator() {
 	const [formData, setFormData] = useState<DetailedFormData>(() =>
 		formDataFromPreset(getPreset(INITIAL_TYPE)),
@@ -132,7 +135,12 @@ export function useCalculator() {
 	};
 
 	const handleHoursChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-		setEstimatedHours(Number(e.target.value));
+		const clamped = Math.min(MAX_HOURS, Math.max(0, Number(e.target.value) || 0));
+		setEstimatedHours(clamped);
+	};
+
+	const stepHours = (delta: number) => {
+		setEstimatedHours((h) => Math.min(MAX_HOURS, Math.max(0, h + delta)));
 	};
 
 	// Recompute the derived (but user-overridable) cost fields whenever their
@@ -238,6 +246,7 @@ export function useCalculator() {
 		handleChange,
 		handleSelectChange,
 		handleHoursChange,
+		stepHours,
 		handleIsWetSwitchChange,
 		handleFixedCostsYearlySwitchChange,
 		applyPreset,
