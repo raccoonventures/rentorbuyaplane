@@ -1,18 +1,18 @@
-import Footer from '@/components/layout/footer';
-import Header from '@/components/layout/header';
-import type { Metadata } from 'next';
-import Script from 'next/script';
+import type { Metadata } from "next";
+import Script from "next/script";
+import Footer from "@/components/layout/footer";
+import Header from "@/components/layout/header";
 
-import './globals.css';
+import "./globals.css";
 
 export const metadata: Metadata = {
-	title: 'RentOrBuyAPlane.com',
+	title: "RentOrBuyAPlane.com",
 	description:
-		'Estimate the cost of owning vs renting a plane, and discover the exact # of hours to break even',
+		"Estimate the cost of owning vs renting a plane, and discover the exact # of hours to break even",
 	openGraph: {
 		images: [
 			{
-				url: 'https://rentorbuyaplane.com/og.webp', // Must be an absolute URL
+				url: "https://rentorbuyaplane.com/og.webp", // Must be an absolute URL
 				width: 1200,
 				height: 603,
 			},

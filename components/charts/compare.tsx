@@ -1,20 +1,28 @@
-'use client';
-import { ResponsiveLine } from '@nivo/line';
-const commaNumber = require('comma-number');
+"use client";
+import { ResponsiveLine } from "@nivo/line";
 
-import { generateChartData } from '@/utils/charts';
-import theme from './theme';
+const commaNumber = require("comma-number");
+
+import { generateChartData } from "@/utils/charts";
+import theme from "./theme";
 
 const themeOutput = theme();
 
-export function Chart(properties: any) {
+interface ChartProps {
+	rentCost: number;
+	operationCost: number;
+	fixedCost: number;
+	breakEven: number | null;
+}
+
+export function Chart(properties: ChartProps) {
 	const chartData = generateChartData(
 		properties.rentCost,
 		properties.operationCost,
 		properties.fixedCost,
 	);
 
-	// @ts-ignore
+	// @ts-expect-error
 	const CustomTooltip = ({ point }) => {
 		const { serieId, data } = point;
 
@@ -24,27 +32,27 @@ export function Chart(properties: any) {
 
 		return (
 			<div className="rounded-lg border border-zinc-950/50 bg-zinc-50 p-2 text-zinc-950 dark:border-zinc-50 dark:bg-zinc-800/95 dark:text-zinc-50">
-				Flying for <span className="font-bold">{hours}</span> hours will cost
-				you <span className="font-bold">${commaNumber(cost)}</span> when{' '}
+				Flying for <span className="font-bold">{hours}</span> hours will cost you{" "}
+				<span className="font-bold">${commaNumber(cost)}</span> when{" "}
 				<span className="font-bold">{serieId}</span>
 			</div>
 		);
 	};
 
 	return (
-		<section className="h-96 min-h-[800px]">
+		<div className="h-[340px] w-full">
 			<ResponsiveLine
 				data={chartData}
-				margin={{ top: 150, right: 75, bottom: 150, left: 75 }}
-				curve={'natural'}
-				lineWidth={4}
-				xScale={{ type: 'linear' }}
+				margin={{ top: 24, right: 30, bottom: 64, left: 76 }}
+				curve={"natural"}
+				lineWidth={3}
+				xScale={{ type: "linear" }}
 				enableGridX={false}
 				gridXValues={[10, 25, 50, 75, 100, 125, 150, 175, 200]}
 				yScale={{
-					type: 'linear',
-					min: 'auto',
-					max: 'auto',
+					type: "linear",
+					min: "auto",
+					max: "auto",
 					stacked: false,
 					reverse: false,
 				}}
@@ -55,44 +63,44 @@ export function Chart(properties: any) {
 					tickSize: 5,
 					tickPadding: 5,
 					tickRotation: 0,
-					legend: 'Flight Hours',
-					legendOffset: 36,
-					legendPosition: 'middle',
+					legend: "Flight hours / year",
+					legendOffset: 46,
+					legendPosition: "middle",
 					truncateTickAt: 0,
 				}}
 				axisLeft={{
 					tickSize: 10,
 					tickPadding: 5,
 					tickRotation: 0,
-					legend: 'Total cost',
+					legend: "Total cost",
 					legendOffset: -60,
-					legendPosition: 'middle',
+					legendPosition: "middle",
 					truncateTickAt: 0,
 				}}
-				colors={['#0ea5e9', '#2563eb']}
+				colors={["#FF7124", "#2563eb"]}
 				pointSize={1}
-				pointColor={{ from: 'color', modifiers: [] }}
+				pointColor={{ from: "color", modifiers: [] }}
 				useMesh={true}
 				legends={[
 					{
-						anchor: 'bottom',
-						direction: 'row',
+						anchor: "bottom",
+						direction: "row",
 						justify: false,
 						translateX: 16,
-						translateY: 80,
+						translateY: 56,
 						itemsSpacing: 0,
-						itemDirection: 'left-to-right',
+						itemDirection: "left-to-right",
 						itemWidth: 80,
 						itemHeight: 20,
 						itemOpacity: 0.75,
 						symbolSize: 8,
-						symbolShape: 'circle',
-						symbolBorderColor: 'rgba(0, 0, 0, .5)',
+						symbolShape: "circle",
+						symbolBorderColor: "rgba(0, 0, 0, .5)",
 						effects: [
 							{
-								on: 'hover',
+								on: "hover",
 								style: {
-									itemBackground: 'rgba(0, 0, 0, .03)',
+									itemBackground: "rgba(0, 0, 0, .03)",
 									itemOpacity: 1,
 								},
 							},
@@ -100,24 +108,24 @@ export function Chart(properties: any) {
 					},
 				]}
 				tooltip={CustomTooltip}
-				{...(properties.breakEven != undefined && {
+				{...(properties.breakEven !== null && {
 					markers: [
 						{
-							axis: 'x',
-							legend: 'Break-Even',
+							axis: "x",
+							legend: "Break-Even",
 							lineStyle: {
-								stroke: '#22c55e',
-								strokeWidth: 4,
-								strokeLinecap: 'round',
+								stroke: "#22c55e",
+								strokeWidth: 2,
+								strokeLinecap: "round",
 							},
-							text: { fill: 'blue' },
+							text: { fill: "blue" },
 							value: properties.breakEven,
 						},
 					],
 				})}
-				// @ts-ignore
+				// @ts-expect-error
 				theme={themeOutput}
 			/>
-		</section>
+		</div>
 	);
 }

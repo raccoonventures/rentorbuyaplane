@@ -1,50 +1,43 @@
-'use client';
+"use client";
 
-import { Button } from '@/catalyst/button';
+import { useState } from "react";
+import { useForm } from "react-hook-form";
+import { Button } from "@/catalyst/button";
 import {
 	Dialog,
 	DialogActions,
 	DialogBody,
 	DialogDescription,
 	DialogTitle,
-} from '@/catalyst/dialog';
-import { Field, Label } from '@/catalyst/fieldset';
-import { Input } from '@/catalyst/input';
-import { useState } from 'react';
-
-import { useForm } from 'react-hook-form';
+} from "@/catalyst/dialog";
+import { Field, Label } from "@/catalyst/fieldset";
+import { Input } from "@/catalyst/input";
 
 export const Preregister = () => {
-	let [isOpen, setIsOpen] = useState(false);
-	let [isSubmitted, setIsSubmitted] = useState(false);
+	const [isOpen, setIsOpen] = useState(false);
+	const [isSubmitted, setIsSubmitted] = useState(false);
 
 	// react-hook-form
-	const {
-		register,
-		handleSubmit,
-		reset,
-		watch,
-		formState: { errors, isSubmitting },
-	} = useForm();
+	const { register, handleSubmit, reset } = useForm();
 
 	const onSubmit = async (data: object) => {
 		try {
 			// Sending the data to the backend
 			const backend = await fetch(`/api/preregister`, {
-				method: 'POST',
+				method: "POST",
 				headers: {
-					'Content-Type': 'application/json',
+					"Content-Type": "application/json",
 				},
 				body: JSON.stringify(data),
 			});
 
 			// If fetch doesn't return a 200, we throw an error
-			if (backend.status != 200) {
-				throw new Error('Backend encountered an error');
+			if (backend.status !== 200) {
+				throw new Error("Backend encountered an error");
 			}
 
 			setIsSubmitted(true);
-		} catch (error) {}
+		} catch (_error) {}
 	};
 
 	return (
@@ -65,13 +58,13 @@ export const Preregister = () => {
 					Be the first to know when this feature becomes available
 				</DialogTitle>
 				<DialogDescription>
-					You can already download a summary report today, but we&apos;re hard
-					at work building extensive custom financial reports with
-					visualizations, charts, and multi-year calculations.
+					You can already download a summary report today, but we&apos;re hard at
+					work building extensive custom financial reports with visualizations,
+					charts, and multi-year calculations.
 					<br />
 					<br />
-					Leave your email below and we&apos;ll reach out once it&apos;s ready
-					for you
+					Leave your email below and we&apos;ll reach out once it&apos;s ready for
+					you
 				</DialogDescription>
 				<form onSubmit={handleSubmit(onSubmit)}>
 					<DialogBody>
@@ -80,7 +73,7 @@ export const Preregister = () => {
 							<Input
 								placeholder="ryan@whoopf.com"
 								disabled={isSubmitted}
-								{...register('email', {
+								{...register("email", {
 									required: true,
 								})}
 							/>
@@ -113,7 +106,7 @@ export const Preregister = () => {
 									onClick={() => {
 										setIsOpen(false);
 										reset({
-											email: '',
+											email: "",
 										});
 									}}
 								>

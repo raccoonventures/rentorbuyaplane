@@ -1,23 +1,23 @@
 export default function theme() {
 	return {
-		background: 'transparent',
+		background: "transparent",
 		text: {
-			fontFamily: 'sans-serif',
+			fontFamily: "sans-serif",
 			fontSize: 11,
-			fill: '#777777',
+			fill: "#777777",
 			outlineWidth: 0,
-			outlineColor: 'transparent',
+			outlineColor: "transparent",
 		},
 		axis: {
 			domain: {
 				line: {
-					stroke: 'transparent',
+					stroke: "transparent",
 					strokeWidth: 1,
 				},
 			},
 			ticks: {
 				line: {
-					stroke: '#777777',
+					stroke: "#777777",
 					strokeWidth: 1,
 				},
 				text: {},
@@ -30,25 +30,25 @@ export default function theme() {
 		},
 		grid: {
 			line: {
-				stroke: '#dddddd',
+				stroke: "#dddddd",
 				strokeWidth: 1,
 			},
 		},
 		legends: {
 			hidden: {
 				symbol: {
-					fill: '#777777',
+					fill: "#777777",
 					opacity: 0.6,
 				},
 				text: {
-					fill: '#777777',
+					fill: "#777777",
 					opacity: 0.6,
 				},
 			},
 			text: {},
 			ticks: {
 				line: {
-					stroke: '#777777',
+					stroke: "#777777",
 					strokeWidth: 1,
 				},
 				text: {
@@ -72,63 +72,63 @@ export default function theme() {
 		},
 		tooltip: {
 			container: {
-				background: 'white',
-				color: 'inherit',
-				fontSize: 'inherit',
-				borderRadius: '2px',
-				boxShadow: '0 1px 2px rgba(0, 0, 0, 0.25)',
-				padding: '5px 9px',
+				background: "white",
+				color: "inherit",
+				fontSize: "inherit",
+				borderRadius: "2px",
+				boxShadow: "0 1px 2px rgba(0, 0, 0, 0.25)",
+				padding: "5px 9px",
 			},
 			basic: {
-				whiteSpace: 'pre',
-				display: 'flex',
-				alignItems: 'center',
+				whiteSpace: "pre",
+				display: "flex",
+				alignItems: "center",
 			},
 			chip: {
 				marginRight: 7,
 			},
 			table: {},
 			tableCell: {
-				padding: '3px 5px',
+				padding: "3px 5px",
 			},
 			tableCellValue: {
-				fontWeight: 'bold',
+				fontWeight: "bold",
 			},
 		},
 		crosshair: {
 			line: {
-				stroke: '#000000',
+				stroke: "#000000",
 				strokeWidth: 1,
 				strokeOpacity: 0.75,
-				strokeDasharray: '6 6',
+				strokeDasharray: "6 6",
 			},
 		},
 		annotations: {
 			text: {
 				fontSize: 13,
 				outlineWidth: 2,
-				outlineColor: '#ffffff',
+				outlineColor: "#ffffff",
 				outlineOpacity: 1,
 			},
 			link: {
-				stroke: '#000000',
+				stroke: "#000000",
 				strokeWidth: 1,
 				outlineWidth: 2,
-				outlineColor: '#ffffff',
+				outlineColor: "#ffffff",
 				outlineOpacity: 1,
 			},
 			outline: {
-				fill: 'none',
-				stroke: '#000000',
+				fill: "none",
+				stroke: "#000000",
 				strokeWidth: 2,
 				outlineWidth: 2,
-				outlineColor: '#ffffff',
+				outlineColor: "#ffffff",
 				outlineOpacity: 1,
 			},
 			symbol: {
-				fill: '#000000',
+				fill: "#000000",
 				outlineWidth: 2,
-				outlineColor: '#ffffff',
+				outlineColor: "#ffffff",
 				outlineOpacity: 1,
 			},
 		},

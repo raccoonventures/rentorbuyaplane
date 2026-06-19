@@ -1,10 +1,10 @@
-import { Logo } from '@/components/layout/logo';
-import Link from 'next/link';
+import Link from "next/link";
+import { Logo } from "@/components/layout/logo";
 
 const navigation = [
-	{ name: 'Calculator', href: '/', notification: true },
-	{ name: 'About', href: '/about' },
-	{ name: 'Contact', href: '/contact' },
+	{ name: "Calculator", href: "/", notification: true },
+	{ name: "About", href: "/about" },
+	{ name: "Contact", href: "/contact" },
 ];
 
 export default function Header() {

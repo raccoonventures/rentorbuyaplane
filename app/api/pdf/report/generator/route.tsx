@@ -1,138 +1,120 @@
-import { type NextRequest } from 'next/server';
+import type { NextRequest } from "next/server";
 
-const commaNumber = require('comma-number');
-
-import { generateChartData } from '@/utils/charts';
-
-import { Analytics } from '@customerio/cdp-analytics-node';
-const analytics = new Analytics({
-	writeKey: `${process.env.CIO_CDP_API_KEY}`,
-	host: 'https://cdp.customer.io',
-});
+const commaNumber = require("comma-number");
 
 import ReactPDF, {
 	Document,
+	G,
+	Line,
 	Page,
 	Path,
+	Polyline,
 	StyleSheet,
 	Svg,
 	Text,
 	View,
-} from '@react-pdf/renderer';
+} from "@react-pdf/renderer";
+import type { JSX } from "react";
+import { getPreset } from "@/helpers/aircraft";
+import { generateChartData } from "@/utils/charts";
+import { setNestedObject } from "@/utils/searchParamsHelpers";
 
-import { setNestedObject } from '@/utils/searchParamsHelpers';
+const ORANGE = "#FF7124";
+const BLUE = "#2563eb";
+const INK = "#18181b";
+const MUTED = "#71717a";
 
-import type { JSX } from 'react';
+const CATEGORY_LABEL: Record<string, string> = {
+	trainer: "Trainer",
+	single: "Single-engine",
+	complex: "Complex single",
+	twin: "Twin piston",
+	turboprop: "Turboprop",
+};
 
 const styles = StyleSheet.create({
 	page: {
-		flexDirection: 'column',
-		backgroundColor: '#F5F5F5',
-		alignItems: 'flex-start',
-		fontSize: 14,
-		fontWeight: 400,
+		flexDirection: "column",
+		backgroundColor: "#FFFFFF",
+		fontSize: 11,
+		color: INK,
+		paddingBottom: 48,
 	},
-	section: {
-		padding: 10,
+	band: {
+		backgroundColor: ORANGE,
+		paddingVertical: 18,
+		paddingHorizontal: 32,
+		flexDirection: "row",
+		alignItems: "center",
+		justifyContent: "space-between",
 	},
-	colFlex: {
-		flexDirection: 'row',
-		alignItems: 'center',
+	bandTitle: { color: "#FFFFFF", fontSize: 16, fontWeight: 700 },
+	bandMeta: { color: "#FFFFFF", fontSize: 10, opacity: 0.9 },
+	section: { paddingHorizontal: 32, paddingTop: 18 },
+	hero: {
+		marginTop: 18,
+		marginHorizontal: 32,
+		padding: 16,
+		borderRadius: 8,
+		border: `1px solid ${ORANGE}`,
+		backgroundColor: "#FFF4ED",
 	},
-	colFlexTop: {
-		flexDirection: 'row',
-		alignItems: 'flex-start',
-		justifyContent: 'space-between',
-	},
-	header: {
-		fontSize: 20,
+	heroVerdict: { fontSize: 18, fontWeight: 700, color: INK },
+	heroSub: { fontSize: 11, color: MUTED, marginTop: 4 },
+	heading: {
+		fontSize: 13,
 		fontWeight: 700,
-		paddingVertical: 8,
+		marginBottom: 8,
+		color: INK,
 	},
+	paragraph: { lineHeight: 1.5, color: INK },
+	columns: { flexDirection: "row", justifyContent: "space-between", gap: 24 },
+	column: { flex: 1 },
 	subHeader: {
-		fontSize: 16,
+		fontSize: 11,
 		fontWeight: 700,
-		paddingVertical: 4,
-	},
-	paragraph: {
-		paddingVertical: 6,
-	},
-	list: {
-		paddingVertical: 3,
-		paddingHorizontal: 12,
-		flexDirection: 'column',
+		marginBottom: 4,
+		color: ORANGE,
 	},
 	costItem: {
-		flexDirection: 'row',
-		alignItems: 'center',
-		justifyContent: 'space-between',
+		flexDirection: "row",
+		justifyContent: "space-between",
 		paddingVertical: 2,
+		color: INK,
 	},
 	costItemTotal: {
-		flexDirection: 'row',
-		alignItems: 'center',
-		justifyContent: 'space-between',
-		paddingVertical: 6,
+		flexDirection: "row",
+		justifyContent: "space-between",
+		paddingVertical: 5,
+		marginTop: 4,
 		borderTopWidth: 1,
+		borderColor: "#e4e4e7",
+		fontWeight: 700,
 	},
 	badge: {
-		display: 'flex',
-		marginLeft: 12,
-		marginTop: 2,
+		marginLeft: 8,
 		paddingVertical: 2,
 		paddingHorizontal: 6,
 		fontWeight: 700,
-		fontSize: 10,
-		textTransform: 'uppercase',
-		alignItems: 'center',
-		borderWidth: 1,
-		borderRadius: 12,
-		borderColor: '#a3e635',
-		backgroundColor: '#a3e63533',
-		color: '#4d7c0f',
+		fontSize: 8,
+		textTransform: "uppercase",
+		borderRadius: 10,
+		backgroundColor: "#dcfce7",
+		color: "#15803d",
+	},
+	footer: {
+		position: "absolute",
+		bottom: 18,
+		left: 32,
+		right: 32,
+		flexDirection: "row",
+		justifyContent: "space-between",
+		fontSize: 8,
+		color: MUTED,
 	},
 });
 
-const Logo = () => (
-	<Svg viewBox="0 0 441 55" width="320" height="40">
-		<Path
-			fill="none"
-			d="M-5.924-5.652h400.032v54.971H-5.924z"
-			transform="matrix(1.10091 0 0 1 6.522 5.652)"
-		></Path>
-		<Path
-			fill="#FBBF24"
-			d="M-1.323 34.883H6.58v-13.3c0-2.7 1.18-4.05 3.27-4.05 1.135 0 1.953.4 2.498 1l4.587-6.75c-1.09-1.25-2.634-1.85-4.723-1.85-2.317 0-4.133.7-5.632 2.05v-1.55h-7.903v24.45zm30.43.55c3.906 0 7.04-1.4 9.265-4.15l-4.133-4.55c-1.317 1.65-2.998 2.45-5.132 2.45-2.589 0-4.315-1.3-4.996-3.7l15.578-.1c.272-1.35.363-2.35.363-3.3 0-7.1-4.814-12.25-11.536-12.25-6.948 0-12.126 5.45-12.126 12.8 0 7.55 5.223 12.8 12.717 12.8zm-.5-19.35c2.226 0 3.634 1.25 4.133 3.7l-8.63.05c.637-2.4 2.272-3.75 4.497-3.75zm14.443 18.8h7.902v-13.8c0-2.25 1.363-3.65 3.27-3.65 1.862 0 3.225 1.4 3.225 3.65v13.8h7.903v-15.8c0-5.1-3.588-9.15-8.357-9.15-2.407 0-4.451.75-6.04 2.1v-1.6H43.05v24.45zm29.248 0h7.903v-17.2h4.905v-7.25H80.2V.333h-7.903v10.1h-4.905v7.25h4.905v17.2z"
-			transform="matrix(1.10091 0 0 1 6.522 5.652)"
-		></Path>
-		<Path
-			fill="#FF7124"
-			d="M98.459 35.433c7.085 0 12.353-5.5 12.353-12.85 0-7.3-5.268-12.75-12.399-12.75-7.13 0-12.399 5.5-12.399 12.75 0 7.35 5.314 12.85 12.445 12.85zm-.046-7.75c-2.589 0-4.36-2.05-4.36-5 0-3 1.771-5.05 4.36-5.05 2.589 0 4.36 2 4.36 5s-1.726 5.05-4.36 5.05zm15.533 7.2h7.902v-13.3c0-2.7 1.181-4.05 3.27-4.05 1.136 0 1.953.4 2.498 1l4.587-6.75c-1.09-1.25-2.634-1.85-4.723-1.85-2.316 0-4.133.7-5.632 2.05v-1.55h-7.902v24.45z"
-			transform="matrix(1.10091 0 0 1 6.522 5.652)"
-		></Path>
-		<Path
-			fill="#FBBF24"
-			d="M133.248 34.883h7.72v-1.4c1.5 1.15 3.453 1.9 5.496 1.9 6.45 0 10.9-5.35 10.9-12.7 0-7.4-4.45-12.75-10.9-12.75-1.998 0-3.86.6-5.313 1.65v-13.15h-7.903v36.45zm11.808-7.25c-2.588 0-4.36-2.05-4.36-5 0-2.9 1.772-4.95 4.315-4.95s4.36 2.1 4.36 4.95c0 2.95-1.817 5-4.315 5zm25.752 7.8c6.313 0 10.764-4.4 10.764-10.85v-14.15h-7.903v14.15c0 2.05-1.18 3.3-2.861 3.3-1.726 0-2.861-1.25-2.861-3.3v-14.15h-7.903v14.15c0 6.35 4.496 10.85 10.764 10.85zm16.168 9.8h7.948l3.815-10.35 9.13-24.45h-8.448l-3.816 14.05-3.815-14.05h-8.447l8.447 23.2-4.814 11.6z"
-			transform="matrix(1.10091 0 0 1 6.522 5.652)"
-		></Path>
-		<Path
-			fill="#FF7124"
-			d="M218.768 35.383c2.271 0 4.27-.8 5.723-2.15v1.65h7.766v-24.45h-7.766v1.7c-1.454-1.4-3.452-2.2-5.723-2.2-6.177 0-10.627 5.35-10.627 12.75 0 7.35 4.45 12.7 10.627 12.7zm1.68-7.75c-2.497 0-4.314-2.05-4.314-5 0-2.85 1.817-4.95 4.36-4.95s4.315 2.05 4.315 4.95c0 2.95-1.772 5-4.36 5z"
-			transform="matrix(1.10091 0 0 1 6.522 5.652)"
-		></Path>
-		<Path
-			fill="#FBBF24"
-			d="M236.89 45.233h7.72v-11.6c1.5 1.1 3.452 1.75 5.496 1.75 6.45 0 10.9-5.35 10.9-12.7 0-7.4-4.45-12.75-10.9-12.75-1.998 0-3.86.7-5.314 1.8v-1.3h-7.902v34.8zm11.763-17.6c-2.544 0-4.315-2.05-4.315-5s1.771-4.95 4.36-4.95c2.498 0 4.315 2.05 4.315 4.95 0 2.9-1.817 5-4.36 5zM264.276-1.567h7.903v36.45h-7.903zM286.076 35.383c2.271 0 4.27-.8 5.723-2.15v1.65h7.766v-24.45h-7.766v1.7c-1.454-1.4-3.452-2.2-5.723-2.2-6.177 0-10.627 5.35-10.627 12.75 0 7.35 4.45 12.7 10.627 12.7zm1.68-7.75c-2.497 0-4.314-2.05-4.314-5 0-2.85 1.817-4.95 4.36-4.95s4.315 2.05 4.315 4.95c0 2.95-1.772 5-4.36 5zm16.442 7.25h7.902v-13.8c0-2.25 1.363-3.65 3.27-3.65 1.862 0 3.225 1.4 3.225 3.65v13.8h7.902v-15.8c0-5.1-3.588-9.15-8.356-9.15-2.408 0-4.451.75-6.04 2.1v-1.6h-7.903v24.45zm37.696.55c3.906 0 7.04-1.4 9.265-4.15l-4.133-4.55c-1.317 1.65-2.998 2.45-5.132 2.45-2.59 0-4.315-1.3-4.996-3.7l15.578-.1c.272-1.35.363-2.35.363-3.3 0-7.1-4.814-12.25-11.536-12.25-6.949 0-12.126 5.45-12.126 12.8 0 7.55 5.223 12.8 12.717 12.8zm-.5-19.35c2.226 0 3.633 1.25 4.133 3.7l-8.63.05c.637-2.4 2.272-3.75 4.497-3.75z"
-			transform="matrix(1.10091 0 0 1 6.522 5.652)"
-		></Path>
-		<Path
-			fill="#FF7124"
-			stroke="#FF7124"
-			d="M35.6 38.4L32 22l7-7c3-3 4-7 3-9-2-1-6 0-9 3l-7 7-16.4-3.6c-1-.2-1.8.2-2.2 1l-.6 1c-.4 1-.2 2 .6 2.6L18 24l-4 6H8l-2 2 6 4 4 6 2-2v-6l6-4 7 10.6c.6.8 1.6 1 2.6.6l1-.4c.8-.6 1.2-1.4 1-2.4z"
-			transform="matrix(1.10091 0 0 1 6.522 5.652) matrix(.90834 0 0 1 351.657 -1.98)"
-		></Path>
-	</Svg>
-);
+const money = (n: number) => `$${commaNumber(Math.round(n || 0))}`;
 
 function outputObjectValues(
 	obj: {
@@ -140,52 +122,43 @@ function outputObjectValues(
 	},
 	label: string,
 ): JSX.Element[] {
-	// Helper function to capitalize the first letter of a string
 	const capitalize = (s: string) => s.charAt(0).toUpperCase() + s.slice(1);
-
 	let totalValue = 0;
 	const output: JSX.Element[] = [];
 
-	// Iterate over the keys and values of the object
 	for (const key in obj) {
 		const value = obj[key];
-
-		// If the value is an object, iterate over its keys and values
-		if (typeof value === 'object' && value !== null) {
+		if (typeof value === "object" && value !== null) {
 			for (const subKey in value) {
 				const subValue = value[subKey];
-				totalValue += subValue; // Add sub-value to total
-
+				totalValue += subValue;
 				output.push(
 					<View style={styles.costItem} key={`${key}-${subKey}`}>
-						<Text>- {capitalize(subKey)}:</Text>
-						<Text style={{ paddingLeft: 24 }}>
-							${commaNumber(subValue)} /{label}
+						<Text>{capitalize(subKey)}</Text>
+						<Text>
+							{money(subValue)} /{label}
 						</Text>
 					</View>,
 				);
 			}
 		} else {
-			totalValue += value; // Add value to total
-
-			// Output the key and value directly
+			totalValue += value;
 			output.push(
 				<View style={styles.costItem} key={key}>
-					<Text>- {capitalize(key)}:</Text>
-					<Text style={{ paddingLeft: 24 }}>
-						${commaNumber(value)} /{label}
+					<Text>{capitalize(key)}</Text>
+					<Text>
+						{money(value)} /{label}
 					</Text>
 				</View>,
 			);
 		}
 	}
 
-	// Add the total value element after the loop
 	output.push(
 		<View style={styles.costItemTotal} key="total">
-			<Text>TOTAL:</Text>
-			<Text style={{ paddingLeft: 24 }}>
-				${commaNumber(totalValue)} /{label}
+			<Text>Total</Text>
+			<Text>
+				{money(totalValue)} /{label}
 			</Text>
 		</View>,
 	);
@@ -193,32 +166,191 @@ function outputObjectValues(
 	return output;
 }
 
+const Logo = () => (
+	<Svg viewBox="0 0 24 24" width="34" height="34">
+		<Path
+			fill="none"
+			stroke="#FFFFFF"
+			strokeWidth="1.4"
+			strokeLinecap="round"
+			strokeLinejoin="round"
+			d="M17.8 19.2 16 11l3.5-3.5C21 6 21.5 4 21 3c-1-.5-3 0-4.5 1.5L13 8 4.8 6.2c-.5-.1-.9.1-1.1.5l-.3.5c-.2.5-.1 1 .3 1.3L9 12l-2 3H4l-1 1 3 2 2 3 1-1v-3l3-2 3.5 5.3c.3.4.8.5 1.3.3l.5-.2c.4-.3.6-.7.5-1.2z"
+		/>
+	</Svg>
+);
+
+/** Native-PDF rent-vs-buy line chart with a break-even marker. */
+function CostChart({
+	rentPerHour,
+	owningPerHour,
+	owningFixed,
+	breakEven,
+}: {
+	rentPerHour: number;
+	owningPerHour: number;
+	owningFixed: number;
+	breakEven: number;
+}) {
+	const data = generateChartData(rentPerHour, owningPerHour, owningFixed);
+	const renting = data[0].data as { x: number; y: number }[];
+	const buying = data[1].data as { x: number; y: number }[];
+
+	const W = 515;
+	const H = 230;
+	const L = 58;
+	const R = 502;
+	const T = 16;
+	const B = 196;
+	const xMax = 200;
+	const yMax =
+		Math.max(...renting.map((d) => d.y), ...buying.map((d) => d.y), 1) * 1.1;
+
+	const sx = (x: number) => L + (x / xMax) * (R - L);
+	const sy = (y: number) => B - (y / yMax) * (B - T);
+	const toPoints = (series: { x: number; y: number }[]) =>
+		series.map((d) => `${sx(d.x).toFixed(1)},${sy(d.y).toFixed(1)}`).join(" ");
+
+	const yTicks = [0, yMax / 2, yMax];
+	const xTicks = [0, 50, 100, 150, 200];
+	const showBreakEven = breakEven > 0 && breakEven <= xMax;
+
+	return (
+		<Svg width={W} height={H}>
+			{/* grid + axes */}
+			<G>
+				{yTicks.map((y) => (
+					<Line
+						key={`gy-${y}`}
+						x1={L}
+						y1={sy(y)}
+						x2={R}
+						y2={sy(y)}
+						strokeWidth={0.5}
+						stroke="#e4e4e7"
+					/>
+				))}
+				{yTicks.map((y) => (
+					<Text
+						key={`yl-${y}`}
+						x={L - 6}
+						y={sy(y) + 3}
+						fill={MUTED}
+						style={{ fontSize: 7, textAlign: "right" }}
+					>
+						{money(y)}
+					</Text>
+				))}
+				{xTicks.map((x) => (
+					<Text
+						key={`xl-${x}`}
+						x={sx(x) - 6}
+						y={B + 12}
+						fill={MUTED}
+						style={{ fontSize: 7 }}
+					>
+						{x}
+					</Text>
+				))}
+				<Text x={(L + R) / 2 - 24} y={H - 2} style={{ fontSize: 8, color: MUTED }}>
+					Flight hours / year
+				</Text>
+			</G>
+
+			{/* break-even marker */}
+			{showBreakEven && (
+				<G>
+					<Line
+						x1={sx(breakEven)}
+						y1={T}
+						x2={sx(breakEven)}
+						y2={B}
+						strokeWidth={1.5}
+						stroke="#22c55e"
+						strokeDasharray="3 3"
+					/>
+					<Text
+						x={sx(breakEven) + 3}
+						y={T + 8}
+						fill="#16a34a"
+						style={{ fontSize: 7 }}
+					>
+						Break-even {breakEven}h
+					</Text>
+				</G>
+			)}
+
+			{/* series */}
+			<Polyline
+				points={toPoints(renting)}
+				fill="none"
+				stroke={ORANGE}
+				strokeWidth={2}
+			/>
+			<Polyline
+				points={toPoints(buying)}
+				fill="none"
+				stroke={BLUE}
+				strokeWidth={2}
+			/>
+
+			{/* legend */}
+			<G>
+				<Line
+					x1={L}
+					y1={T - 2}
+					x2={L + 14}
+					y2={T - 2}
+					stroke={ORANGE}
+					strokeWidth={2}
+				/>
+				<Text x={L + 18} y={T + 1} fill={INK} style={{ fontSize: 7 }}>
+					Renting
+				</Text>
+				<Line
+					x1={L + 70}
+					y1={T - 2}
+					x2={L + 84}
+					y2={T - 2}
+					stroke={BLUE}
+					strokeWidth={2}
+				/>
+				<Text x={L + 88} y={T + 1} fill={INK} style={{ fontSize: 7 }}>
+					Buying
+				</Text>
+			</G>
+		</Svg>
+	);
+}
+
 export async function GET(request: NextRequest) {
 	const searchParams = request.nextUrl.searchParams;
 
-	// Create an empty object to hold the parameters
+	// biome-ignore lint/suspicious/noExplicitAny: nested params rebuilt from the query string
 	const params: any = {};
-
-	// Iterate over the search parameters and add them to the object
 	searchParams.forEach((value, key) => {
-		// Split the key string by '[' and ']' to get the top-level key and sub-keys
 		const nestedKeys = key.split(/\[|\]/).filter((k) => k);
-
-		// Use the array of keys as the path for the setNestedObject function
 		setNestedObject(params, nestedKeys, value);
 	});
 
-	console.log(params);
+	const aircraft = params.aircraft ?? {};
+	const output = params.output ?? {};
+	const estimatedHours = output.estimatedHours ?? 0;
+	const atLeast = estimatedHours === 200;
+	const isBuyingBest = output.isBuyingBest;
+	const category = getPreset(aircraft.type).category;
+	const categoryLabel = CATEGORY_LABEL[category] ?? "Aircraft";
 
-	const chartData = generateChartData(
-		params?.output?.renting?.perHour,
-		params?.output?.owning?.perHour,
-		params.output.owning.fixed.perYear,
-	);
+	const rentPerHour = output?.renting?.perHour ?? 0;
+	const rentFixed = output?.renting?.fixed ?? 0;
+	const owningPerHour = output?.owning?.perHour ?? 0;
+	const owningFixed = output?.owning?.fixed?.perYear ?? 0;
+
+	const rentTotal = rentPerHour * estimatedHours + rentFixed;
+	const ownTotal = owningPerHour * estimatedHours + owningFixed;
 
 	const MyDocument = () => (
 		<Document
-			title={`RentOrBuyAPlane — Report for ${params.aircraft.type}`}
+			title={`RentOrBuyAPlane — Report for ${aircraft.type}`}
 			author="RentOrBuyAPlane.com"
 			creator="RentOrBuyAPlane.com"
 			producer="RentOrBuyAPlane.com"
@@ -226,88 +358,111 @@ export async function GET(request: NextRequest) {
 			language="en"
 		>
 			<Page size="A4" style={styles.page}>
-				<View style={styles.section}>
-					<Logo />
-				</View>
-				<View style={styles.section}>
-					<Text style={styles.paragraph}>
-						{params.output?.estimatedHours == undefined
-							? 'For'
-							: `You plan on flying ${params.output.estimatedHours == 200 ? `at least ${params.output.estimatedHours}` : params.output.estimatedHours} hours per year on`}{' '}
-						a {params.aircraft.type} burning {params.aircraft.fuelBurn} GPH and
-						requiring an oil refill every {params.aircraft.oilRefill} hours—and
-						with {commaNumber(params.aircraft.tbo - params.aircraft.tsmoh)}{' '}
-						hours before an engine overhaul.
-					</Text>
-					<Text style={styles.paragraph}>
-						Based on the numbers you provided, you would break even at{' '}
-						{params.output.breakEven} hours of flying per year. Therefore{' '}
-						{params.output.isBuyingBest ? 'buying' : 'renting'} would be more
-						cost-effective.
-					</Text>
-				</View>
-				<View style={styles.section}>
-					<View style={styles.colFlex}>
-						<Text style={styles.header}>Renting</Text>
-						{params.output.isBuyingBest ? (
-							<></>
-						) : (
-							<View style={styles.badge}>
-								<Text>Best Option</Text>
-							</View>
-						)}
-					</View>
-					<Text style={styles.paragraph}>
-						Your rental is ${commaNumber(params?.output?.renting?.perHour)} /
-						hour (fuel {params.costs.rental.isWet ? '' : 'not '}included)
-					</Text>
-					<Text style={styles.paragraph}>
-						Which equals to $
-						{commaNumber(
-							params?.output?.renting?.perHour * params.output.estimatedHours,
-						)}{' '}
-						/ year for {params.output.estimatedHours} hours
-					</Text>
-				</View>
-				<View style={styles.section}>
-					<View style={styles.colFlex}>
-						<Text style={styles.header}>Buying</Text>
-						{params.output.isBuyingBest ? (
-							<View style={styles.badge}>
-								<Text>Best Option</Text>
-							</View>
-						) : (
-							<></>
-						)}
-					</View>
-					<Text style={styles.paragraph}>
-						Your hourly operating cost is $
-						{commaNumber(params?.output?.owning?.perHour)} and your yearly fixed
-						costs are ${commaNumber(params.output.owning.fixed.perYear)}
-					</Text>
-					<View style={styles.colFlexTop}>
-						<View style={styles.list}>
-							<Text style={styles.subHeader}>Operating/Variable costs</Text>
-							{outputObjectValues(params.costs.operation.variable, 'hour')}
-						</View>
-						<View style={styles.list}>
-							<Text style={styles.subHeader}>Fixed costs</Text>
-							{outputObjectValues(params.costs.operation.fixed, 'month')}
+				{/* Header band */}
+				<View style={styles.band} fixed>
+					<View style={{ flexDirection: "row", alignItems: "center", gap: 10 }}>
+						<Logo />
+						<View>
+							<Text style={styles.bandTitle}>Rent or Buy a Plane</Text>
+							<Text style={styles.bandMeta}>Cost comparison report</Text>
 						</View>
 					</View>
+					<View style={{ alignItems: "flex-end" }}>
+						<Text style={styles.bandTitle}>{aircraft.type}</Text>
+						<Text style={styles.bandMeta}>{categoryLabel}</Text>
+					</View>
+				</View>
+
+				{/* Hero verdict */}
+				<View style={styles.hero}>
+					<Text style={styles.heroVerdict}>
+						{isBuyingBest ? "Buying" : "Renting"} looks more cost-effective for you
+					</Text>
+					<Text style={styles.heroSub}>
+						Flying {atLeast ? "at least " : ""}
+						{estimatedHours} hours a year, you{isBuyingBest ? "'d" : ""} break even at{" "}
+						{output.breakEven} hours.
+					</Text>
+					<Text style={styles.heroSub}>
+						Below that, renting wins; above it, owning pays off.
+					</Text>
+				</View>
+
+				{/* Intro */}
+				<View style={styles.section}>
 					<Text style={styles.paragraph}>
-						Which equals to $
-						{commaNumber(
-							params?.output?.owning?.perHour * params.output.estimatedHours +
-								params.output.owning.fixed.perYear,
-						)}{' '}
-						/ year for {params.output.estimatedHours} hours (or ~$
-						{Math.round(
-							(params?.output?.owning?.perHour * params.output.estimatedHours +
-								params.output.owning.fixed.perYear) /
-								params.output.estimatedHours,
-						)}{' '}
-						/ hour all-included )
+						Based on the numbers you entered for a {aircraft.type} burning{" "}
+						{aircraft.fuelBurn} GPH, with an oil refill every {aircraft.oilRefill}{" "}
+						hours and {commaNumber((aircraft.tbo ?? 0) - (aircraft.tsmoh ?? 0))} hours
+						left before the next engine overhaul.
+					</Text>
+				</View>
+
+				{/* Chart */}
+				<View style={styles.section}>
+					<Text style={styles.heading}>Annual cost by flight hours</Text>
+					<CostChart
+						rentPerHour={rentPerHour}
+						owningPerHour={owningPerHour}
+						owningFixed={owningFixed}
+						breakEven={output.breakEven ?? 0}
+					/>
+				</View>
+
+				{/* Side-by-side verdict numbers */}
+				<View style={[styles.section, styles.columns]}>
+					<View style={styles.column}>
+						<View style={{ flexDirection: "row", alignItems: "center" }}>
+							<Text style={styles.heading}>Renting</Text>
+							{!isBuyingBest && <Text style={styles.badge}>Best option</Text>}
+						</View>
+						<Text style={styles.paragraph}>
+							{money(rentPerHour)} / hour (fuel{" "}
+							{params.costs?.rental?.isWet ? "" : "not "}included)
+						</Text>
+						<Text style={[styles.paragraph, { marginTop: 4, fontWeight: 700 }]}>
+							{atLeast ? "≥ " : "= "}
+							{money(rentTotal)} / year
+						</Text>
+					</View>
+					<View style={styles.column}>
+						<View style={{ flexDirection: "row", alignItems: "center" }}>
+							<Text style={styles.heading}>Buying</Text>
+							{isBuyingBest && <Text style={styles.badge}>Best option</Text>}
+						</View>
+						<Text style={styles.paragraph}>
+							{money(owningPerHour)} / hour variable + {money(owningFixed)} / year
+							fixed
+						</Text>
+						<Text style={[styles.paragraph, { marginTop: 4, fontWeight: 700 }]}>
+							{atLeast ? "≥ " : "= "}
+							{money(ownTotal)} / year
+						</Text>
+					</View>
+				</View>
+
+				{/* Cost breakdown tables */}
+				<View style={[styles.section, styles.columns]}>
+					<View style={styles.column}>
+						<Text style={styles.subHeader}>Variable costs (per hour)</Text>
+						{outputObjectValues(params.costs.operation.variable, "hour")}
+					</View>
+					<View style={styles.column}>
+						<Text style={styles.subHeader}>
+							Fixed costs (per {params.settings?.fixedCostsYearly ? "year" : "month"})
+						</Text>
+						{outputObjectValues(
+							params.costs.operation.fixed,
+							params.settings?.fixedCostsYearly ? "year" : "month",
+						)}
+					</View>
+				</View>
+
+				{/* Footer */}
+				<View style={styles.footer} fixed>
+					<Text>rentorbuyaplane.com</Text>
+					<Text>
+						Estimates only—adjust the inputs to match your real-world situation.
 					</Text>
 				</View>
 			</Page>
@@ -315,6 +470,6 @@ export async function GET(request: NextRequest) {
 	);
 
 	const result = await ReactPDF.renderToStream(<MyDocument />);
-	// @ts-ignore
+	// @ts-expect-error
 	return new Response(result);
 }

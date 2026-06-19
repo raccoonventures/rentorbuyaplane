@@ -21,13 +21,13 @@ export function generateChartData(
 
 	const chartData = [
 		{
-			id: 'renting',
-			color: 'hsl(198.63, 88.66%, 48.43%)',
+			id: "renting",
+			color: "hsl(198.63, 88.66%, 48.43%)",
 			data: rentingData,
 		},
 		{
-			id: 'buying',
-			color: 'hsl(270.74, 91.01%, 65.1%)',
+			id: "buying",
+			color: "hsl(270.74, 91.01%, 65.1%)",
 			data: buyingData,
 		},
 	];

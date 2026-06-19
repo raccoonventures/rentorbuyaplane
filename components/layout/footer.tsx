@@ -1,10 +1,10 @@
-import Link from 'next/link';
+import Link from "next/link";
 
 const navigation = [
-	{ name: 'About', href: '/about' },
-	{ name: 'Contact', href: '/contact' },
-	{ name: 'Terms', href: '/terms' },
-	{ name: 'Privacy', href: '/privacy' },
+	{ name: "About", href: "/about" },
+	{ name: "Contact", href: "/contact" },
+	{ name: "Terms", href: "/terms" },
+	{ name: "Privacy", href: "/privacy" },
 ];
 
 export default function Footer() {
@@ -41,9 +41,9 @@ export default function Footer() {
 				</div>
 				<div className="md:order-1">
 					<p className="text-center text-xs leading-5 text-zinc-500">
-						&copy; 2024-{new Date().getFullYear()}{' '}
-						<Link href="https://raccoonv.com">Raccoon Ventures, Inc.</Link> All
-						rights reserved.
+						&copy; 2024-{new Date().getFullYear()}{" "}
+						<Link href="https://raccoonv.com">Raccoon Ventures, Inc.</Link> All rights
+						reserved.
 					</p>
 				</div>
 			</div>

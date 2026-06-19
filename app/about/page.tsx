@@ -1,37 +1,38 @@
-import Image from 'next/image';
+import Image from "next/image";
 
 const redditUsers = [
-	'BillySpacs',
-	'fenuxjde',
-	'theanswriz42',
-	'Capt-Soliman',
-	'Sufficient_Rate1032',
-	'FridayMcNight',
-	'Rhyick',
-	'Ictalbot',
-	'sarge46',
-	'Badjo',
-	'KITTYONFYRE',
-	'lavionverte',
-	'Zestyclose-Glove2559',
-	'iguanayou',
+	"BillySpacs",
+	"fenuxjde",
+	"theanswriz42",
+	"Capt-Soliman",
+	"Sufficient_Rate1032",
+	"FridayMcNight",
+	"Rhyick",
+	"Ictalbot",
+	"sarge46",
+	"Badjo",
+	"KITTYONFYRE",
+	"lavionverte",
+	"Zestyclose-Glove2559",
+	"iguanayou",
 ];
 
 const AboutPage = () => {
 	return (
-		<section className="grid grid-flow-row items-center justify-center gap-8">
+		<section className="grid grid-flow-row items-center justify-center gap-16 py-8">
+			{/* Why this exists */}
 			<div className="grid grid-flow-col items-center justify-start gap-12">
 				<div className="prose prose-lg prose-zinc dark:prose-invert grid justify-center tracking-tight">
-					<h2 id="our-mission">Our Mission</h2>
+					<h2 id="why-this-exists">Why this exists</h2>
 					<p>
-						Welcome to rentorbuyaplane.com, your trusted resource for navigating
-						the complexities of aircraft ownership. Our mission is to provide
-						aviators, from seasoned pilots to aspiring enthusiasts, with the
-						tools and insights needed to determine whether owning a plane is
-						more cost-effective than renting.
+						I&apos;m Jp—a private pilot who got tired of guessing. Every rental
+						invoice felt like money set on fire, but buying a plane looked terrifying
+						and the spreadsheets never agreed with each other. I wanted one honest
+						answer to a simple question: at how many hours a year does owning actually
+						beat renting? I couldn&apos;t find a calculator that did the math the way
+						a pilot thinks about it, so I built this one.
 					</p>
 				</div>
-
 				<Image
 					alt="photo of a Cessna 150 with a clear blue sky in background"
 					src="/about-sky.webp"
@@ -40,6 +41,52 @@ const AboutPage = () => {
 					className="rounded-full"
 				/>
 			</div>
+
+			{/* What it does */}
+			<div className="grid grid-flow-col items-center justify-start gap-12">
+				<Image
+					alt="man refueling a Cessna airplane on the ground"
+					src="/about-refill.webp"
+					width="180"
+					height="180"
+					className="rounded-full"
+				/>
+				<div className="prose prose-lg prose-zinc dark:prose-invert grid justify-center tracking-tight">
+					<h2 id="what-it-does">What it does</h2>
+					<p>
+						Pick an aircraft and tell it how much you fly. It splits ownership into
+						the costs that hit whether you fly or not—hangar, insurance, the annual,
+						your loan—and the costs that scale with every hour: fuel, oil, and the
+						reserves you should be setting aside for the engine overhaul and
+						maintenance. Then it stacks that against what renting the same plane would
+						run you, and shows the break-even point where the lines cross.
+					</p>
+				</div>
+			</div>
+
+			{/* What it doesn't do */}
+			<div className="grid grid-flow-col items-center justify-start gap-12">
+				<div className="prose prose-lg prose-zinc dark:prose-invert grid justify-center tracking-tight">
+					<h2 id="what-it-doesnt-do">What it doesn&apos;t do</h2>
+					<p>
+						It won&apos;t do your taxes, predict resale value, or factor in the grin
+						you get walking out to a plane that&apos;s yours. The defaults are
+						reasonable starting points, not gospel—real insurance quotes, maintenance
+						surprises, and partnership arrangements vary wildly. Treat the result as a
+						well-informed gut check, not financial advice, and always sanity-check the
+						numbers against your own quotes.
+					</p>
+				</div>
+				<Image
+					alt="photography through the windshield of a small airplane flying over a desert"
+					src="/about-windshield.webp"
+					width="180"
+					height="180"
+					className="rounded-full"
+				/>
+			</div>
+
+			{/* Who's behind it */}
 			<div className="grid grid-flow-col items-center justify-start gap-12">
 				<Image
 					alt="portrait of Jp, developer of rentorbuyaplane.com"
@@ -49,129 +96,26 @@ const AboutPage = () => {
 					className="rounded-full"
 				/>
 				<div className="prose prose-lg prose-zinc dark:prose-invert grid justify-center tracking-tight">
-					<h2 id="meet-our-founder">Meet Our Founder</h2>
+					<h2 id="whos-behind-it">Who&apos;s behind it</h2>
 					<p>
-						rentorbuyaplane.com is the brainchild of Jp, a dedicated aviation
-						enthusiast and the visionary behind Raccoon Ventures Inc. With a
-						profound passion for flight and a Private Pilot License, Jp combines
-						his love for aviation with his expertise in web development to
-						create a valuable resource for fellow avgeeks.
+						This is a side project I build under Raccoon Ventures Inc., somewhere
+						between a hangar-flying conversation and a calculator. If a number looks
+						off or you&apos;d like to see a feature, I genuinely want to hear it—reach
+						out through the contact page. Blue skies and tailwinds.
 					</p>
 				</div>
 			</div>
 
-			<div className="grid grid-flow-col items-center justify-start gap-12">
-				<div className="prose prose-lg prose-zinc dark:prose-invert grid justify-center tracking-tight">
-					<h2 id="our-commitment">Our Commitment</h2>
-					<p>
-						At rentorbuyaplane.com, we are committed to empowering our community
-						with transparent and accurate information. We understand that
-						aircraft ownership involves various financial considerations, from
-						fuel and maintenance costs to financing and depreciation. Our goal
-						is to simplify this process, providing clarity through our intuitive
-						cost calculator.
-					</p>
-				</div>
-
-				<Image
-					alt="man refueling a Cessna airplane on the ground"
-					src="/about-refill.webp"
-					width="180"
-					height="180"
-					className="rounded-full"
-				/>
-			</div>
-			<div className="grid grid-flow-col items-center justify-start gap-12">
-				<Image
-					alt="photo of a pilot smiling in the cockpit"
-					src="/about-pilot.webp"
-					width="180"
-					height="180"
-					className="rounded-full"
-				/>
-				<div className="prose prose-lg prose-zinc dark:prose-invert grid justify-center tracking-tight">
-					<h2 id="why-choose-us-">Why Choose Us?</h2>
-					<p>
-						Choosing between renting and buying a plane is a significant
-						decision. Our calculator takes into account key factors such as
-						anticipated flight hours, fuel consumption rates, insurance costs,
-						and more. By analyzing these variables, we deliver personalized
-						insights to help you make informed choices about your aviation
-						journey.
-					</p>
-				</div>
-			</div>
-
-			<div className="grid grid-flow-col items-center justify-start gap-12">
-				<div className="prose prose-lg prose-zinc dark:prose-invert grid justify-center tracking-tight">
-					<h2 id="how-it-works">How It Works</h2>
-					<p>
-						Using our cost calculator is easy. Simply enter your flight
-						parameters, and within moments, receive a detailed breakdown of the
-						financial implications of owning versus renting an aircraft. Our
-						tool enables you to explore different scenarios and understand when
-						aircraft ownership becomes economically advantageous.
-					</p>
-				</div>
-
-				<Image
-					alt="photography through the windshield of a small airplane flying over a desert"
-					src="/about-windshield.webp"
-					width="180"
-					height="180"
-					className="rounded-full"
-				/>
-			</div>
-			<div className="grid grid-flow-col items-center justify-start gap-12">
-				<Image
-					alt="pilot and copilot in a cockpit during a sunset"
-					src="/about-cockpit.webp"
-					width="180"
-					height="180"
-					className="rounded-full"
-				/>
-				<div className="prose prose-lg prose-zinc dark:prose-invert grid justify-center tracking-tight">
-					<h2 id="join-our-community">Join Our Community</h2>
-					<p>
-						Join our growing community of aviation enthusiasts! Whether
-						you&#39;re a seasoned pilot looking to expand your fleet or a
-						first-time flyer dreaming of ownership, rentorbuyaplane.com is here
-						to support you. Connect with us, share your experiences, and embark
-						on your aviation adventure with confidence.
-					</p>
-				</div>
-			</div>
-
-			<div className="grid grid-flow-col items-center justify-start gap-12">
-				<div className="prose prose-lg prose-zinc dark:prose-invert grid justify-center tracking-tight">
-					<h2 id="get-in-touch">Get in Touch</h2>
-					<p>
-						Ready to take flight with rentorbuyaplane.com? Explore our
-						resources, try our cost calculator, and unlock the true potential of
-						aircraft ownership. Have questions or feedback? Reach out to Jp and
-						the team – we&#39;re passionate about aviation and committed to
-						helping you achieve your aviation goals.
-					</p>
-				</div>
-
-				<Image
-					alt="small airplane with retractable gear flying over dunes of sand"
-					src="/about-flyover.webp"
-					width="180"
-					height="180"
-					className="rounded-full"
-				/>
-			</div>
-			<div className="prose prose-lg prose-zinc dark:prose-invert mx-auto mt-24 grid justify-center text-center tracking-tight">
+			<div className="prose prose-lg prose-zinc dark:prose-invert mx-auto mt-12 grid justify-center text-center tracking-tight">
 				<h4>
-					Thanks to the following users from the /r/flying subreddit for their
-					feedback
+					Thanks to these folks from the /r/flying subreddit for kicking the tires
+					and pushing back on the numbers
 				</h4>
 				<p>
 					{redditUsers.map((value, index) => (
 						<span key={value}>
 							{value}
-							{index != redditUsers.length - 1 ? ', ' : ' '}
+							{index !== redditUsers.length - 1 ? ", " : " "}
 						</span>
 					))}
 				</p>

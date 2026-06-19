@@ -1,10 +1,9 @@
-import { NextResponse } from 'next/server';
-
-import { Analytics } from '@customerio/cdp-analytics-node';
+import { Analytics } from "@customerio/cdp-analytics-node";
+import { NextResponse } from "next/server";
 
 const analytics = new Analytics({
 	writeKey: `${process.env.CIO_CDP_API_KEY}`,
-	host: 'https://cdp.customer.io',
+	host: "https://cdp.customer.io",
 });
 
 export async function POST(request: Request) {
@@ -22,10 +21,10 @@ export async function POST(request: Request) {
 
 	analytics.track({
 		userId: body.email,
-		event: 'Contact Form Submitted',
+		event: "Contact Form Submitted",
 		properties: body,
 	});
 
 	await analytics.closeAndFlush();
-	return NextResponse.json({ message: 'ok' });
+	return NextResponse.json({ message: "ok" });
 }

@@ -1,13 +1,13 @@
-'use client';
+"use client";
 
-import { Transition } from '@headlessui/react';
-import { useEffect, useRef, useState } from 'react';
+import { Transition } from "@headlessui/react";
+import { useEffect, useRef, useState } from "react";
 
 interface CarouselItem {
 	desc: string;
 }
 
-const savedCarouselItems = [
+const _savedCarouselItems = [
 	{
 		desc: `Welcome to rentorbuyaplane.com, your go-to destination for answering
 					the age-old aviation question: should you rent or buy a plane? Our
@@ -48,13 +48,13 @@ export default function Carousel({ items }: { items: CarouselItem[] }) {
 	const [active, setActive] = useState<number>(0);
 	const [progress, setProgress] = useState<number>(0);
 
+	// biome-ignore lint/correctness/useExhaustiveDependencies: animation loop is keyed on the active slide and re-reads state via the requestAnimationFrame callback
 	useEffect(() => {
 		firstFrameTime.current = performance.now();
 		frame.current = requestAnimationFrame(animate);
 		return () => {
 			cancelAnimationFrame(frame.current);
 		};
-		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [active]);
 
 	const animate = (now: number) => {
@@ -70,12 +70,13 @@ export default function Carousel({ items }: { items: CarouselItem[] }) {
 	};
 
 	const heightFix = () => {
-		if (itemsRef.current && itemsRef.current.parentElement) {
+		if (itemsRef.current?.parentElement) {
 			itemsRef.current.parentElement.style.height = `${itemsRef.current.clientHeight}px`;
 			itemsRef.current.parentElement.style.width = `100%`;
 		}
 	};
 
+	// biome-ignore lint/correctness/useExhaustiveDependencies: run the height fix once on mount
 	useEffect(() => {
 		heightFix();
 	}, []);
@@ -111,9 +112,10 @@ export default function Carousel({ items }: { items: CarouselItem[] }) {
 			</div>
 			{/* Buttons */}
 			<div className="mx-auto grid w-full grid-flow-col justify-stretch gap-0 px-2 md:mt-8 md:max-w-5xl md:gap-4 md:px-0">
-				{items.map((item, index) => (
+				{items.map((_item, index) => (
 					<button
 						key={index}
+						type="button"
 						className="group rounded-sm p-2 focus:outline-hidden focus-visible:ring-3 focus-visible:ring-lime-300"
 						onClick={() => {
 							setActive(index);
@@ -121,7 +123,7 @@ export default function Carousel({ items }: { items: CarouselItem[] }) {
 						}}
 					>
 						<div
-							className={`flex flex-col items-center space-y-1 text-center md:space-y-2 ${active === index ? '' : 'opacity-50 transition-opacity group-hover:opacity-100 group-focus:opacity-100'}`}
+							className={`flex flex-col items-center space-y-1 text-center md:space-y-2 ${active === index ? "" : "opacity-50 transition-opacity group-hover:opacity-100 group-focus:opacity-100"}`}
 						>
 							<div
 								className="relative block h-1 w-full rounded-full bg-slate-200"
@@ -130,7 +132,7 @@ export default function Carousel({ items }: { items: CarouselItem[] }) {
 							>
 								<span
 									className="absolute inset-0 rounded-[inherit] bg-lime-500"
-									style={{ width: active === index ? `${progress}%` : '0%' }}
+									style={{ width: active === index ? `${progress}%` : "0%" }}
 								></span>
 							</div>
 						</div>

@@ -11,11 +11,11 @@ export function setNestedObject(obj, path, value) {
 
 	// Try to parse the value to preserve the type
 	let parsedValue;
-	if (value === 'true') {
+	if (value === "true") {
 		parsedValue = true;
-	} else if (value === 'false') {
+	} else if (value === "false") {
 		parsedValue = false;
-	} else if (!isNaN(value) && value.trim() !== '') {
+	} else if (value.trim() !== "" && !Number.isNaN(Number(value))) {
 		// We use the unary plus operator to convert the string to a number
 		// It is equivalent to parseFloat for strings that represent floating-point numbers
 		parsedValue = +value;
@@ -26,20 +26,16 @@ export function setNestedObject(obj, path, value) {
 	current[lastKey] = parsedValue;
 }
 
-export function toQueryString(params, prefix = '') {
+export function toQueryString(params, prefix = "") {
 	const parts = [];
 	for (const key in params) {
-		if (Object.prototype.hasOwnProperty.call(params, key)) {
+		if (Object.hasOwn(params, key)) {
 			const value = params[key];
 			const fullKey = prefix
 				? `${prefix}[${encodeURIComponent(key)}]`
 				: encodeURIComponent(key);
 			// If the value is an object and not an array, recursively process the object
-			if (
-				typeof value === 'object' &&
-				value !== null &&
-				!Array.isArray(value)
-			) {
+			if (typeof value === "object" && value !== null && !Array.isArray(value)) {
 				parts.push(toQueryString(value, fullKey));
 			} else {
 				// If the value is an array, iterate over its elements
@@ -54,5 +50,5 @@ export function toQueryString(params, prefix = '') {
 			}
 		}
 	}
-	return parts.join('&');
+	return parts.join("&");
 }
