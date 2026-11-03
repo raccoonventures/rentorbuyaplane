@@ -1,3 +1,12 @@
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+	title: "Privacy Policy",
+	description:
+		"How RentOrBuyAPlane.com collects, uses, and protects your information.",
+	alternates: { canonical: "/privacy" },
+};
+
 const PrivacyPage = () => {
 	return (
 		<div className="h-full">

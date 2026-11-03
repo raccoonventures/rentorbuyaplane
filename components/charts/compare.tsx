@@ -1,5 +1,9 @@
 "use client";
-import { ResponsiveLine } from "@nivo/line";
+import {
+	type LineSeries,
+	type PointTooltipProps,
+	ResponsiveLine,
+} from "@nivo/line";
 
 const commaNumber = require("comma-number");
 
@@ -15,29 +19,28 @@ interface ChartProps {
 	breakEven: number | null;
 }
 
+const CustomTooltip = ({ point }: PointTooltipProps<LineSeries>) => {
+	const { seriesId, data } = point;
+
+	// Assuming `data.x` is your hours and `data.y` is your cost
+	const hours = data.x;
+	const cost = data.y;
+
+	return (
+		<div className="rounded-lg border border-zinc-950/50 bg-zinc-50 p-2 text-zinc-950 dark:border-zinc-50 dark:bg-zinc-800/95 dark:text-zinc-50">
+			Flying for <span className="font-bold">{String(hours)}</span> hours will cost
+			you <span className="font-bold">${commaNumber(cost)}</span> when{" "}
+			<span className="font-bold">{seriesId}</span>
+		</div>
+	);
+};
+
 export function Chart(properties: ChartProps) {
 	const chartData = generateChartData(
 		properties.rentCost,
 		properties.operationCost,
 		properties.fixedCost,
 	);
-
-	// @ts-expect-error
-	const CustomTooltip = ({ point }) => {
-		const { serieId, data } = point;
-
-		// Assuming `data.x` is your hours and `data.y` is your cost
-		const hours = data.x;
-		const cost = data.y;
-
-		return (
-			<div className="rounded-lg border border-zinc-950/50 bg-zinc-50 p-2 text-zinc-950 dark:border-zinc-50 dark:bg-zinc-800/95 dark:text-zinc-50">
-				Flying for <span className="font-bold">{hours}</span> hours will cost you{" "}
-				<span className="font-bold">${commaNumber(cost)}</span> when{" "}
-				<span className="font-bold">{serieId}</span>
-			</div>
-		);
-	};
 
 	return (
 		<div className="h-[340px] w-full">

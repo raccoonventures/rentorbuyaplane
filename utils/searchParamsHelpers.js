@@ -1,8 +1,16 @@
+// Keys that would let a crafted query string reach Object.prototype.
+const UNSAFE_KEYS = new Set(["__proto__", "constructor", "prototype"]);
+
 export function setNestedObject(obj, path, value) {
+	// Ignore the whole assignment if any segment is unsafe.
+	if (path.length === 0 || path.some((key) => UNSAFE_KEYS.has(key))) {
+		return;
+	}
+
 	let current = obj;
 	for (let i = 0; i < path.length - 1; i++) {
 		const key = path[i];
-		if (!current[key]) {
+		if (!Object.hasOwn(current, key) || typeof current[key] !== "object") {
 			current[key] = {};
 		}
 		current = current[key];

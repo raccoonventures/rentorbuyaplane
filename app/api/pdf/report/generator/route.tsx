@@ -348,6 +348,8 @@ export async function GET(request: NextRequest) {
 	const rentTotal = rentPerHour * estimatedHours + rentFixed;
 	const ownTotal = owningPerHour * estimatedHours + owningFixed;
 
+	// Rendered once per request by renderToStream, not a React render: no state to lose.
+	// biome-ignore lint/correctness/noComponentHookFactories: server-side one-shot render
 	const MyDocument = () => (
 		<Document
 			title={`RentOrBuyAPlane — Report for ${aircraft.type}`}
@@ -445,14 +447,14 @@ export async function GET(request: NextRequest) {
 				<View style={[styles.section, styles.columns]}>
 					<View style={styles.column}>
 						<Text style={styles.subHeader}>Variable costs (per hour)</Text>
-						{outputObjectValues(params.costs.operation.variable, "hour")}
+						{outputObjectValues(params.costs?.operation?.variable ?? {}, "hour")}
 					</View>
 					<View style={styles.column}>
 						<Text style={styles.subHeader}>
 							Fixed costs (per {params.settings?.fixedCostsYearly ? "year" : "month"})
 						</Text>
 						{outputObjectValues(
-							params.costs.operation.fixed,
+							params.costs?.operation?.fixed ?? {},
 							params.settings?.fixedCostsYearly ? "year" : "month",
 						)}
 					</View>

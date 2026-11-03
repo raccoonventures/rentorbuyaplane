@@ -6,23 +6,69 @@ const analytics = new Analytics({
 	host: "https://cdp.customer.io",
 });
 
-export async function POST(request: Request) {
-	const body = await request.json();
-	console.log(body);
+const MAX_NAME = 200;
+const MAX_EMAIL = 320;
+const MAX_MESSAGE = 5000;
+const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
+type ContactPayload = { name: string; email: string; message: string };
+
+/** Return a clean payload, or null when the body is not a valid contact form. */
+function parseContact(body: unknown): ContactPayload | null {
+	if (typeof body !== "object" || body === null) return null;
+	const { name, email, message } = body as Record<string, unknown>;
+	if (
+		typeof name !== "string" ||
+		typeof email !== "string" ||
+		typeof message !== "string"
+	) {
+		return null;
+	}
+
+	const clean = {
+		name: name.trim(),
+		email: email.trim(),
+		message: message.trim(),
+	};
+	if (!clean.name || !clean.email || !clean.message) return null;
+	if (
+		clean.name.length > MAX_NAME ||
+		clean.email.length > MAX_EMAIL ||
+		clean.message.length > MAX_MESSAGE
+	) {
+		return null;
+	}
+	if (!EMAIL_PATTERN.test(clean.email)) return null;
+	return clean;
+}
+
+export async function POST(request: Request) {
+	let body: unknown;
+	try {
+		body = await request.json();
+	} catch {
+		return NextResponse.json({ message: "Invalid JSON" }, { status: 400 });
+	}
+
+	const contact = parseContact(body);
+	if (!contact) {
+		return NextResponse.json({ message: "Invalid form data" }, { status: 400 });
+	}
+
+	// Never log the submission: it holds personal data.
 	analytics.identify({
-		userId: body.email,
+		userId: contact.email,
 		traits: {
-			name: body.name,
-			email: body.email,
+			name: contact.name,
+			email: contact.email,
 			unsubscribed: true,
 		},
 	});
 
 	analytics.track({
-		userId: body.email,
+		userId: contact.email,
 		event: "Contact Form Submitted",
-		properties: body,
+		properties: contact,
 	});
 
 	await analytics.closeAndFlush();

@@ -1,4 +1,12 @@
+import type { Metadata } from "next";
 import Image from "next/image";
+
+export const metadata: Metadata = {
+	title: "About",
+	description:
+		"Why a private pilot built an honest rent-vs-buy airplane calculator, how it works, and what its numbers include.",
+	alternates: { canonical: "/about" },
+};
 
 const redditUsers = [
 	"BillySpacs",

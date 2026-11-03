@@ -1,3 +1,12 @@
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+	title: "Terms & Conditions",
+	description:
+		"The legal terms for using RentOrBuyAPlane.com and its rent-vs-buy calculator.",
+	alternates: { canonical: "/terms" },
+};
+
 const TermsPage = () => {
 	return (
 		<div className="h-full">
