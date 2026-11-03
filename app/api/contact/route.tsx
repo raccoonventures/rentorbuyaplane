@@ -1,15 +1,11 @@
 import { Analytics } from "@customerio/cdp-analytics-node";
 import { NextResponse } from "next/server";
+import { CONTACT_LIMITS, EMAIL_PATTERN } from "@/utils/contact";
 
 const analytics = new Analytics({
 	writeKey: `${process.env.CIO_CDP_API_KEY}`,
 	host: "https://cdp.customer.io",
 });
-
-const MAX_NAME = 200;
-const MAX_EMAIL = 320;
-const MAX_MESSAGE = 5000;
-const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 type ContactPayload = { name: string; email: string; message: string };
 
@@ -32,9 +28,9 @@ function parseContact(body: unknown): ContactPayload | null {
 	};
 	if (!clean.name || !clean.email || !clean.message) return null;
 	if (
-		clean.name.length > MAX_NAME ||
-		clean.email.length > MAX_EMAIL ||
-		clean.message.length > MAX_MESSAGE
+		clean.name.length > CONTACT_LIMITS.name ||
+		clean.email.length > CONTACT_LIMITS.email ||
+		clean.message.length > CONTACT_LIMITS.message
 	) {
 		return null;
 	}
